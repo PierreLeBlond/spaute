@@ -1,0 +1,66 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary" // https://github.com/prisma/prisma/issues/10649#issuecomment-1445170405
+}
+
+generator zod {
+  provider = "zod-prisma"
+  output   = "./generated/zod"
+}
+
+model Band {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  players Player[]
+  gigs    Gig[]
+}
+
+model Player {
+  id        Int        @id @default(autoincrement())
+  name      String
+  presences Presence[]
+  roles     Role[]
+  band      Band       @relation(fields: [bandId], references: [id])
+  bandId    Int
+}
+
+model Gig {
+  id        Int        @id @default(autoincrement())
+  name      String
+  presences Presence[]
+  band      Band       @relation(fields: [bandId], references: [id])
+  bandId    Int
+  date      DateTime
+  location  String
+}
+
+model Presence {
+  id       Int     @id @default(autoincrement())
+  value    Boolean @default(false)
+  gig      Gig     @relation(fields: [gigId], references: [id])
+  gigId    Int
+  player   Player  @relation(fields: [playerId], references: [id])
+  playerId Int
+
+  @@unique([gigId, playerId])
+}
+
+model Role {
+  id           Int        @id @default(autoincrement())
+  playable     Boolean    @default(false)
+  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+  instrumentId Int        @unique
+  player       Player     @relation(fields: [playerId], references: [id])
+  playerId     Int
+}
+
+model Instrument {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  role Role?
+}
