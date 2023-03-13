@@ -21,5 +21,5 @@ jobs:
       - run: npm ci
       - run: echo $DATABASE_URL && npx prisma db seed
         env:
-          DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}
+          DATABASE_URL: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB
       - run: npm run build
