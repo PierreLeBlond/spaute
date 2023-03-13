@@ -1,6 +1,0 @@
-export * from "./band"
-export * from "./player"
-export * from "./gig"
-export * from "./presence"
-export * from "./role"
-export * from "./instrument"
