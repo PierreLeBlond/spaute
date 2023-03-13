@@ -2,12 +2,6 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const instrumentData: Prisma.InstrumentCreateInput[] = [
-  {
-    name: 'Flute'
-  },
-]
-
 const bandData: Prisma.BandCreateInput[] = [
   {
     name: 'Feis',
@@ -28,6 +22,31 @@ const bandData: Prisma.BandCreateInput[] = [
           location: 'Place de la République'
         }
       ]
+    },
+    voices: {
+      create: [
+        {
+          instrument: {
+            create: {
+              name: 'Sousaphone'
+            }
+          }
+        },
+        {
+          instrument: {
+            create: {
+              name: 'Trumpet'
+            }
+          }
+        },
+        {
+          instrument: {
+            create: {
+              name: 'Euphonium'
+            }
+          }
+        },
+      ]
     }
   },
 ]
@@ -38,12 +57,6 @@ async function main() {
   for (const b of bandData) {
     await prisma.band.create({
       data: b
-    })
-  }
-
-  for (const i of instrumentData) {
-    await prisma.instrument.create({
-      data: i
     })
   }
 

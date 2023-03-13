@@ -13,6 +13,7 @@ model Band {
   name    String   @unique
   players Player[]
   gigs    Gig[]
+  voices  Voice[]
 }
 
 model Player {
@@ -32,6 +33,7 @@ model Gig {
   bandId    Int
   date      DateTime
   location  String
+  playable  Boolean    @default(false)
 }
 
 model Presence {
@@ -55,7 +57,16 @@ model Role {
 }
 
 model Instrument {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  role Role?
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  role  Role?
+  voice Voice?
+}
+
+model Voice {
+  id           Int        @id @default(autoincrement())
+  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+  instrumentId Int        @unique
+  band         Band       @relation(fields: [bandId], references: [id])
+  bandId       Int
 }

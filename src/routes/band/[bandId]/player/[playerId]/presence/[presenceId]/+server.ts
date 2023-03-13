@@ -1,3 +1,4 @@
+import { computePlayability } from "$lib/hook/computePlayability";
 import prisma from "$lib/prisma";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
@@ -11,5 +12,6 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
     },
     data
   });
+  await computePlayability(response.gigId);
   return json(response);
 }
