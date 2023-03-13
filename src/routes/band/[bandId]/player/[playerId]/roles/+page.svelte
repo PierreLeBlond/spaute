@@ -6,8 +6,6 @@
 
   $: roles = data.roles;
   $: instruments = data.instruments;
-
-  let disabled = false;
 </script>
 
 <ul class="grid grid-cols-1 gap-y-2 pb-2">
@@ -32,9 +30,8 @@
     </select>
     <label for="playable-input"> playable </label>
     <input type="checkbox" name="playable" id="playable-input" />
-    <button
-      class="col-span-2 w-full p-2 border rounded border-yellow-600"
-      {disabled}>Add</button
+    <button class="col-span-2 w-full p-2 border rounded border-yellow-600"
+      >Add</button
     >
   </form>
 </div>
