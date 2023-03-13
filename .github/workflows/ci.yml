@@ -14,13 +14,12 @@ jobs:
           POSTGRES_USER: spaute
           POSTGRES_PASSWORD: spaute
           POSTGRES_DB: spaute
-          POSTGRES_PORT: 5432
         ports: ["5432:5432"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm ci
-      - run: npx prisma db seed
+      - run: echo $DATABASE_URL && npx prisma db seed
         env:
-          DATABASE_URL: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$localhost:$POSTGRES_PORT/$POSTGRES_DB
+          DATABASE_URL: postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$localhost:5432/$POSTGRES_DB
       - run: npm run build
