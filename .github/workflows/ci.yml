@@ -1,0 +1,25 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: spaute
+          POSTGRES_PASSWORD: spaute
+          POSTGRES_DB: spaute
+        ports: ["5432:5432"]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npx prisma migrate deploy && npx prisma db seed
+        env:
+          DATABASE_URL: postgresql://spaute:spaute@localhost:5432/spaute
+      - run: npm run build
