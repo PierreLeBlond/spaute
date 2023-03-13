@@ -8,11 +8,6 @@ generator client {
   engineType = "binary" // https://github.com/prisma/prisma/issues/10649#issuecomment-1445170405
 }
 
-generator zod {
-  provider = "zod-prisma"
-  output   = "./generated/zod"
-}
-
 model Band {
   id      Int      @id @default(autoincrement())
   name    String   @unique
