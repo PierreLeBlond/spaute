@@ -51,7 +51,7 @@ model Role {
   id           Int        @id @default(autoincrement())
   playable     Boolean    @default(false)
   instrument   Instrument @relation(fields: [instrumentId], references: [id])
-  instrumentId Int        @unique
+  instrumentId Int
   player       Player     @relation(fields: [playerId], references: [id])
   playerId     Int
 }
@@ -59,7 +59,7 @@ model Role {
 model Instrument {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  role  Role?
+  roles Role[]
   voice Voice?
 }
 

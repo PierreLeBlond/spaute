@@ -8,7 +8,7 @@ const bandData: Prisma.BandCreateInput[] = [
     players: {
       create: [
         {
-          name: 'Pierre',
+          name: 'Pierre'
         }, {
           name: 'Thomas'
         }
