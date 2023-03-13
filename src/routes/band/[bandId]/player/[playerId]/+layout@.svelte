@@ -1,7 +1,15 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import type { LayoutData } from "./$types";
 
   export let data: LayoutData;
+
+  const routeMap = new Map<string, string>([
+    ["/band/[bandId]/player/[playerId]/presences", "presences"],
+    ["/band/[bandId]/player/[playerId]/roles", "roles"],
+  ]);
+  $: route = $page.route.id ?? "";
+  $: selectedPanel = routeMap.get(route);
 </script>
 
 <header class="w-full grid grid-cols-4">
@@ -31,6 +39,10 @@
   <li>
     <a class="w-full block text-center" href="./roles">Roles</a>
   </li>
+  <li
+    class="relative h-0.5 mx-2 border border-yellow-600 col-span-1 col-start-1 transition-all"
+    style:left={selectedPanel == "roles" ? "100%" : "0"}
+  />
 </ul>
 
 <slot />
