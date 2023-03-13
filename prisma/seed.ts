@@ -20,9 +20,85 @@ const bandData: Prisma.BandCreateInput[] = [
     players: {
       create: [
         {
-          name: 'Pierre'
-        }, {
-          name: 'Thomas'
+          name: 'Solvej D'
+        } ,{
+          Name: 'Xavier S'
+        } ,{
+          name: 'Pedro L'
+        } ,{
+          name: 'Simon L'
+        } ,{
+          name: 'Louis L'
+        } ,{
+          name: 'Annaïg P'
+        } ,{
+          name: 'Eléonore T'
+        } ,{
+          name: 'Loanne M'
+        } ,{
+          name: 'Théo G'
+        } ,{
+          name: 'Pierre L'
+        } ,{
+          name: 'Sophie M'
+        } ,{
+          name: 'Arthur M'
+        } ,{
+          name: 'Emerson F'
+        } ,{
+          name: 'Lucie B'
+        } ,{
+          name: 'Robinson C'
+        } ,{
+          name: 'Quentin L'
+        } ,{
+          name: 'Antoine L'
+        } ,{
+          name: 'Julien K'
+        } ,{
+          name: 'Valentin M'
+        } ,{
+          name: 'Pierre K'
+        } ,{
+          name: 'Thomas G'
+        } ,{
+          name: 'Arthur F'
+        } ,{
+          name: 'Clémentine M'
+        } ,{
+          name: 'Pierre PPP'
+        } ,{
+          Name: 'Romain F'
+        } ,{
+          name: 'Samuel M'
+        } ,{
+          name: 'Cédric A'
+        } ,{
+          name: 'Ando D'
+        } ,{
+          name: 'Thibaut E'
+        } ,{
+          name: 'Eudes C'
+        } ,{
+          name: 'Orianne F'
+        } ,{
+          name: 'Simon W'
+        } ,{
+          name: 'Augustin C'
+        } ,{
+          name: 'Julien F'
+        } ,{
+          name: 'Cyril E'
+        } ,{
+          name: 'Seb F'
+        } ,{
+          name: 'Lucie M'
+        } ,{
+          name: 'Violette G'
+        } ,{
+          name: 'Friedrich A'
+        } ,{
+          name: 'Elisa K'
         }
       ],
     },
