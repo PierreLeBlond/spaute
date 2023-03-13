@@ -34,85 +34,257 @@ const bandData: Prisma.BandCreateInput[] = [
     players: {
       create: [
         {
-          name: 'Solvej D'
+          name: 'Solvej D', 
+          roles: {create: [
+            {instrument: {connect: {id:2}}},
+            {instrument: {connect: {id:3}}},
+            ]
+          }
         } ,{
-          Name: 'Xavier S'
+          Name: 'Xavier S',
+          roles: {create: [
+            {instrument: {connect: {id:2}}}
+            ]
+          }
         } ,{
-          name: 'Pedro L'
+          name: 'Pedro L', 
+          roles: {create: [
+            {instrument: {connect: {id:2}}},
+            {instrument: {connect: {id:3}}},
+            ]
+          }
         } ,{
-          name: 'Simon L'
+          name: 'Simon L', 
+          roles: {create: [
+            {instrument: {connect: {id:2}}},
+            {instrument: {connect: {id:3}}},
+            ]
+          }
         } ,{
-          name: 'Louis L'
+          name: 'Louis L', 
+          roles: {create: [
+            {instrument: {connect: {id:2}}},
+            {instrument: {connect: {id:3}}},
+            {instrument: {connect: {id:4}}},
+            {instrument: {connect: {id:10}}},
+            ]
+          }
         } ,{
-          name: 'Annaïg P'
+          name: 'Annaïg P',
+          roles: {create: [
+            {instrument: {connect: {id:6}}}
+            ]
+          }
         } ,{
-          name: 'Eléonore T'
+          name: 'Eléonore T',
+          roles: {create: [
+            {instrument: {connect: {id:6}}}
+            ]
+          }
         } ,{
-          name: 'Loanne M'
+          name: 'Loanne M',
+          roles: {create: [
+            {instrument: {connect: {id:6}}},
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Théo G'
+          name: 'Théo G',
+          roles: {create: [
+            {instrument: {connect: {id:6}}}
+            ]
+          }
         } ,{
-          name: 'Pierre L'
+          name: 'Pierre L',
+          roles: {create: [
+            {instrument: {connect: {id:6}}},
+            {instrument: {connect: {id:10}}},
+            {instrument: {connect: {id:2}}},
+            {instrument: {connect: {id:3}}}
+            ]
+          }
         } ,{
-          name: 'Sophie M'
+          name: 'Sophie M',
+          roles: {create: [
+            {instrument: {connect: {id:4}}}
+            ]
+          }
         } ,{
-          name: 'Arthur M'
+          name: 'Arthur M',
+          roles: {create: [
+            {instrument: {connect: {id:4}}}
+            ]
+          }
         } ,{
-          name: 'Emerson F'
+          name: 'Emerson F',
+          roles: {create: [
+            {instrument: {connect: {id:4}}},
+            {instrument: {connect: {id:5}}},
+            {instrument: {connect: {name: 'Kick Drum'}}},
+            ]
+          }
         } ,{
-          name: 'Lucie B'
+          name: 'Lucie B',
+          roles: {create: [
+            {instrument: {connect: {id:4}}}
+            ]
+          }
         } ,{
-          name: 'Robinson C'
+          name: 'Robinson C',
+          roles: {create: [
+            {instrument: {connect: {id:4}}}
+            ]
+          }
         } ,{
-          name: 'Quentin L'
+          name: 'Quentin L',
+          roles: {create: [
+            {instrument: {connect: {id:4}}}
+            ]
+          }
         } ,{
-          name: 'Antoine L'
+          name: 'Antoine L',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Julien K'
+          name: 'Julien K',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Valentin M'
+          name: 'Valentin M',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Pierre K'
+          name: 'Pierre K',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Thomas G'
+          name: 'Thomas G',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Arthur F'
+          name: 'Arthur F',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Clémentine M'
+          name: 'Clémentine M',
+          roles: {create: [
+            {instrument: {connect: {id:5}}}
+            ]
+          }
         } ,{
-          name: 'Pierre PPP'
+          name: 'Pierre PPP',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          Name: 'Romain F'
+          Name: 'Romain F',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Samuel M'
+          name: 'Samuel M',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Cédric A'
+          name: 'Cédric A',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Ando D'
+          name: 'Ando D',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Thibaut E'
+          name: 'Thibaut E',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Eudes C'
+          name: 'Eudes C',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Orianne F'
+          name: 'Orianne F',
+          roles: {create: [
+            {instrument: {connect: {id:7}}}
+            ]
+          }
         } ,{
-          name: 'Simon W'
+          name: 'Simon W',
+          roles: {create: [
+            {instrument: {connect: {id:8}}}
+            ]
+          }
         } ,{
-          name: 'Augustin C'
+          name: 'Augustin C',
+          roles: {create: [
+            {instrument: {connect: {id:8}}}
+            ]
+          }
         } ,{
-          name: 'Julien F'
+          name: 'Julien F',
+          roles: {create: [
+            {instrument: {connect: {id:9}}}
+            ]
+          }
         } ,{
-          name: 'Cyril E'
+          name: 'Cyril E',
+          roles: {create: [
+            {instrument: {connect: {id:9}}}
+            ]
+          }
         } ,{
-          name: 'Seb F'
+          name: 'Seb F',
+          roles: {create: [
+            {instrument: {connect: {id:9}}}
+            ]
+          }
         } ,{
-          name: 'Lucie M'
+          name: 'Lucie M',
+          roles: {create: [
+            {instrument: {connect: {id:1}}}
+            ]
+          }
         } ,{
-          name: 'Violette G'
+          name: 'Violette G',
+          roles: {create: [
+            {instrument: {connect: {id:1}}}
+            ]
+          }
         } ,{
-          name: 'Friedrich A'
+          name: 'Friedrich A',
+          roles: {create: [
+            {instrument: {connect: {id:1}}}
+            ]
+          }
         } ,{
-          name: 'Elisa K'
+          name: 'Elisa K',
+          roles: {create: [
+            {instrument: {connect: {id:1}}}
+            ]
+          }
         }
       ],
     },
