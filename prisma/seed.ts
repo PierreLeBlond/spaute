@@ -4,13 +4,27 @@ const prisma = new PrismaClient()
 
 const instrumentData: Prisma.InstrumentCreateInput[] = [
   {
-    name: 'Sousaphone'
-  },
-  {
-    name: 'Trumpet'
-  },
-  {
+    name: 'Flute'
+  } ,{
+    name: 'Kick Drum'
+  } ,{
+    name: 'Snare Drum'
+  } ,{
+    name: 'Trombone'
+  } ,{
+    name: 'Trumpette'
+  } ,{
     name: 'Euphonium'
+  } ,{
+    name: 'Alto Saxophone'
+  } ,{
+    name: 'Tenor Saxophone'
+  } ,{
+    name: 'Clarinettes'
+  } ,{
+    name: 'Sousaphone'
+  } ,{
+    name: 'Rusty Trombone'
   },
 ]
 
