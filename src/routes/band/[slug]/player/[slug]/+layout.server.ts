@@ -1,7 +1,7 @@
 import prisma from "$lib/prisma";
-import type { PageServerLoad } from "./$types";
+import type { LayoutServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: LayoutServerLoad = async ({ params }) => {
   const { slug } = params;
   const player = await prisma.player.findUniqueOrThrow({
     where: {
