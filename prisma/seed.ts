@@ -2,6 +2,18 @@ import { PrismaClient, type Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+const instrumentData: Prisma.InstrumentCreateInput[] = [
+  {
+    name: 'Sousaphone'
+  },
+  {
+    name: 'Trumpet'
+  },
+  {
+    name: 'Euphonium'
+  },
+]
+
 const bandData: Prisma.BandCreateInput[] = [
   {
     name: 'Feis',
@@ -27,22 +39,22 @@ const bandData: Prisma.BandCreateInput[] = [
       create: [
         {
           instrument: {
-            create: {
-              name: 'Sousaphone'
+            connect: {
+              id: 1
             }
           }
         },
         {
           instrument: {
-            create: {
-              name: 'Trumpet'
+            connect: {
+              id: 2
             }
           }
         },
         {
           instrument: {
-            create: {
-              name: 'Euphonium'
+            connect: {
+              id: 3
             }
           }
         },
@@ -53,6 +65,12 @@ const bandData: Prisma.BandCreateInput[] = [
 
 async function main() {
   console.log(`Start seeding ...`)
+
+  for (const i of instrumentData) {
+    await prisma.instrument.create({
+      data: i
+    })
+  }
 
   for (const b of bandData) {
     await prisma.band.create({
