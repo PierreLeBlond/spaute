@@ -21,8 +21,7 @@ model Player {
   name      String
   presences Presence[]
   roles     Role[]
-  band      Band       @relation(fields: [bandId], references: [id])
-  bandId    Int
+  band      Band[]
 }
 
 model Gig {

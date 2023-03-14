@@ -3,10 +3,13 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			playerId?: string;
+			redirectAfterLogin?: string;
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}
 }
 
-export {};
+export { };
