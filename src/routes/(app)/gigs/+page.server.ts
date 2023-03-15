@@ -52,8 +52,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   return {
     presences,
     newGigs,
-    bands,
-    title: 'Gigs'
+    bands
   }
 }
 

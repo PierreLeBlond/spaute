@@ -18,8 +18,7 @@ export const load: PageServerLoad = async ({ parent }) => {
   });
   return {
     instruments,
-    roles,
-    title: 'Roles'
+    roles
   }
 }
 

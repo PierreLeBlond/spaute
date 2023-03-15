@@ -4,36 +4,19 @@
 
   export let data: PageData;
 
-  $: presences = data.presences;
-  $: newGigs = data.newGigs;
-  $: bands = data.bands;
+  $: gigs = data.gigs;
 </script>
 
 <ul
   class="p-2 w-full sm:w-96 grid grid-cols-1 gap-y-2 mb-2 overflow-y-auto border grow border-yellow-600 rounded"
 >
-  {#each presences as presence}
-    <li class="w-full">
-      <a
-        href="./gig/{presence.gig.id}"
-        class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
-      >
-        <GigView gig={presence.gig} band={presence.gig.band} />
-        {#if presence.gig.playable}
-          <p class="text-green-600">Playable !</p>
-        {:else}
-          <p class="text-red-600">Not playable...</p>
-        {/if}
-      </a>
-    </li>
-  {/each}
-  {#each newGigs as gig}
+  {#each gigs as gig}
     <li class="w-full">
       <a
         href="./gig/{gig.id}"
         class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
       >
-        <GigView {gig} band={gig.band} />
+        <GigView {gig} band={data.band} />
         {#if gig.playable}
           <p class="text-green-600">Playable !</p>
         {:else}
@@ -49,14 +32,6 @@
 >
   <p class="text-sm">Add a gig</p>
   <form class="grid grid-cols-2 gap-y-2" method="POST">
-    <label for="band-input"> band </label>
-    <select name="bandId" id="band-input" class="bg-zinc-900 text-yellow-600">
-      {#each bands as band}
-        <option value={band.id}>
-          {band.name}
-        </option>
-      {/each}
-    </select>
     <label for="name-input"> name </label>
     <input
       type="text"

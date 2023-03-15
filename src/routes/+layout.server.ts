@@ -16,6 +16,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
   return {
     playerId,
-    playerName: player.name
+    playerName: player.name,
+    title: 'Spaute'
   }
 }

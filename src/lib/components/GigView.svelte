@@ -5,7 +5,7 @@
   export let gig: Gig;
   export let band: Band;
 
-  $: link = `${$page.url.origin}/gig/${gig.id}`;
+  $: link = `${$page.url.origin}/band/${band.id}/gig/${gig.id}`;
 </script>
 
 <div class="flex justify-between">

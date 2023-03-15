@@ -4,16 +4,18 @@
   export let data: PageData;
 </script>
 
-<h2 class="w-full h-16 text-sm pb-2">First, we need to know who you are :</h2>
+<h2 class="w-full sm:w-96 h-16 text-sm pb-2">
+  First, we need to know who you are :
+</h2>
 
 <ul
-  class="mb-2 p-2 grid grid-cols-1 gap-y-2 w-full border grow border-yellow-600 rounded overflow-y-scroll"
+  class="mb-2 p-2 grid grid-cols-1 gap-y-2 w-full sm:w-96 border grow border-yellow-600 rounded overflow-y-auto"
 >
   {#each data.players as player}
-    <li class="text-center w-full border border-yellow-300 rounded">
+    <li class="w-full">
       <form method="POST" action="?/login">
         <input type="hidden" name="playerId" value={player.id} />
-        <button>
+        <button class="text-center w-full border border-yellow-300 rounded">
           {player.name}
         </button>
       </form>
@@ -21,7 +23,7 @@
   {/each}
 </ul>
 
-<div class="bg-yellow-600 text-zinc-900 h-32 p-2 rounded">
+<div class="bg-yellow-600 text-zinc-900 h-32 p-2 rounded w-full sm:w-96">
   <h2 class="w-full text-sm">
     <p>Couldn't find yourself ?</p>
     <p>Create a new player :</p>
