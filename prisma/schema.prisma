@@ -13,6 +13,7 @@ model Band {
   name    String   @unique
   players Player[]
   gigs    Gig[]
+  voices  Voice[]
 }
 
 model Player {
@@ -20,8 +21,7 @@ model Player {
   name      String
   presences Presence[]
   roles     Role[]
-  band      Band       @relation(fields: [bandId], references: [id])
-  bandId    Int
+  bands     Band[]
 }
 
 model Gig {
@@ -32,6 +32,7 @@ model Gig {
   bandId    Int
   date      DateTime
   location  String
+  playable  Boolean    @default(false)
 }
 
 model Presence {
@@ -49,13 +50,22 @@ model Role {
   id           Int        @id @default(autoincrement())
   playable     Boolean    @default(false)
   instrument   Instrument @relation(fields: [instrumentId], references: [id])
-  instrumentId Int        @unique
+  instrumentId Int
   player       Player     @relation(fields: [playerId], references: [id])
   playerId     Int
 }
 
 model Instrument {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  role Role?
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  roles  Role[]
+  voices Voice[]
+}
+
+model Voice {
+  id           Int        @id @default(autoincrement())
+  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+  instrumentId Int
+  band         Band       @relation(fields: [bandId], references: [id])
+  bandId       Int
 }
