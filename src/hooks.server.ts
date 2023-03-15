@@ -7,11 +7,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   event.locals.playerId = playerId;
 
-  const redirectToLogin = !playerId && event.url.pathname != '/login';
+  const fromPathname = event.url.pathname;
+  if (fromPathname != '/logout' && fromPathname != '/login') {
+    event.cookies.set('fromPathname', fromPathname, { path: '/' });
+  }
+
+  const redirectToLogin = !playerId && fromPathname != '/login';
 
   if (redirectToLogin) {
-    const fromPathname = event.url.pathname;
-    event.cookies.set('fromPathname', fromPathname, { path: '/' });
     throw redirect(302, '/login');
   }
 
