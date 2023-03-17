@@ -28,7 +28,7 @@ model Gig {
   id        Int        @id @default(autoincrement())
   name      String
   presences Presence[]
-  band      Band       @relation(fields: [bandId], references: [id])
+  band      Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
   bandId    Int
   date      DateTime
   location  String
@@ -38,9 +38,9 @@ model Gig {
 model Presence {
   id       Int     @id @default(autoincrement())
   value    Boolean @default(false)
-  gig      Gig     @relation(fields: [gigId], references: [id])
+  gig      Gig     @relation(fields: [gigId], references: [id], onDelete: Cascade)
   gigId    Int
-  player   Player  @relation(fields: [playerId], references: [id])
+  player   Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId Int
 
   @@unique([gigId, playerId])
@@ -49,9 +49,9 @@ model Presence {
 model Role {
   id           Int        @id @default(autoincrement())
   playable     Boolean    @default(false)
-  instrument   Instrument @relation(fields: [instrumentId], references: [id])
+  instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
   instrumentId Int
-  player       Player     @relation(fields: [playerId], references: [id])
+  player       Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId     Int
 }
 

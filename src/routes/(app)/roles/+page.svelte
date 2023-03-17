@@ -15,7 +15,7 @@
 
 <List>
   {#if roles.length == 0}
-    <p class="text-xs">Allez, tu dois bien savoir jouer d'un truc non ?</p>
+    <p class="text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
   {:else}
     {#each roles as role}
       <li class="mb-2">

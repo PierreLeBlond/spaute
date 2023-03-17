@@ -5,6 +5,7 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
+  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
 
   export let data: PageData;
 
@@ -18,9 +19,17 @@
   {:else}
     {#each voices as voice}
       <ListItem>
-        <p class="w-full rounded p-2 text-sm">
-          {voice.instrument.name}
-        </p>
+        <div class="flex w-full items-center justify-between">
+          <p class="w-full rounded p-2 text-sm">
+            {voice.instrument.name}
+          </p>
+          <DeleteButton
+            icon={true}
+            label="Supprimer"
+            url="/api/voice/{voice.id}"
+            backUrl="./voices"
+          />
+        </div>
       </ListItem>
     {/each}
   {/if}

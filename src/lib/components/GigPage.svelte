@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Band, Gig, Player, Presence } from '@prisma/client';
+  import DeleteButton from './forms/DeleteButton.svelte';
   import JoinGigForm from './forms/JoinGigForm.svelte';
   import UpdatePresenceForm from './forms/UpdatePresenceForm.svelte';
   import GigView from './GigView.svelte';
@@ -57,3 +58,11 @@
     </li>
   {/each}
 </List>
+
+<div class="w-full p-2">
+  <DeleteButton
+    label="Supprimer la presta"
+    url="/api/gig/{gig.id}"
+    backUrl="../"
+  />
+</div>
