@@ -1,32 +1,36 @@
 <script lang="ts">
-  import type { Instrument, Role } from "@prisma/client";
+  import Button from '$lib/components/forms/Button.svelte';
+  import Checkbox from '$lib/components/forms/Checkbox.svelte';
+  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import Form from '$lib/components/forms/Form.svelte';
+  import type { Instrument, Role } from '@prisma/client';
 
   export let role: Role;
   export let instrument: Instrument;
 </script>
 
-<div
-  class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
->
-  <div>
-    <p class="text-center">
+<Form action={'?/update'}>
+  <div class="grid grid-cols-1 gap-y-2">
+    <p class="text-center text-xs">
       {instrument.name}
     </p>
-  </div>
-  <form
-    class="grid p-2 bg-yellow-600 text-zinc-900 rounded grid-cols-2 gap-y-2"
-    method="POST"
-    action="?/update"
-  >
-    <input type="hidden" value={role.id} name="roleId" />
-    <label for="playable-input">Playable</label>
     <input
-      id="playable-input"
-      name="playable"
-      type="checkbox"
-      checked={role.playable}
-      class="border rounded border-yellow-600"
+      type="hidden"
+      value={role.id}
+      name="roleId"
     />
-    <button class="col-span-4 border rounded border-zinc-900">Update</button>
-  </form>
-</div>
+    <Checkbox
+      id="playable"
+      label="je gère mon pupitre"
+      checked={role.playable}
+    />
+    <Button label={'Mettre à jour'} />
+  </div>
+  <div class="pt-2">
+    <DeleteButton
+      label="Supprimer"
+      url="/api/role/{role.id}"
+      backUrl="/roles"
+    />
+  </div>
+</Form>

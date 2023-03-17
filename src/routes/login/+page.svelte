@@ -1,45 +1,44 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import Button from '$lib/components/forms/Button.svelte';
+  import Form from '$lib/components/forms/Form.svelte';
+  import Text from '$lib/components/forms/Text.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 </script>
 
-<h2 class="w-full sm:w-96 h-16 text-sm pb-2">
-  First, we need to know who you are :
-</h2>
+<h2 class="h-16 w-full p-2 text-sm sm:w-96">Yo ! Qui es tu ?</h2>
 
-<ul
-  class="mb-2 p-2 grid grid-cols-1 gap-y-2 w-full sm:w-96 border grow border-yellow-600 rounded overflow-y-auto"
->
+<List>
   {#each data.players as player}
-    <li class="w-full">
-      <form method="POST" action="?/login">
-        <input type="hidden" name="playerId" value={player.id} />
-        <button class="text-center w-full border border-yellow-300 rounded">
-          {player.name}
-        </button>
-      </form>
+    <li class="mb-2">
+      <Form action="?/login">
+        <input
+          type="hidden"
+          name="playerId"
+          value={player.id}
+        />
+        <Button label={player.name} />
+      </Form>
     </li>
   {/each}
-</ul>
+</List>
 
-<div class="bg-yellow-600 text-zinc-900 h-32 p-2 rounded w-full sm:w-96">
-  <h2 class="w-full text-sm">
-    <p>Couldn't find yourself ?</p>
-    <p>Create a new player :</p>
-  </h2>
-  <form
-    class="pt-2 grid grid-cols-2 gap-y-2"
-    method="POST"
-    action="?/addPlayer"
-  >
-    <label for="name-input">name -></label>
-    <input
-      id="name-input"
-      name="name"
-      class="bg-zinc-900 text-yellow-600 rounded"
-      type="text"
-    />
-    <button class="col-span-2 border rounded border-zinc-900">Add</button>
-  </form>
+<div class="w-full p-2 sm:w-96">
+  <Form action={'?/addPlayer'}>
+    <div class="grid grid-cols-2 gap-y-2 pt-2">
+      <h2 class="col-span-2 w-full text-xs">
+        <p>Tu trouves pas ton blaze ?</p>
+        <p>Rajoute le :</p>
+      </h2>
+      <Text
+        id={'name'}
+        label={'nom'}
+      />
+      <div class="col-span-2">
+        <Button label="Ajouter" />
+      </div>
+    </div>
+  </Form>
 </div>

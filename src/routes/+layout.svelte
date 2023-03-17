@@ -1,16 +1,16 @@
 <script lang="ts">
-  import "../app.css";
-  import Header from "$lib/components/Header.svelte";
+  import '../app.css';
+  import Header from '$lib/components/Header.svelte';
 </script>
 
 <main
-  class="flex flex-col items-center bg-zinc-900 h-screen w-screen text-xl text-yellow-300"
-  style:height={"100svh"}
+  class="flex h-screen w-screen flex-col items-center bg-neutral-800 text-xl text-amber-300"
+  style:height={'100svh'}
 >
-  <div class="absolute h-16 top-0 w-full">
+  <div class="absolute top-0 h-20 w-full">
     <Header />
   </div>
-  <div class="p-2 flex flex-col items-center w-full pt-16 overflow-y-hidden">
+  <div class="flex w-full grow flex-col items-center overflow-y-hidden pt-20">
     <slot />
   </div>
 </main>

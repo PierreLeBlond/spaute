@@ -11,6 +11,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
   return {
     band,
     title: band.name,
-    backPathname: '/bands'
+    backPathname: '/bands',
+    backName: 'fanfares'
   };
 }

@@ -57,7 +57,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 }
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async ({ request, locals }) => {
+    const { playerId } = locals;
     const data = await request.formData();
     const bandId = Number(data.get("bandId"));
     const name = data.get("name") as string;
@@ -68,6 +69,12 @@ export const actions: Actions = {
         band: {
           connect: {
             id: bandId
+          }
+        },
+        presences: {
+          create: {
+            playerId: Number(playerId),
+            value: true
           }
         },
         name,

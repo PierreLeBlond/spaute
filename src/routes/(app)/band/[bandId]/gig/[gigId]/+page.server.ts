@@ -50,12 +50,15 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     remainingPlayers,
     presence,
     backPathname: '../gigs',
+    backName: 'prestas',
     title: gig.name
   }
 }
 
 export const actions: Actions = {
-  join: async ({ params, locals }) => {
+  join: async ({ params, locals, request }) => {
+    const data = await request.formData();
+    const available = !!data.get('available');
     const { gigId } = params;
     const { playerId } = locals;
 
@@ -63,7 +66,7 @@ export const actions: Actions = {
       data: {
         gigId: Number(gigId),
         playerId: Number(playerId),
-        value: true
+        value: available
       }
     });
 
@@ -73,7 +76,7 @@ export const actions: Actions = {
   },
   update: async ({ request }) => {
     const data = await request.formData();
-    const presence = data.get('presence') == 'true';
+    const presence = !!data.get('presence');
     const presenceId = Number(data.get('presenceId'));
 
     const response = await prisma.presence.update({
