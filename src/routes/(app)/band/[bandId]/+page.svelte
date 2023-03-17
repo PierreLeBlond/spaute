@@ -1,38 +1,42 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import Button from '$lib/components/forms/Button.svelte';
+  import Form from '$lib/components/forms/Form.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import ListItem from '$lib/components/layout/ListItem.svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 </script>
 
 {#if data.players.length != 0}
-  <div
-    class="w-full mb-2 p-2 bg-yellow-600 text-zinc-900 rounded grid grid-cols-1"
-  >
-    <p class="text-sm">
-      You're a member of {data.band.name} !
-    </p>
+  <div class="w-full p-2 text-amber-300 sm:w-96">
+    <p class="text-xs">Bienvenus chez ta fanfare préférée !</p>
   </div>
 {:else}
-  <form
-    class="w-full mb-2 p-2 bg-yellow-600 text-zinc-900 rounded grid grid-cols-1"
-    method="POST"
-    action="?/join"
-  >
-    <p class="text-sm">
-      You're not a member of {data.band.name}. Join us ?
-    </p>
-    <button class="border rounded border-zinc-900">Join</button>
-  </form>
+  <div class="w-full p-2 sm:w-96">
+    <Form action="?/join">
+      <p class="text-xs">Tu viens t'amuser avec nous ?</p>
+      <Button label={'Rejoindre'} />
+    </Form>
+  </div>
 {/if}
 
-<ul
-  class="p-2 w-full sm:w-96 grid grid-cols-1 gap-y-2 mb-2 overflow-y-auto border grow border-yellow-600 rounded"
->
-  {#each data.band.players as player}
-    <li
-      class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
-    >
-      {player.name}
-    </li>
-  {/each}
-</ul>
+<List>
+  {#if data.band.players.length == 0}
+    <p class="text-xs">Youhou ? Y'a quelqu'un ?</p>
+  {:else}
+    {#each data.band.players as player}
+      <ListItem>
+        {#if player.id == Number(data.playerId)}
+          <p class="w-full bg-amber-300 p-2 text-sm text-neutral-900">
+            {player.name}
+          </p>
+        {:else}
+          <p class="w-full rounded p-2 text-sm">
+            {player.name}
+          </p>
+        {/if}
+      </ListItem>
+    {/each}
+  {/if}
+</List>

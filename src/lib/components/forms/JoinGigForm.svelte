@@ -1,11 +1,15 @@
 <script lang="ts">
+  import Button from "./Button.svelte";
+import Form from "./Form.svelte";
+
   export let action: string;
 </script>
 
-<form
-  class="w-full p-2 bg-yellow-600 text-zinc-900 rounded grid grid-cols-1"
-  method="POST"
+<Form
   {action}
 >
-  <button class="border rounded border-zinc-900">Join</button>
-</form>
+<div class="grid grid-cols-2 gap-x-2 text-sm">
+  <Button id={"available"} label={"Participe"}/>
+  <Button label={"Ne participe pas"}/>
+</div>
+</Form>

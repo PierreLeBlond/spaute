@@ -1,34 +1,35 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import Form from '$lib/components/forms/Form.svelte';
+  import Text from '$lib/components/forms/Text.svelte';
+  import Button from '$lib/components/forms/Button.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import ListItem from '$lib/components/layout/ListItem.svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
   $: instruments = data.instruments;
 </script>
 
-<ul
-  class="p-2 w-full sm:w-96 grid grid-cols-1 gap-y-2 mb-2 overflow-y-auto border grow border-yellow-600 rounded"
->
+<List>
   {#each instruments as instrument}
-    <li class="w-full">
-      <p
-        class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
-      >
-        {instrument.name}
-      </p>
-    </li>
+    <ListItem>
+      <p class="p-2 text-sm">{instrument.name}</p>
+    </ListItem>
   {/each}
-</ul>
-<div class="bg-yellow-600 text-zinc-900 h-32 p-2 rounded w-full sm:w-96">
-  <h2 class="w-full text-sm">Add an instrument</h2>
-  <form class="pt-2 grid grid-cols-2 gap-y-2" method="POST">
-    <label for="name-input">name -></label>
-    <input
-      id="name-input"
-      name="name"
-      class="bg-zinc-900 text-yellow-600 rounded"
-      type="text"
-    />
-    <button class="col-span-2 border rounded border-zinc-900">Add</button>
-  </form>
+</List>
+
+<div class="w-full p-2 sm:w-96">
+  <Form>
+    <div class="grid grid-cols-2 gap-y-2">
+      <p class="col-span-2 w-full text-sm">Ajouter un instrument</p>
+      <Text
+        id="name"
+        label="nom"
+      />
+      <div class="col-span-2">
+        <Button label={'Ajouter'} />
+      </div>
+    </div>
+  </Form>
 </div>

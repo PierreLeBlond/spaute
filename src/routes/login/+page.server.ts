@@ -42,7 +42,6 @@ export const actions: Actions = {
     locals.playerId = playerId;
 
     const fromPathname = cookies.get('fromPathname');
-    console.log('pong', fromPathname);
 
     if (fromPathname) {
       cookies.delete('fromPathname');

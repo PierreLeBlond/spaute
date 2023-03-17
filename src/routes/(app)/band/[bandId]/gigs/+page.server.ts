@@ -1,17 +1,49 @@
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+  const playerId = Number(locals.playerId);
   const { bandId } = params;
 
-  const gigs = await prisma.gig.findMany({
+  const presences = await prisma.presence.findMany({
     where: {
-      bandId: Number(bandId)
+      AND: {
+        playerId: playerId,
+        gig: {
+          bandId: Number(bandId)
+        }
+      }
+    },
+    include: {
+      gig: {
+        include: {
+          band: true
+        }
+      }
+    }
+  });
+
+  const newGigs = await prisma.gig.findMany({
+    where: {
+      AND: {
+        bandId: Number(bandId),
+        NOT: {
+          presences: {
+            some: {
+              playerId: playerId
+            }
+          }
+        }
+      }
+    },
+    include: {
+      band: true
     }
   });
 
   return {
-    gigs
+    presences,
+    newGigs
   }
 }
 

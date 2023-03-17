@@ -1,6 +1,14 @@
 <script lang="ts">
-  import GigView from "$lib/components/GigView.svelte";
-  import type { PageData } from "./$types";
+  import Button from '$lib/components/forms/Button.svelte';
+  import Form from '$lib/components/forms/Form.svelte';
+  import Text from '$lib/components/forms/Text.svelte';
+  import Select from '$lib/components/forms/Select.svelte';
+  import Date from '$lib/components/forms/Date.svelte';
+  import GigView from '$lib/components/GigView.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
+  import type { PageData } from './$types';
+  import GigsPage from '$lib/components/GigsPage.svelte';
 
   export let data: PageData;
 
@@ -9,75 +17,40 @@
   $: bands = data.bands;
 </script>
 
-<ul
-  class="p-2 w-full sm:w-96 grid grid-cols-1 gap-y-2 mb-2 overflow-y-auto border grow border-yellow-600 rounded"
->
-  {#each presences as presence}
-    <li class="w-full">
-      <a
-        href="./gig/{presence.gig.id}"
-        class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
-      >
-        <GigView gig={presence.gig} band={presence.gig.band} />
-        {#if presence.gig.playable}
-          <p class="text-green-600">Playable !</p>
-        {:else}
-          <p class="text-red-600">Not playable...</p>
-        {/if}
-      </a>
-    </li>
-  {/each}
-  {#each newGigs as gig}
-    <li class="w-full">
-      <a
-        href="./gig/{gig.id}"
-        class="p-2 w-full border border-yellow-200 rounded text-sm grid grid-cols-1 gap-y-1"
-      >
-        <GigView {gig} band={gig.band} />
-        {#if gig.playable}
-          <p class="text-green-600">Playable !</p>
-        {:else}
-          <p class="text-red-600">Not playable...</p>
-        {/if}
-      </a>
-    </li>
-  {/each}
-</ul>
+<GigsPage
+  {presences}
+  {newGigs}
+/>
 
-<div
-  class="p-2 bg-yellow-600 text-zinc-900 rounded grid grid-cols-1 gap-y-1 w-full sm:w-96"
->
-  <p class="text-sm">Add a gig</p>
-  <form class="grid grid-cols-2 gap-y-2" method="POST">
-    <label for="band-input"> band </label>
-    <select name="bandId" id="band-input" class="bg-zinc-900 text-yellow-600">
-      {#each bands as band}
-        <option value={band.id}>
-          {band.name}
-        </option>
-      {/each}
-    </select>
-    <label for="name-input"> name </label>
-    <input
-      type="text"
-      class="bg-zinc-900 text-yellow-600"
-      name="name"
-      id="name-input"
-    />
-    <label for="location-input"> location </label>
-    <input
-      type="text"
-      class="bg-zinc-900 text-yellow-600"
-      name="location"
-      id="location-input"
-    />
-    <label for="date-input"> date </label>
-    <input
-      type="date"
-      class="bg-zinc-900 text-yellow-600"
-      name="date"
-      id="date-input"
-    />
-    <button class="col-span-2 border rounded border-zinc-900">Add</button>
-  </form>
+<div class="w-full p-2 sm:w-96">
+  <Form>
+    <div class="grid grid-cols-2 gap-y-2 gap-x-2">
+      <p class="col-span-2 text-xs">Ajouter une presta</p>
+      <Select
+        id="bandId"
+        label="fanfare"
+      >
+        {#each bands as band}
+          <option value={band.id}>
+            {band.name}
+          </option>
+        {/each}
+      </Select>
+      <Text
+        id="name"
+        label="titre"
+      />
+      <Text
+        id="location"
+        label="lieu"
+      />
+      <Date
+        id="date"
+        label="date"
+      />
+      <div class="col-span-2">
+        <Button label={'Créer'} />
+      </div>
+    </div>
+  </Form>
 </div>
