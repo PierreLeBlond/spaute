@@ -1,0 +1,23 @@
+{
+	"printWidth": 120,
+	"tabWidth": 2,
+	"useTabs": false,
+	"semi": true,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"singleAttributePerLine": true,
+	"plugins": [
+		"prettier-plugin-svelte"
+	],
+	"pluginSearchDirs": [
+		"."
+	],
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "svelte"
+			}
+		}
+	]
+}
