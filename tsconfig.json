@@ -20,7 +20,7 @@
 		// Module
 		"allowUmdGlobalAccess": false,
 		// "baseUrl": "",
-		"module": "NodeNext",
+		"module": "ESNext",
 		"moduleResolution": "node",
 		"noResolve": false,
 		"resolveJsonModule": true,
