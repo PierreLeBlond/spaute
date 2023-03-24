@@ -1,15 +1,14 @@
 import { PresenceUpdateArgsSchema } from "$lib/generated/zod";
-import { computePlayability } from "$lib/hook/computePlayability";
 import prisma from "$lib/prisma";
 import type { Prisma } from "@prisma/client";
 
 export const update = async (formData: { [k: string]: FormDataEntryValue }) => {
   const args: Prisma.PresenceUpdateArgs = {
     data: {
-      value: !!formData.presence
+      value: !!formData["presence"]
     },
     where: {
-      id: Number(formData.presenceId)
+      id: Number(formData["presenceId"])
     },
   }
 
@@ -27,6 +26,5 @@ export const update = async (formData: { [k: string]: FormDataEntryValue }) => {
 
   const response = await prisma.presence.update(args);
 
-  await computePlayability(response.gigId);
   return { success: true, response };
 }

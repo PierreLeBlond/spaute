@@ -4,9 +4,9 @@
 
 <header class="grid h-full w-full grid-cols-5">
   <div class="col-span-1 flex flex-col items-center justify-evenly py-2">
-    {#if $page.data.backPathname}
+    {#if $page.data['backPathname']}
       <a
-        href={$page.data.backPathname}
+        href={$page.data['backPathname']}
         class="flex items-center justify-center text-blue-300"
       >
         <svg
@@ -23,17 +23,17 @@
         </svg>
       </a>
     {/if}
-    {#if $page.data.backName}
-      <p class="truncate text-xs">{$page.data.backName}</p>
+    {#if $page.data['backName']}
+      <p class="truncate text-xs">{$page.data['backName']}</p>
     {/if}
   </div>
   <div class="col-span-2 col-start-2 flex h-16 flex-col items-start justify-center truncate">
     <h1 class="text-xl">
-      {$page.data.title}
+      {$page.data['title']}
     </h1>
   </div>
   <div class="col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
-    {#if $page.data.playerName}
+    {#if $page.data['playerName']}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="32"
@@ -48,11 +48,11 @@
           d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
         />
       </svg>
-      <p class="truncate text-xs">{$page.data.playerName}</p>
+      <p class="truncate text-xs">{$page.data['playerName']}</p>
     {/if}
   </div>
   <div class="col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
-    {#if $page.data.playerId}
+    {#if $page.data['playerId']}
       <a
         href="/logout"
         class="flex items-center justify-center text-blue-300"
