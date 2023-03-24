@@ -3,9 +3,10 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import List from '$lib/components/layout/List.svelte';
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
+  export let form: ActionData;
 </script>
 
 <h2 class="h-16 w-full p-2 text-sm sm:w-96">Yo ! Qui es tu ?</h2>
@@ -35,6 +36,8 @@
       <Text
         id={'name'}
         label={'nom'}
+        value={form?.data?.name ?? ''}
+        error={form?.errors?.name}
       />
       <div class="col-span-2">
         <Button label="Ajouter" />

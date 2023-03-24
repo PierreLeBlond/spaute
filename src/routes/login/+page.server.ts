@@ -1,6 +1,8 @@
-import { json, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
+import type { Prisma } from "@prisma/client";
+import { PlayerCreateInputSchema } from "$lib/generated/zod";
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (locals.playerId) {
@@ -20,19 +22,27 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 export const actions: Actions = {
   addPlayer: async ({ request }) => {
-    const data = await request.formData();
-    const name = data.get("name") as string;
+    const formData = Object.fromEntries(await request.formData());
 
-    if (!name || name == "") {
-      return { success: false };
+    const data: Prisma.PlayerCreateInput = {
+      name: formData.name as string,
+    };
+
+    const result = PlayerCreateInputSchema.safeParse(data);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = {
+        name: formated.name?._errors.pop(),
+      }
+
+      return {
+        data,
+        errors
+      }
     }
 
-    const response = await prisma.player.create({
-      data: {
-        name
-      }
-    });
-
+    const response = await prisma.player.create({ data });
     return { success: true, response };
   },
   login: async ({ cookies, request, locals }) => {
