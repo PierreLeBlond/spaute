@@ -10,7 +10,7 @@
 </script>
 
 {#if data.players.length != 0}
-  <div class="w-full p-2 text-amber-300 sm:w-96">
+  <div class="w-full p-2 text-orange-300 sm:w-96">
     <p class="text-xs">Bienvenus chez ta fanfare préférée !</p>
   </div>
 {:else}
@@ -29,7 +29,7 @@
     {#each data.band.players as player}
       <ListItem>
         {#if player.id == Number(data.playerId)}
-          <p class="w-full bg-amber-300 p-2 text-sm text-neutral-900">
+          <p class="w-full bg-orange-300 p-2 text-sm text-neutral-900">
             {player.name}
           </p>
         {:else}

@@ -9,7 +9,7 @@
 <div class="flex flex-col">
   <label
     for="{id}-input"
-    class="text-xs text-blue-300">{label}</label
+    class="text-xs">{label}</label
   >
   <div class="relative grid h-8 grid-cols-3 items-center justify-center">
     {#if !checked}

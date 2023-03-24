@@ -4,7 +4,7 @@
 </script>
 
 <main
-  class="flex h-screen w-screen flex-col items-center bg-neutral-800 text-xl text-amber-300"
+  class="flex h-screen w-screen flex-col items-center bg-neutral-800 text-xl text-orange-300"
   style:height={'100svh'}
 >
   <div class="absolute top-0 h-20 w-full">

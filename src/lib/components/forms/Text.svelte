@@ -9,24 +9,24 @@
 </script>
 
 <div class="flex flex-col">
-  <div class="flex justify-between text-xs text-blue-300">
+  <div class="flex justify-between text-xs">
     <label
       for="{id}-input"
-      class="text-xs text-blue-300">{label}</label
+      class="text-xs">{label}</label
     >
     <p>{value.length}/{maxlength}</p>
   </div>
   <input
     id="{id}-input"
     name={id}
-    class="h-8 rounded border-red-300 bg-neutral-800 text-sm text-blue-300"
+    class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
     class:border={!!error}
     type="text"
     bind:value
     {maxlength}
   />
   <p
-    class="h-4 text-xs text-blue-300"
+    class="h-4 text-xs"
     class:text-red-300={error}
   >
     {error || info}
