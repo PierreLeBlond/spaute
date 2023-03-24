@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
 </script>
 
-<header class="grid h-full w-full grid-cols-5">
+<header class="grid h-full w-full grid-cols-5 bg-neutral-900">
   <div class="col-span-1 flex flex-col items-center justify-evenly py-2">
     {#if $page.data['backPathname']}
       <a
@@ -26,11 +26,6 @@
     {#if $page.data['backName']}
       <p class="truncate text-xs">{$page.data['backName']}</p>
     {/if}
-  </div>
-  <div class="col-span-2 col-start-2 flex h-16 flex-col items-start justify-center truncate">
-    <h1 class="text-xl">
-      {$page.data['title']}
-    </h1>
   </div>
   <div class="col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
     {#if $page.data['playerName']}
@@ -72,5 +67,10 @@
       </a>
       <p class="text-xs">logout</p>
     {/if}
+  </div>
+  <div class="col-span-5 row-start-2 flex h-16 flex-col items-start justify-center truncate pl-8">
+    <h1 class="text-xl">
+      {$page.data['title']}
+    </h1>
   </div>
 </header>
