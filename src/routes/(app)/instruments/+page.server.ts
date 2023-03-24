@@ -32,6 +32,8 @@ export const actions: Actions = {
       const errors = formated._errors;
 
       return {
+        success: false,
+        message: 'Instrument non valide :(',
         data,
         errors
       }
@@ -41,6 +43,6 @@ export const actions: Actions = {
       data
     });
 
-    return { success: true, response };
+    return { success: true, message: 'Instrument créé :)', response };
   }
 }

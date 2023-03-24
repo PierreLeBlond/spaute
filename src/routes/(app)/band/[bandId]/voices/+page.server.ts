@@ -46,6 +46,8 @@ export const actions: Actions = {
       const errors = formated._errors;
 
       return {
+        success: false,
+        message: 'Pupitre non valide :(',
         data,
         errors
       }
@@ -54,7 +56,7 @@ export const actions: Actions = {
     const response = await prisma.voice.create({
       data
     });
-    return { success: true, response };
+    return { success: true, message: 'Pupitre créé :)', response };
   }
 }
 

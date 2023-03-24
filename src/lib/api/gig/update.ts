@@ -19,6 +19,8 @@ export const update = async (formData: { [k: string]: FormDataEntryValue }) => {
     const errors = formated._errors;
 
     return {
+      success: false,
+      message: 'Impossible de mettre à jour :(',
       data: args.data,
       errors
     }
@@ -26,5 +28,5 @@ export const update = async (formData: { [k: string]: FormDataEntryValue }) => {
 
   const response = await prisma.presence.update(args);
 
-  return { success: true, response };
+  return { success: true, message: 'participation mise à jour :)', response };
 }

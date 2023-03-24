@@ -42,13 +42,15 @@ export const actions: Actions = {
       }
 
       return {
+        success: false,
+        message: 'Fanfare non valide :(',
         data,
         errors
       }
     }
 
     const response = await prisma.band.create({ data });
-    return { success: true, response };
+    return { success: true, message: 'Fanfare créée !', response };
   }
 }
 

@@ -24,6 +24,8 @@ export const join = async (gigId: string, playerId: string, formData: { [k: stri
     const errors = formated._errors;
 
     return {
+      success: false,
+      message: 'Impossible de rejoindre :(',
       data,
       errors
     }
@@ -33,5 +35,5 @@ export const join = async (gigId: string, playerId: string, formData: { [k: stri
     data
   });
 
-  return { success: true, response };
+  return { success: true, message: 'Presta rejointe :)', response };
 }

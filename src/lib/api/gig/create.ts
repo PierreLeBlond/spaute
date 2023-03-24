@@ -32,11 +32,13 @@ export const create = async (playerId: string, bandId: string, formData: { [k: s
     }
 
     return {
+      success: false,
+      message: 'Presta non valide :(',
       data,
       errors
     }
   }
 
   const response = await prisma.gig.create({ data });
-  return { success: true, response };
+  return { success: true, message: 'Presta créée :)', response };
 }

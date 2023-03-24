@@ -59,6 +59,8 @@ export const actions: Actions = {
       const errors = formated._errors;
 
       return {
+        success: false,
+        message: 'Impossible de rejoindre :(',
         data: args.data,
         errors
       }
@@ -66,7 +68,7 @@ export const actions: Actions = {
 
     const response = await prisma.player.update(args);
 
-    return { success: true, response };
+    return { success: true, message: 'Fanfare rejointe :)', response };
   }
 }
 

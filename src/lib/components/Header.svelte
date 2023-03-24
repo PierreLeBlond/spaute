@@ -1,5 +1,11 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { Toaster } from 'svelte-french-toast';
+  import { sendToast } from './sendToast';
+
+  $: if ($page?.form?.message) {
+    sendToast($page.form.message, !$page.form.success);
+  }
 </script>
 
 <header class="grid h-full w-full grid-cols-5 bg-neutral-900">
@@ -68,9 +74,12 @@
       <p class="text-xs">logout</p>
     {/if}
   </div>
-  <div class="col-span-5 row-start-2 flex h-16 flex-col items-start justify-center truncate pl-8">
+  <div class="col-span-3 row-start-2 flex h-16 flex-col items-start justify-center truncate pl-8">
     <h1 class="text-xl">
       {$page.data['title']}
     </h1>
+  </div>
+  <div class="relative col-span-2 row-start-2">
+    <Toaster />
   </div>
 </header>

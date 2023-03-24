@@ -37,13 +37,15 @@ export const actions: Actions = {
       }
 
       return {
+        success: false,
+        message: 'Musicien non valide :(',
         data,
         errors
       }
     }
 
     const response = await prisma.player.create({ data });
-    return { success: true, response };
+    return { success: true, messagge: 'Musicien créé :)', response };
   },
   login: async ({ cookies, request, locals }) => {
     const data = await request.formData();
@@ -58,6 +60,6 @@ export const actions: Actions = {
       throw redirect(302, fromPathname);
     }
 
-    return { success: true }
+    return { success: true, message: 'Connexion réussi :)' }
   }
 }
