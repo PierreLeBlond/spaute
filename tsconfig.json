@@ -1,14 +1,39 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
+		// Type checking
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		// "exactOptionalPropertyTypes": true, // Fails with zod-prisma-types definitions
+		// "noFallthroughCasesInSwitch": true, // We don't use switch statement anyway
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		// Let's be strict, covers and enables several strictness options
+		"strict": true,
+		// Module
+		"allowUmdGlobalAccess": false,
+		// "baseUrl": "",
+		"module": "NodeNext",
+		"moduleResolution": "node",
+		"noResolve": false,
+		"resolveJsonModule": true,
+		"newLine": "lf",
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"allowJs": false,
+		"checkJs": false,
+		"allowSyntheticDefaultImports": false,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true
+		"isolatedModules": true,
+		"skipLibCheck": true
 	},
 	"ts-node": {
 		"esm": true // To make prisma seeding work with ts-node
