@@ -1,4 +1,6 @@
+import { InstrumentCreateInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
@@ -16,13 +18,27 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const data = await request.formData();
-    const name = data.get('name') as string;
+
+    const formData = Object.fromEntries(await request.formData());
+
+    const data: Prisma.InstrumentCreateInput = {
+      name: formData.name as string
+    }
+
+    const result = InstrumentCreateInputSchema.safeParse(data);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = formated._errors;
+
+      return {
+        data,
+        errors
+      }
+    }
 
     const response = await prisma.instrument.create({
-      data: {
-        name,
-      }
+      data
     });
 
     return { success: true, response };

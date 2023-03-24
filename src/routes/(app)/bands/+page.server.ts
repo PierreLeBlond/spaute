@@ -1,4 +1,6 @@
+import { BandCreateInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
+import type { Prisma } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -19,21 +21,33 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const data = await request.formData();
-    const name = data.get('name') as string;
     const { playerId } = locals;
 
-    const response = await prisma.band.create({
-      data: {
-        name,
-        players: {
-          connect: [{
-            id: Number(playerId)
-          }]
-        }
+    const formData = Object.fromEntries(await request.formData());
+    const data: Prisma.BandCreateInput = {
+      name: formData.name as string,
+      players: {
+        connect: [{
+          id: Number(playerId)
+        }]
       }
-    });
+    };
 
+    const result = BandCreateInputSchema.safeParse(data);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = {
+        name: formated.name?._errors.pop(),
+      }
+
+      return {
+        data,
+        errors
+      }
+    }
+
+    const response = await prisma.band.create({ data });
     return { success: true, response };
   }
 }

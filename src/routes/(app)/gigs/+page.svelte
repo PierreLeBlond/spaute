@@ -3,14 +3,12 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import Select from '$lib/components/forms/Select.svelte';
-  import Date from '$lib/components/forms/Date.svelte';
-  import GigView from '$lib/components/GigView.svelte';
-  import List from '$lib/components/layout/List.svelte';
-  import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
-  import type { PageData } from './$types';
+  import DateInput from '$lib/components/forms/DateInput.svelte';
+  import type { ActionData, PageData } from './$types';
   import GigsPage from '$lib/components/GigsPage.svelte';
 
   export let data: PageData;
+  export let form: ActionData;
 
   $: presences = data.presences;
   $: newGigs = data.newGigs;
@@ -39,14 +37,22 @@
       <Text
         id="name"
         label="titre"
+        value={form?.data?.name ?? ''}
+        error={form?.errors?.name}
+        maxlength={32}
       />
       <Text
         id="location"
         label="lieu"
+        value={form?.data?.location ?? ''}
+        error={form?.errors?.location}
+        maxlength={60}
       />
-      <Date
+      <DateInput
         id="date"
         label="date"
+        value={form?.data?.date ? new Date(form.data.date) : new Date()}
+        error={form?.errors?.date}
       />
       <div class="col-span-2">
         <Button label={'Créer'} />

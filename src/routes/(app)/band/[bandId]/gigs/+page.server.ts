@@ -1,4 +1,7 @@
+import { create } from '$lib/api/gig/create';
+import { GigCreateInputSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma'
+import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
@@ -50,29 +53,10 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 export const actions: Actions = {
   default: async ({ params, request, locals }) => {
     const { playerId } = locals;
-    const data = await request.formData();
     const { bandId } = params;
-    const name = data.get("name") as string;
-    const location = data.get("location") as string;
-    const date = data.get("date") as string;
-    const response = await prisma.gig.create({
-      data: {
-        band: {
-          connect: {
-            id: Number(bandId)
-          }
-        },
-        presences: {
-          create: {
-            playerId: Number(playerId),
-            value: true
-          }
-        },
-        name,
-        location,
-        date: new Date(date)
-      }
-    });
-    return { success: true, response };
+
+    const formData = Object.fromEntries(await request.formData());
+
+    return await create(playerId, bandId, formData);
   }
 }

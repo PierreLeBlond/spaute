@@ -1,3 +1,5 @@
+import { join } from '$lib/api/gig/join';
+import { update } from '$lib/api/gig/update';
 import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
@@ -57,39 +59,16 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
 export const actions: Actions = {
   join: async ({ params, locals, request }) => {
-    const data = await request.formData();
-    const available = !!data.get('available');
     const { gigId } = params;
     const { playerId } = locals;
+    const formData = Object.fromEntries(await request.formData());
 
-    const response = await prisma.presence.create({
-      data: {
-        gigId: Number(gigId),
-        playerId: Number(playerId),
-        value: available
-      }
-    });
-
-    await computePlayability(Number(gigId));
-
-    return { success: true, response };
+    return await join(gigId, playerId, formData);
   },
   update: async ({ request }) => {
-    const data = await request.formData();
-    const presence = !!data.get('presence');
-    const presenceId = Number(data.get('presenceId'));
+    const formData = Object.fromEntries(await request.formData());
 
-    const response = await prisma.presence.update({
-      where: {
-        id: presenceId
-      },
-      data: {
-        value: presence
-      }
-    });
-
-    await computePlayability(response.gigId);
-    return { success: true, response };
+    return await update(formData);
   }
 }
 

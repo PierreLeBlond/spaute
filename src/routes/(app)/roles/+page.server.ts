@@ -1,5 +1,7 @@
+import { RoleCreateInputSchema, RoleUpdateArgsSchema } from '$lib/generated/zod';
 import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
+import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
@@ -25,9 +27,34 @@ export const load: PageServerLoad = async ({ parent }) => {
 export const actions: Actions = {
   add: async ({ locals, request }) => {
     const { playerId } = locals;
-    const data = await request.formData();
-    const instrumentId = Number(data.get("instrumentId"));
-    const playable = !!data.get("playable");
+    const formData = Object.fromEntries(await request.formData());
+
+    const data: Prisma.RoleCreateInput = {
+      player: {
+        connect: {
+          id: Number(playerId)
+        }
+      },
+      instrument: {
+        connect: {
+          id: Number(formData.instrumentId)
+        }
+      },
+      playable: !!formData.playable
+    }
+
+    const result = RoleCreateInputSchema.safeParse(data);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = formated._errors;
+
+      return {
+        data,
+        errors
+      }
+    }
+
     const response = await prisma.role.create({
       include: {
         player: {
@@ -36,32 +63,39 @@ export const actions: Actions = {
           }
         }
       },
-      data: {
-        player: {
-          connect: {
-            id: Number(playerId)
-          }
-        },
-        instrument: {
-          connect: {
-            id: instrumentId
-          }
-        },
-        playable
-      }
+      data
     });
+
     await Promise.all(response.player.presences.map(presence => computePlayability(presence.gigId)));
+
     return { success: true, response };
   },
   update: async ({ request }) => {
-    const data = await request.formData();
-    const playable = !!data.get('playable');
-    const roleId = Number(data.get('roleId'));
+    const formData = Object.fromEntries(await request.formData());
+
+    const args: Prisma.RoleUpdateArgs = {
+      where: {
+        id: Number(formData.roleId)
+      },
+      data: {
+        playable: !!formData.playable
+      }
+    }
+
+    const result = RoleUpdateArgsSchema.safeParse(args);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = formated._errors;
+
+      return {
+        data: args.data,
+        errors
+      }
+    }
 
     const response = await prisma.role.update({
-      where: {
-        id: Number(roleId)
-      },
+      ...args,
       include: {
         player: {
           include: {
@@ -69,10 +103,8 @@ export const actions: Actions = {
           }
         }
       },
-      data: {
-        playable
-      }
     });
+
     await Promise.all(response.player.presences.map(presence => computePlayability(presence.gigId)));
     return { success: true, response };
   }

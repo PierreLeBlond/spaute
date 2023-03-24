@@ -1,5 +1,7 @@
+import { PlayerUpdateArgsSchema } from '$lib/generated/zod';
 import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
+import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -38,7 +40,7 @@ export const actions: Actions = {
     const { bandId } = params;
     const { playerId } = locals;
 
-    const response = await prisma.player.update({
+    const args: Prisma.PlayerUpdateArgs = {
       where: {
         id: Number(playerId)
       },
@@ -49,7 +51,21 @@ export const actions: Actions = {
           }
         }
       }
-    });
+    }
+
+    const result = PlayerUpdateArgsSchema.safeParse(args);
+
+    if (!result.success) {
+      const formated = result.error.format();
+      const errors = formated._errors;
+
+      return {
+        data: args.data,
+        errors
+      }
+    }
+
+    const response = await prisma.player.update(args);
 
     return { success: true, response };
   }
