@@ -25,7 +25,7 @@ export const actions: Actions = {
 
     const formData = Object.fromEntries(await request.formData());
     const data: Prisma.BandCreateInput = {
-      name: formData.name as string,
+      name: formData["name"] as string,
       players: {
         connect: [{
           id: Number(playerId)

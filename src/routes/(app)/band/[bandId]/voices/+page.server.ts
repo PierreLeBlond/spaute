@@ -1,7 +1,6 @@
 import { VoiceCreateInputSchema } from '$lib/generated/zod';
-import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -35,7 +34,7 @@ export const actions: Actions = {
       },
       instrument: {
         connect: {
-          id: Number(formData.instrumentId)
+          id: Number(formData['instrumentId'])
         }
       }
     }
@@ -53,15 +52,8 @@ export const actions: Actions = {
     }
 
     const response = await prisma.voice.create({
-      data, include: {
-        band: {
-          include: {
-            gigs: true
-          }
-        }
-      }
+      data
     });
-    await Promise.all(response.band.gigs.map(gig => computePlayability(gig.id)));
     return { success: true, response };
   }
 }

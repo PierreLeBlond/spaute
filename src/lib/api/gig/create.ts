@@ -16,9 +16,9 @@ export const create = async (playerId: string, bandId: string, formData: { [k: s
         value: true
       }
     },
-    name: formData.name as string,
-    location: formData.location as string,
-    date: new Date(formData.date as string)
+    name: formData["name"] as string,
+    location: formData["location"] as string,
+    date: new Date(formData["date"] as string)
   }
 
   const result = GigCreateInputSchema.safeParse(data);

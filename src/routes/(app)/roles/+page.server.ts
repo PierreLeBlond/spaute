@@ -1,5 +1,4 @@
 import { RoleCreateInputSchema, RoleUpdateArgsSchema } from '$lib/generated/zod';
-import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
 import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
@@ -37,10 +36,10 @@ export const actions: Actions = {
       },
       instrument: {
         connect: {
-          id: Number(formData.instrumentId)
+          id: Number(formData['instrumentId'])
         }
       },
-      playable: !!formData.playable
+      playable: !!formData['playable']
     }
 
     const result = RoleCreateInputSchema.safeParse(data);
@@ -56,17 +55,9 @@ export const actions: Actions = {
     }
 
     const response = await prisma.role.create({
-      include: {
-        player: {
-          include: {
-            presences: true
-          }
-        }
-      },
       data
     });
 
-    await Promise.all(response.player.presences.map(presence => computePlayability(presence.gigId)));
 
     return { success: true, response };
   },
@@ -75,10 +66,10 @@ export const actions: Actions = {
 
     const args: Prisma.RoleUpdateArgs = {
       where: {
-        id: Number(formData.roleId)
+        id: Number(formData['roleId'])
       },
       data: {
-        playable: !!formData.playable
+        playable: !!formData['playable']
       }
     }
 
@@ -94,18 +85,10 @@ export const actions: Actions = {
       }
     }
 
-    const response = await prisma.role.update({
-      ...args,
-      include: {
-        player: {
-          include: {
-            presences: true
-          }
-        }
-      },
-    });
+    const response = await prisma.role.update(
+      args
+    );
 
-    await Promise.all(response.player.presences.map(presence => computePlayability(presence.gigId)));
     return { success: true, response };
   }
 }

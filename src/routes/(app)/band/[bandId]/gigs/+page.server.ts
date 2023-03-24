@@ -1,7 +1,5 @@
 import { create } from '$lib/api/gig/create';
-import { GigCreateInputSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {

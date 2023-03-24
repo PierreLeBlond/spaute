@@ -17,12 +17,12 @@ export const load: PageServerLoad = async () => {
 }
 
 export const actions: Actions = {
-  default: async ({ request, locals }) => {
+  default: async ({ request }) => {
 
     const formData = Object.fromEntries(await request.formData());
 
     const data: Prisma.InstrumentCreateInput = {
-      name: formData.name as string
+      name: formData["name"] as string
     }
 
     const result = InstrumentCreateInputSchema.safeParse(data);

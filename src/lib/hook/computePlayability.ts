@@ -1,30 +1,11 @@
 import prisma from "$lib/prisma"
-import type { Voice, Player, Role, Presence } from "@prisma/client";
+import type { Voice, Player, Role, Presence, Gig, Band } from "@prisma/client";
 
-export const computePlayability = async (gigId: number) => {
-  const gig = await prisma.gig.findUniqueOrThrow({
-    where: {
-      id: gigId
-    },
-    include: {
-      presences: {
-        include: {
-          player: {
-            include: {
-              roles: true
-            }
-          }
-        }
-      },
-      band: {
-        include: {
-          voices: true
-        }
-      }
-    }
-  });
+type GigPayload = Gig & { band: Band & { voices: Voice[] }, presences: (Presence & { player: Player & { roles: Role[] } })[] };
 
-  const findConfiguration = (voices: Voice[], presences: Presence[], configuration: Role[]) => {
+export const computePlayability = async (gig: GigPayload) => {
+
+  const findConfiguration = (voices: Voice[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Role[]) => {
 
     const voicesCopy = voices.slice(0);
     const voice = voicesCopy.pop();
@@ -35,8 +16,9 @@ export const computePlayability = async (gigId: number) => {
 
     const players = presences.map(presence => presence.player);
 
-    const roles: Role[] = players.filter(player => player.roles.some((role: Role) => role.instrumentId == voice.instrumentId && role.playable))
-      .map(player => player.roles.find((role: Role) => role.instrumentId == voice.instrumentId));
+    const roles = players.filter(player => player.roles.some((role: Role) => role.instrumentId == voice.instrumentId && role.playable))
+      .map(player => player.roles.find((role: Role) => role.instrumentId == voice.instrumentId))
+      .filter(Boolean);
 
     let config;
     const foundConfiguration = roles.some(role => {
@@ -60,10 +42,14 @@ export const computePlayability = async (gigId: number) => {
 
   await prisma.gig.update({
     where: {
-      id: gigId
+      id: gig.id
     },
     data: {
       playable: !!configuration
     }
   })
+}
+
+export const computePlayabilities = async (gigs: GigPayload[]) => {
+  await Promise.all(gigs.map(gig => computePlayability(gig)));
 }

@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from './$types';
 import type { Prisma } from "@prisma/client";
 import { PlayerCreateInputSchema } from "$lib/generated/zod";
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   if (locals.playerId) {
     throw redirect(302, '/');
   }
@@ -25,7 +25,7 @@ export const actions: Actions = {
     const formData = Object.fromEntries(await request.formData());
 
     const data: Prisma.PlayerCreateInput = {
-      name: formData.name as string,
+      name: formData["name"] as string,
     };
 
     const result = PlayerCreateInputSchema.safeParse(data);

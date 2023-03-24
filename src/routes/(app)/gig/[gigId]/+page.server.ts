@@ -1,6 +1,5 @@
 import { join } from '$lib/api/gig/join';
 import { update } from '$lib/api/gig/update';
-import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
 

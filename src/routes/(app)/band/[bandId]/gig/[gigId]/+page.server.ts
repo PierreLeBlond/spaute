@@ -1,9 +1,6 @@
 import { join } from '$lib/api/gig/join';
 import { update } from '$lib/api/gig/update';
-import { PresenceCreateInputSchema, PresenceUpdateArgsSchema } from '$lib/generated/zod';
-import { computePlayability } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, parent }) => {

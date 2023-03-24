@@ -1,5 +1,4 @@
 import { PresenceCreateInputSchema } from "$lib/generated/zod";
-import { computePlayability } from "$lib/hook/computePlayability";
 import prisma from "$lib/prisma";
 import type { Prisma } from "@prisma/client";
 
@@ -15,7 +14,7 @@ export const join = async (gigId: string, playerId: string, formData: { [k: stri
         id: Number(playerId)
       }
     },
-    value: !!formData.available
+    value: !!formData["available"]
   }
 
   const result = PresenceCreateInputSchema.safeParse(data);
@@ -33,8 +32,6 @@ export const join = async (gigId: string, playerId: string, formData: { [k: stri
   const response = await prisma.presence.create({
     data
   });
-
-  await computePlayability(Number(gigId));
 
   return { success: true, response };
 }

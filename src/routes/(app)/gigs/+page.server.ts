@@ -63,7 +63,7 @@ export const actions: Actions = {
 
     const formData = Object.fromEntries(await request.formData());
 
-    return await create(playerId, formData.bandId as string, formData);
+    return await create(playerId, formData['bandId'] as string, formData);
 
   }
 }

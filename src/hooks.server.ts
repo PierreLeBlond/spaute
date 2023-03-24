@@ -3,9 +3,11 @@ import * as cookie from 'cookie';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-  const playerId = cookies.playerId;
+  const playerId = cookies['playerId'];
 
-  event.locals.playerId = playerId;
+  if (playerId) {
+    event.locals.playerId = playerId;
+  }
 
   const fromPathname = event.url.pathname;
   if (fromPathname != '/logout' && fromPathname != '/login') {
