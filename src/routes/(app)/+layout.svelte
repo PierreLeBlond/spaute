@@ -1,5 +1,8 @@
 <script lang="ts">
-  import Menu from '$lib/components/Menu.svelte';
+  import type { LayoutData } from './$types';
+  import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+
+  export let data: LayoutData;
 
   const tabs = [
     {
@@ -17,8 +20,7 @@
   ];
 </script>
 
-<Menu {tabs} />
-
-<div class="relative h-full w-full">
-  <slot />
-</div>
+<SlidingTabs
+  href={data.href}
+  {tabs}><slot /></SlidingTabs
+>

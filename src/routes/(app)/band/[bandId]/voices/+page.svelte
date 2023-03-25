@@ -1,17 +1,21 @@
 <script lang="ts">
-  import Form from '$lib/components/forms/Form.svelte';
-  import Select from '$lib/components/forms/Select.svelte';
-  import Button from '$lib/components/forms/Button.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
   import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
+  import RightLink from '$lib/components/links/RightLink.svelte';
 
   export let data: PageData;
 
   $: voices = data.voices;
-  $: instruments = data.instruments;
 </script>
+
+<div class="p-2">
+  <RightLink
+    href="/band/{data.band.id}/voice"
+    label="Ajouter un pupitre"
+  />
+</div>
 
 <List>
   {#if voices.length == 0}
@@ -34,22 +38,3 @@
     {/each}
   {/if}
 </List>
-
-<div class="w-full p-2 sm:w-96">
-  <Form>
-    <div class="grid grid-cols-1 gap-y-2">
-      <h2 class="text-xs">Ajouter un pupitre</h2>
-      <Select
-        id={'instrumentId'}
-        label={'instrument'}
-      >
-        {#each instruments as instrument}
-          <option value={instrument.id}>
-            {instrument.name}
-          </option>
-        {/each}
-      </Select>
-      <Button label={'Ajouter'} />
-    </div>
-  </Form>
-</div>

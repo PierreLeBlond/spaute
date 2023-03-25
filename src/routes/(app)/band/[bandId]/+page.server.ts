@@ -30,12 +30,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   });
   return {
     band,
-    players
+    players,
+    index: 10
   }
 }
 
 export const actions: Actions = {
-  join: async ({ params, locals }) => {
+  default: async ({ params, locals }) => {
     const { bandId } = params;
     const { playerId } = locals;
 

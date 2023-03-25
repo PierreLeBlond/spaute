@@ -1,6 +1,5 @@
-import { create } from '$lib/api/gig/create';
 import prisma from '$lib/prisma'
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
   const playerId = Number(locals.playerId);
@@ -44,17 +43,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
   return {
     presences,
-    newGigs
-  }
-}
-
-export const actions: Actions = {
-  default: async ({ params, request, locals }) => {
-    const { playerId } = locals;
-    const { bandId } = params;
-
-    const formData = Object.fromEntries(await request.formData());
-
-    return await create(playerId, bandId, formData);
+    newGigs,
+    index: 20
   }
 }

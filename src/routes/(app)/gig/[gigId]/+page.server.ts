@@ -52,7 +52,8 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     presence,
     backPathname: '../gigs',
     backName: 'prestas',
-    title: gig.name
+    title: gig.name,
+    index: 21
   }
 }
 

@@ -1,6 +1,5 @@
 import prisma from '$lib/prisma'
-import type { Actions, PageServerLoad } from './$types';
-import { create } from '$lib/api/gig/create';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const playerId = Number(locals.playerId);
@@ -41,29 +40,9 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
   });
 
-  const bands = prisma.band.findMany({
-    where: {
-      players: {
-        some: {
-          id: playerId
-        }
-      }
-    }
-  })
   return {
     presences,
     newGigs,
-    bands
-  }
-}
-
-export const actions: Actions = {
-  default: async ({ request, locals }) => {
-    const { playerId } = locals;
-
-    const formData = Object.fromEntries(await request.formData());
-
-    return await create(playerId, formData['bandId'] as string, formData);
-
+    index: 20
   }
 }

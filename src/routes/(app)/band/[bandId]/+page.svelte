@@ -11,12 +11,12 @@
 
 {#if data.players.length != 0}
   <div class="w-full p-2 text-orange-300 sm:w-96">
-    <p class="text-xs">Bienvenus chez ta fanfare préférée !</p>
+    <p class="text-xs">Un, dos, Atención. Un, dos, tres, cuatro, la panthera.</p>
   </div>
 {:else}
   <div class="w-full p-2 sm:w-96">
-    <Form action="?/join">
-      <p class="text-xs">Tu viens t'amuser avec nous ?</p>
+    <Form>
+      <p class="text-xs">Allez viens, on est bien !</p>
       <Button label={'Rejoindre'} />
     </Form>
   </div>

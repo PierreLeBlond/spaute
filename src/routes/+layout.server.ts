@@ -1,7 +1,7 @@
 import prisma from '$lib/prisma';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals }) => {
+export const load: LayoutServerLoad = async ({ locals, url }) => {
   const { playerId } = locals;
 
   if (!playerId) {
@@ -17,6 +17,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
   return {
     playerId,
     playerName: player.name,
-    title: player.name
+    title: player.name,
+    href: url.href
   }
 }
