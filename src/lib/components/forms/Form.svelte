@@ -3,7 +3,7 @@
 </script>
 
 <form
-  class="w-full overflow-y-auto rounded border border-amber-300 bg-neutral-900 p-2"
+  class="w-full overflow-y-auto rounded bg-neutral-900 p-2 text-blue-300"
   method="POST"
   {action}
 >

@@ -1,76 +1,117 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { Toaster } from 'svelte-french-toast';
+  import { sendToast } from './sendToast';
+
+  $: if ($page?.form?.message) {
+    sendToast($page.form.message, !$page.form.success);
+  }
 </script>
 
-<header class="grid h-full w-full grid-cols-5">
-  <div class="col-span-1 flex flex-col items-center justify-evenly py-2">
-    {#if $page.data['backPathname']}
-      <a
-        href={$page.data['backPathname']}
-        class="flex items-center justify-center text-blue-300"
-      >
+<header class="relative grid h-full w-full grid-cols-5 bg-neutral-900">
+  <svg
+    width="100%"
+    height="110%"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 135.46666 30"
+    preserveAspectRatio="none"
+    class="absolute z-0 h-full w-full text-neutral-800"
+  >
+    <g transform="scale(0.95037414,1.0522172)">
+      <path
+        d="m 10.328013,26.265205 q 1.469071,0 2.403934,-0.222587 0.979381,-0.267104 1.558106,-0.667759 0.578725,-0.445173 0.801311,-1.023898 0.222587,-0.578725 0.222587,-1.291002 0,-1.513588 -1.424554,-2.492969 Q 12.464844,19.543092 8.9924942,18.385643 7.478906,17.851435 5.9653179,17.183675 4.4517297,16.471399 3.2497626,15.447501 2.0477955,14.379086 1.2910014,12.910015 0.5342073,11.396426 0.5342073,9.2595961 q 0,-2.1368304 0.8013114,-3.8284878 Q 2.1368301,3.6949336 3.605901,2.4929665 5.0749719,1.2909995 7.1672849,0.66775726 9.259598,-2.2392273e-6 11.886119,-2.2392273e-6 q 3.116211,0 5.386593,0.6677594992273 2.270382,0.66775954 3.739453,1.46907084 L 19.008887,7.612456 Q 17.717885,6.9446965 16.115262,6.4550062 14.557157,5.9207986 12.331292,5.9207986 q -2.4929691,0 -3.6059016,0.7122768 -1.0684152,0.6677595 -1.0684152,2.0923131 0,0.8458287 0.4006557,1.4245535 0.4006557,0.578725 1.1129325,1.068415 0.7567941,0.445173 1.6916576,0.845829 0.97938,0.356138 2.13683,0.756794 2.403934,0.890346 4.184626,1.780692 1.780692,0.845829 2.938142,2.003279 1.201967,1.157449 1.780692,2.715555 0.578725,1.558105 0.578725,3.78397 0,4.318178 -3.027176,6.722113 -3.027177,2.359416 -9.126047,2.359416 -2.0477956,0 -3.6949356,-0.267103 Q 4.9859373,31.696315 3.6949356,31.340177 2.4484512,30.984038 1.5135879,30.583383 0.6232419,30.182727 -2.9659271e-7,29.826589 L 1.9587609,24.306443 q 1.3800363,0.756794 3.3833148,1.380037 2.0477957,0.578725 4.9859373,0.578725 z"
+      />
+      <path
+        d="m 32.523558,0.35613616 q 6.900182,0 10.595117,2.44845144 3.694936,2.4039342 3.694936,7.9240794 0,5.564662 -3.739453,8.057631 -3.739453,2.448452 -10.684152,2.448452 H 30.208659 V 31.562763 H 23.26396 V 1.1574476 q 2.270382,-0.44517304 4.807868,-0.62324224 2.537486,-0.1780692 4.45173,-0.1780692 z M 32.968731,6.276937 q -0.756794,0 -1.513588,0.044517 -0.712277,0.044517 -1.246484,0.089035 v 8.9034601 h 2.181347 q 3.605901,0 5.431111,-0.979381 1.825209,-0.97938 1.825209,-3.650418 0,-1.291002 -0.48969,-2.1368307 Q 38.711463,7.7014906 37.821117,7.2118003 36.975288,6.6775927 35.728804,6.4995235 34.482319,6.276937 32.968731,6.276937 Z"
+      />
+      <path
+        d="m 65.002575,31.562763 q -0.48969,-1.602623 -1.112932,-3.29428 -0.578725,-1.691657 -1.15745,-3.383315 H 50.712522 q -0.578725,1.691658 -1.201967,3.383315 -0.578725,1.691657 -1.068415,3.29428 h -7.211803 q 1.736175,-4.985937 3.29428,-9.215081 1.558106,-4.229143 3.027177,-7.968596 1.513588,-3.739454 2.938141,-7.0782511 1.469071,-3.3833148 3.027177,-6.58856034 h 6.633077 q 1.513589,3.20524554 2.982659,6.58856034 1.469071,3.3387971 2.938142,7.0782511 1.513588,3.739453 3.071694,7.968596 1.558105,4.229144 3.29428,9.215081 z M 56.67784,7.7014906 q -0.222587,0.6677595 -0.66776,1.8252093 -0.445173,1.1574501 -1.023897,2.6710381 -0.578725,1.513588 -1.291002,3.338797 -0.66776,1.82521 -1.380036,3.828488 h 8.769908 Q 60.372776,17.361745 59.705016,15.536535 59.037257,13.711326 58.414015,12.197738 57.83529,10.68415 57.390117,9.5266999 56.944944,8.3692501 56.67784,7.7014906 Z"
+      />
+      <path
+        d="m 83.057991,32.186005 q -3.249763,0 -5.60918,-0.890346 -2.359417,-0.934863 -3.917522,-2.537486 -1.513588,-1.64714 -2.270382,-3.873005 Q 70.54863,22.614786 70.54863,19.899231 V 0.71227456 h 6.944699 V 19.320506 q 0,1.869726 0.400655,3.205245 0.445173,1.291002 1.15745,2.136831 0.756794,0.801311 1.780692,1.15745 1.068415,0.356138 2.3149,0.356138 2.537486,0 4.095591,-1.558106 1.602623,-1.558105 1.602623,-5.297558 V 0.71227456 h 6.944699 V 19.899231 q 0,2.715555 -0.756794,4.985937 -0.756794,2.270383 -2.3149,3.917523 -1.558105,1.602622 -3.96204,2.492968 -2.403934,0.890346 -5.698214,0.890346 z"
+      />
+      <path
+        d="M 120.79007,0.71227456 V 6.6330754 h -9.30412 V 31.562763 h -6.94469 V 6.6330754 H 95.23714 V 0.71227456 Z"
+      />
+      <path
+        d="M 120.68243,31.562763 V 0.71227456 h 20.8341 V 6.5440408 h -13.8894 v 6.0543532 h 12.33129 v 5.698214 h -12.33129 v 7.434389 h 14.9133 v 5.831766 z"
+      />
+    </g>
+  </svg>
+  <div class="z-10 contents">
+    <div class="relative col-span-1 flex flex-col items-center justify-evenly py-2">
+      {#if $page.data['backPathname']}
+        <a
+          href={$page.data['backPathname']}
+          class="flex items-center justify-center text-blue-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-arrow-left-circle-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+            />
+          </svg>
+        </a>
+      {/if}
+      {#if $page.data['backName']}
+        <p class="truncate text-xs">{$page.data['backName']}</p>
+      {/if}
+    </div>
+    <div class="relative col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
+      {#if $page.data['playerName']}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
           fill="currentColor"
-          class="bi bi-arrow-left-circle-fill"
+          class="bi bi-person-circle"
           viewBox="0 0 16 16"
         >
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
           <path
-            d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+            fill-rule="evenodd"
+            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
           />
         </svg>
-      </a>
-    {/if}
-    {#if $page.data['backName']}
-      <p class="truncate text-xs">{$page.data['backName']}</p>
-    {/if}
-  </div>
-  <div class="col-span-2 col-start-2 flex h-16 flex-col items-start justify-center truncate">
-    <h1 class="text-xl">
-      {$page.data['title']}
-    </h1>
-  </div>
-  <div class="col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
-    {#if $page.data['playerName']}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        fill="currentColor"
-        class="bi bi-person-circle"
-        viewBox="0 0 16 16"
-      >
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-        <path
-          fill-rule="evenodd"
-          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-        />
-      </svg>
-      <p class="truncate text-xs">{$page.data['playerName']}</p>
-    {/if}
-  </div>
-  <div class="col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
-    {#if $page.data['playerId']}
-      <a
-        href="/logout"
-        class="flex items-center justify-center text-blue-300"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
-          fill="currentColor"
-          class="bi bi-door-closed-fill"
-          viewBox="0 0 16 16"
+        <p class="truncate text-xs">{$page.data['playerName']}</p>
+      {/if}
+    </div>
+    <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
+      {#if $page.data['playerId']}
+        <a
+          href="/logout"
+          class="flex items-center justify-center text-blue-300"
         >
-          <path
-            d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-          />
-        </svg>
-      </a>
-      <p class="text-xs">logout</p>
-    {/if}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-door-closed-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+            />
+          </svg>
+        </a>
+        <p class="text-xs">logout</p>
+      {/if}
+    </div>
+    <div class="relative col-span-3 row-start-2 flex h-16 flex-col items-start justify-center truncate pl-8">
+      <h1 class="text-xl">
+        {$page.data['title']}
+      </h1>
+    </div>
+    <div class="relative col-span-2 row-start-2">
+      <Toaster />
+    </div>
   </div>
 </header>

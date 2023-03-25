@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/forms/Button.svelte';
-  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
@@ -10,13 +10,13 @@
 </script>
 
 {#if data.players.length != 0}
-  <div class="w-full p-2 text-amber-300 sm:w-96">
-    <p class="text-xs">Bienvenus chez ta fanfare préférée !</p>
+  <div class="w-full p-2 text-orange-300 sm:w-96">
+    <p class="text-xs">Un, dos, Atención. Un, dos, tres, cuatro, la panthera.</p>
   </div>
 {:else}
   <div class="w-full p-2 sm:w-96">
-    <Form action="?/join">
-      <p class="text-xs">Tu viens t'amuser avec nous ?</p>
+    <Form>
+      <p class="text-xs">Allez viens, on est bien !</p>
       <Button label={'Rejoindre'} />
     </Form>
   </div>
@@ -29,7 +29,7 @@
     {#each data.band.players as player}
       <ListItem>
         {#if player.id == Number(data.playerId)}
-          <p class="w-full bg-amber-300 p-2 text-sm text-neutral-900">
+          <p class="w-full bg-orange-300 p-2 text-sm text-neutral-900">
             {player.name}
           </p>
         {:else}

@@ -30,12 +30,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   });
   return {
     band,
-    players
+    players,
+    index: 10
   }
 }
 
 export const actions: Actions = {
-  join: async ({ params, locals }) => {
+  default: async ({ params, locals }) => {
     const { bandId } = params;
     const { playerId } = locals;
 
@@ -59,6 +60,8 @@ export const actions: Actions = {
       const errors = formated._errors;
 
       return {
+        success: false,
+        message: 'Impossible de rejoindre :(',
         data: args.data,
         errors
       }
@@ -66,7 +69,7 @@ export const actions: Actions = {
 
     const response = await prisma.player.update(args);
 
-    return { success: true, response };
+    return { success: true, message: 'Fanfare rejointe :)', response };
   }
 }
 

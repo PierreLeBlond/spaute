@@ -1,22 +1,29 @@
 <script lang="ts">
-  import Menu from "$lib/components/Menu.svelte";
+  import type { LayoutData } from './$types';
+  import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+
+  export let data: LayoutData;
 
   const tabs = [
     {
-      href: "/bands",
-      label: "mes fanfares",
+      href: '/bands',
+      key: '/band',
+      label: 'mes fanfares'
     },
     {
-      href: "/gigs",
-      label: "mes prestas",
+      href: '/gigs',
+      key: '/gig',
+      label: 'mes prestas'
     },
     {
-      href: "/roles",
-      label: "mes pupitres",
-    },
+      href: '/roles',
+      key: '/role',
+      label: 'mes pupitres'
+    }
   ];
 </script>
 
-<Menu {tabs} />
-
-<slot />
+<SlidingTabs
+  href={data.href}
+  {tabs}><slot /></SlidingTabs
+>
