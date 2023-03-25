@@ -5,7 +5,7 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
-  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
 
   export let data: PageData;
 

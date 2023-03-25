@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from '$lib/components/forms/Button.svelte';
-  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';

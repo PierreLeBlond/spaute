@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/forms/Button.svelte';
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
-  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import type { Instrument, Role } from '@prisma/client';
 

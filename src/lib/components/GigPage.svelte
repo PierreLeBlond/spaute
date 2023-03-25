@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Band, Gig, Player, Presence } from '@prisma/client';
-  import DeleteButton from './forms/DeleteButton.svelte';
+  import DeleteButton from './buttons/DeleteButton.svelte';
   import JoinGigForm from './forms/JoinGigForm.svelte';
   import UpdatePresenceForm from './forms/UpdatePresenceForm.svelte';
   import GigView from './GigView.svelte';
