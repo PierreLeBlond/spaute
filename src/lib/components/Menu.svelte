@@ -2,12 +2,14 @@
   import { page } from '$app/stores';
   interface Tab {
     href: string;
+    key: string;
     label: string;
   }
   export let tabs: Tab[];
-  $: routeMap = new Map<string, string>(tabs.map((tab, i) => [tab.href, `${i * 100}%`]));
+  $: offsetMap = new Map<string, string>(tabs.map((tab, i) => [tab.key, `${i * 100}%`]));
   $: pathname = $page.url.pathname ?? '';
-  $: selectedOffset = routeMap.get(pathname);
+  $: selectedHref = Array.from(offsetMap.keys()).find((key: string) => pathname.startsWith(key)) as string;
+  $: selectedOffset = offsetMap.get(selectedHref);
 </script>
 
 <ul class="relative grid w-full grid-cols-3 items-center justify-center bg-neutral-800 py-2 sm:w-64">

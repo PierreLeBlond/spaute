@@ -22,7 +22,7 @@
     {#each bands as band}
       <ListLinkItem>
         <a
-          href="./band/{band.id}"
+          href="./band/{band.id}/players"
           class="flex w-full rounded p-2 text-sm"
         >
           {band.name}
