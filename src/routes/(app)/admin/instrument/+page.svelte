@@ -2,22 +2,13 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import Button from '$lib/components/forms/Button.svelte';
-  import List from '$lib/components/layout/List.svelte';
-  import ListItem from '$lib/components/layout/ListItem.svelte';
-  import type { PageData } from './$types';
+  import type { ActionData } from './$types';
+  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
 
-  export let data: PageData;
-
-  $: instruments = data.instruments;
+  export let form: ActionData;
 </script>
 
-<List>
-  {#each instruments as instrument}
-    <ListItem>
-      <p class="p-2 text-sm">{instrument.name}</p>
-    </ListItem>
-  {/each}
-</List>
+<ReturnLink href="/admin/instruments" />
 
 <div class="w-full p-2 sm:w-96">
   <Form>
@@ -26,6 +17,8 @@
       <Text
         id="name"
         label="nom"
+        value={form?.data?.name ?? ''}
+        error={form?.errors?.name}
       />
       <div class="col-span-2">
         <Button label={'Ajouter'} />

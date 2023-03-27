@@ -1,18 +1,11 @@
 import { InstrumentCreateInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
-  const instruments = await prisma.instrument.findMany({
-    orderBy: {
-      name: 'asc'
-    }
-  });
   return {
-    instruments,
-    backPathname: '/',
-    title: 'Instruments'
+    index: 11
   }
 }
 
@@ -29,7 +22,9 @@ export const actions: Actions = {
 
     if (!result.success) {
       const formated = result.error.format();
-      const errors = formated._errors;
+      const errors = {
+        name: formated.name?._errors.pop()
+      }
 
       return {
         success: false,
@@ -39,10 +34,21 @@ export const actions: Actions = {
       }
     }
 
-    const response = await prisma.instrument.create({
-      data
-    });
-
-    return { success: true, message: 'Instrument créé :)', response };
+    try {
+      const response = await prisma.instrument.create({ data });
+      return { success: true, message: 'Instrument créé !', response };
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+      if (error.code !== 'P2002') {
+        throw error;
+      }
+      return {
+        success: false, message: 'Instrument non valide :(', errors: {
+          name: 'Nom déjà utilisé...'
+        }
+      }
+    }
   }
 }
