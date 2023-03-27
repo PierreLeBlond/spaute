@@ -1,6 +1,6 @@
 import { BandCreateInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = () => ({
@@ -37,8 +37,24 @@ export const actions: Actions = {
       }
     }
 
-    const response = await prisma.band.create({ data });
-    return { success: true, message: 'Fanfare créée !', response };
+    try {
+      const response = await prisma.band.create({ data });
+      return { success: true, message: 'Fanfare créée !', response };
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+      if (error.code !== 'P2002') {
+        throw error;
+      }
+      return {
+        success: false, message: 'Fanfare non valide :(', errors: {
+          name: 'Nom déjà utilisé...'
+        }
+      }
+    }
+
+
   }
 }
 
