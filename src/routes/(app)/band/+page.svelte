@@ -8,23 +8,21 @@
   export let form: ActionData;
 </script>
 
-<div class="h-full w-full">
-  <ReturnLink href="/bands" />
+<ReturnLink href="/bands" />
 
-  <div class="w-full p-2 sm:w-96">
-    <Form>
-      <div class="grid grid-cols-2 gap-y-2">
-        <h2 class="col-span-2 text-xs">Créer une fanfare</h2>
-        <Text
-          id={'name'}
-          label={'nom'}
-          value={form?.data?.name ?? ''}
-          error={form?.errors?.name}
-        />
-        <div class="col-span-2">
-          <Button label={'Créer'} />
-        </div>
+<div class="w-full p-2 sm:w-96">
+  <Form>
+    <div class="grid grid-cols-2 gap-y-2">
+      <h2 class="col-span-2 text-xs">Créer une fanfare</h2>
+      <Text
+        id={'name'}
+        label={'nom'}
+        value={form?.data?.name ?? ''}
+        error={form?.errors?.name}
+      />
+      <div class="col-span-2">
+        <Button label={'Créer'} />
       </div>
-    </Form>
-  </div>
+    </div>
+  </Form>
 </div>
