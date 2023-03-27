@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 }
 
 export const actions: Actions = {
-  addPlayer: async ({ request }) => {
+  create: async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
 
     const data: Prisma.PlayerCreateInput = {
@@ -45,6 +45,7 @@ export const actions: Actions = {
     }
 
     const response = await prisma.player.create({ data });
+
     return { success: true, messagge: 'Musicien créé :)', response };
   },
   login: async ({ cookies, request, locals }) => {

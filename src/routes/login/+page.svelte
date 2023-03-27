@@ -27,7 +27,7 @@
 </List>
 
 <div class="w-full p-2 sm:w-96">
-  <Form action={'?/addPlayer'}>
+  <Form action={'?/create'}>
     <div class="grid grid-cols-2 gap-y-2 pt-2">
       <h2 class="col-span-2 w-full text-xs">
         <p>Tu trouves pas ton blaze ?</p>
