@@ -1,11 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  interface Tab {
-    href: string;
-    key: string;
-    label: string;
-  }
+  import type { Tab } from './Tab';
+
   export let tabs: Tab[];
+
   $: offsetMap = new Map<string, string>(tabs.map((tab, i) => [tab.key, `${i * 100}%`]));
   $: pathname = $page.url.pathname ?? '';
   $: selectedHref = Array.from(offsetMap.keys()).find((key: string) => pathname.startsWith(key)) as string;

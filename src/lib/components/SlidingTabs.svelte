@@ -3,13 +3,10 @@
   import type { EasingFunction } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { page } from '$app/stores';
+  import type { Tab } from './Tab';
 
   export let href: string | undefined;
 
-  interface Tab {
-    href: string;
-    label: string;
-  }
   export let tabs: Tab[];
 
   let lastIndex: number;
