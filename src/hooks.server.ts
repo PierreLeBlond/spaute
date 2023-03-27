@@ -14,7 +14,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.cookies.set('fromPathname', fromPathname, { path: '/' });
   }
 
-  const redirectToLogin = !playerId && fromPathname != '/login';
+  const redirectToLogin = !playerId && !fromPathname.startsWith('/login');
 
   if (redirectToLogin) {
     throw redirect(302, '/login');
