@@ -13,6 +13,6 @@ export const load: PageServerLoad = async ({ params }) => {
   });
   return {
     voices,
-    index: 30
+    index: 300
   }
 }

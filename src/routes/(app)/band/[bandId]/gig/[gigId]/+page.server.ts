@@ -50,10 +50,8 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     unavailablePlayers,
     remainingPlayers,
     presence,
-    backPathname: '../gigs',
-    backName: 'prestas',
     title: gig.name,
-    index: 21
+    index: 202
   }
 }
 

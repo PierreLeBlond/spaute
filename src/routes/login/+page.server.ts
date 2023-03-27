@@ -15,8 +15,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
   });
   return {
-    players,
-    title: 'Login'
+    players
   }
 }
 

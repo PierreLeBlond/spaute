@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
   import type { Tab } from './Tab';
 
-  export let tabs: Tab[];
+  export let tabs: Tab[] = [];
 
   $: offsetMap = new Map<string, string>(tabs.map((tab, i) => [tab.key, `${i * 100}%`]));
   $: pathname = $page.url.pathname ?? '';

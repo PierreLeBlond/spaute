@@ -44,6 +44,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
   return {
     presences,
     newGigs,
-    index: 20
+    index: 200
   }
 }

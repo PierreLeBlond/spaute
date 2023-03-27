@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   return {
     band,
     players,
-    index: 10
+    index: 100
   }
 }
 
