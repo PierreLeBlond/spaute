@@ -29,23 +29,47 @@
     {#each data.band.players as player}
       <ListItem>
         {#if player.id == Number(data.playerId)}
-          <p class="w-full bg-orange-300 p-2 text-sm text-neutral-900">
-            {player.name}
-          </p>
+          <div class="flex justify-between rounded border-b-2 border-orange-300 p-2 text-sm">
+            <p>
+              {player.name}
+            </p>
+            {#if player.adminRoles.length != 0}
+              <p>admin</p>
+            {/if}
+          </div>
+        {:else if data.isAdmin}
+          <a
+            href="/band/{data.band.id}/player/{player.id}"
+            class="flex justify-between rounded border-b-2 border-blue-300 p-2 text-sm"
+          >
+            <p>
+              {player.name}
+            </p>
+            {#if player.adminRoles.length != 0}
+              <p>admin</p>
+            {/if}
+          </a>
         {:else}
-          <p class="w-full rounded p-2 text-sm">
-            {player.name}
-          </p>
+          <div class="flex justify-between p-2 text-sm">
+            <p>
+              {player.name}
+            </p>
+            {#if player.adminRoles.length != 0}
+              <p>admin</p>
+            {/if}
+          </div>
         {/if}
       </ListItem>
     {/each}
   {/if}
 </List>
 
-<div class="w-full p-2">
-  <DeleteButton
-    label="Supprimer la fanfare :o"
-    url="/api/band/{data.band.id}"
-    backUrl="/bands"
-  />
-</div>
+{#if data.isAdmin}
+  <div class="w-full p-2">
+    <DeleteButton
+      label="Supprimer la fanfare :o"
+      url="/api/band/{data.band.id}"
+      backUrl="/bands"
+    />
+  </div>
+{/if}

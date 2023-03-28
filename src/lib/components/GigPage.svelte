@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import type { Band, Gig, Player, Presence } from '@prisma/client';
   import DeleteButton from './buttons/DeleteButton.svelte';
   import JoinGigForm from './forms/JoinGigForm.svelte';
@@ -59,10 +60,12 @@
   {/each}
 </List>
 
-<div class="w-full p-2">
-  <DeleteButton
-    label="Supprimer la presta"
-    url="/api/gig/{gig.id}"
-    backUrl="../"
-  />
-</div>
+{#if $page.data['isAdmin']}
+  <div class="w-full p-2">
+    <DeleteButton
+      label="Supprimer la presta"
+      url="/api/gig/{gig.id}"
+      backUrl="../"
+    />
+  </div>
+{/if}

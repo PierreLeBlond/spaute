@@ -16,6 +16,11 @@ export const create = async (playerId: string, bandId: string, formData: { [k: s
         value: true
       }
     },
+    organizerRoles: {
+      create: {
+        playerId: Number(playerId)
+      }
+    },
     name: formData["name"] as string,
     location: formData["location"] as string,
     date: new Date(formData["date"] as string)

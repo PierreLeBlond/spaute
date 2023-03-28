@@ -245,6 +245,17 @@ const bandData: Prisma.BandCreateInput[] = [
         }, //*/
       ],
     },
+    adminRoles: {
+      create: [
+        {
+          player: {
+            connect: {
+              id: 5
+            }
+          }
+        }
+      ]
+    },
     gigs: {
       create: [
         {

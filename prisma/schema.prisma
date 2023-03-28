@@ -14,35 +14,39 @@ generator zod {
 }
 
 model Band {
-  id      Int      @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   /// @zod.string.min(1, { message: "Pas de nom, pas de fanfare." }).max(32)
-  name    String   @unique
-  players Player[]
-  gigs    Gig[]
-  voices  Voice[]
+  name       String      @unique
+  players    Player[]
+  gigs       Gig[]
+  voices     Voice[]
+  adminRoles AdminRole[]
 }
 
 model Player {
-  id        Int        @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   /// @zod.string.min(1, { message: "J'ai pas compris." }).max(32)
-  name      String
-  presences Presence[]
-  roles     Role[]
-  bands     Band[]
+  name           String
+  presences      Presence[]
+  roles          Role[]
+  bands          Band[]
+  organizerRoles OrganizerRole[]
+  adminRoles     AdminRole[]
 }
 
 model Gig {
-  id        Int        @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   /// @zod.string.min(1, { message: "C\'est vide :(" }).max(32)
-  name      String
-  presences Presence[]
-  band      Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId    Int
+  name           String
+  presences      Presence[]
+  band           Band            @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId         Int
   /// @zod.date.min(new Date(), { message: "Un peu trop tard !"})
-  date      DateTime
+  date           DateTime
   /// @zod.string.min(1, { message: "Dans ton c** ?" }).max(60)
-  location  String
-  playable  Boolean    @default(false)
+  location       String
+  playable       Boolean         @default(false)
+  organizerRoles OrganizerRole[]
 }
 
 model Presence {
@@ -63,6 +67,8 @@ model Role {
   instrumentId Int
   player       Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId     Int
+
+  @@unique([instrumentId, playerId])
 }
 
 model Instrument {
@@ -79,4 +85,24 @@ model Voice {
   instrumentId Int
   band         Band       @relation(fields: [bandId], references: [id])
   bandId       Int
+}
+
+model OrganizerRole {
+  id       Int    @id @default(autoincrement())
+  gig      Gig    @relation(fields: [gigId], references: [id])
+  gigId    Int
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId Int
+
+  @@unique([gigId, playerId])
+}
+
+model AdminRole {
+  id       Int    @id @default(autoincrement())
+  band     Band   @relation(fields: [bandId], references: [id])
+  bandId   Int
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId Int
+
+  @@unique([bandId, playerId])
 }

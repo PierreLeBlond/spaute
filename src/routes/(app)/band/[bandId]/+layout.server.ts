@@ -1,15 +1,24 @@
 import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = async ({ params }) => {
+export const load: LayoutServerLoad = async ({ locals, params }) => {
+  const { playerId } = locals;
   const { bandId } = params;
   const band = await prisma.band.findUniqueOrThrow({
     where: {
       id: Number(bandId)
+    },
+    include: {
+      adminRoles: {
+        where: {
+          playerId: Number(playerId)
+        }
+      }
     }
   });
   return {
     band,
+    isAdmin: band.adminRoles.length != 0,
     title: band.name,
     backPathname: '/bands',
     backName: 'fanfares',

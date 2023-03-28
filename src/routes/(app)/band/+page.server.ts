@@ -18,6 +18,11 @@ export const actions: Actions = {
         connect: [{
           id: Number(playerId)
         }]
+      },
+      adminRoles: {
+        create: [{
+          playerId: Number(playerId)
+        }]
       }
     };
 

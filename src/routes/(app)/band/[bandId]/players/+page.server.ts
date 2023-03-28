@@ -24,6 +24,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
       players: {
         orderBy: {
           name: 'asc'
+        },
+        include: {
+          adminRoles: {
+            where: {
+              bandId: Number(bandId)
+            }
+          }
         }
       }
     }

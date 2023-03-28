@@ -10,12 +10,14 @@
   $: voices = data.voices;
 </script>
 
-<div class="p-2">
-  <RightLink
-    href="/band/{data.band.id}/voice"
-    label="Ajouter un pupitre"
-  />
-</div>
+{#if data.isAdmin}
+  <div class="p-2">
+    <RightLink
+      href="/band/{data.band.id}/voice"
+      label="Ajouter un pupitre"
+    />
+  </div>
+{/if}
 
 <List>
   {#if voices.length == 0}
@@ -27,12 +29,14 @@
           <p class="w-full rounded p-2 text-sm">
             {voice.instrument.name}
           </p>
-          <DeleteButton
-            icon={true}
-            label="Supprimer"
-            url="/api/voice/{voice.id}"
-            backUrl="./voices"
-          />
+          {#if data.isAdmin}
+            <DeleteButton
+              icon={true}
+              label="Supprimer"
+              url="/api/voice/{voice.id}"
+              backUrl="./voices"
+            />
+          {/if}
         </div>
       </ListItem>
     {/each}
