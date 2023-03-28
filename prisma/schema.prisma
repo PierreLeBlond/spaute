@@ -45,6 +45,7 @@ model Gig {
   date           DateTime
   /// @zod.string.min(1, { message: "Dans ton c** ?" }).max(60)
   location       String
+  description    String?
   playable       Boolean         @default(false)
   organizerRoles OrganizerRole[]
 }

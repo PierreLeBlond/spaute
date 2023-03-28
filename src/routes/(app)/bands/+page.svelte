@@ -1,5 +1,4 @@
 <script lang="ts">
-  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';

@@ -23,6 +23,7 @@ export const create = async (playerId: string, bandId: string, formData: { [k: s
     },
     name: formData["name"] as string,
     location: formData["location"] as string,
+    description: formData["description"] as string,
     date: new Date(formData["date"] as string)
   }
 

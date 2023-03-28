@@ -16,10 +16,10 @@
     name={id}
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
     class:border={error}
-    type="date"
-    value={value.toISOString().substring(0, 10)}
+    type="datetime-local"
+    value={value.toISOString().slice(0, 16)}
   />
-  <p class="h-8 text-xs text-red-300">
+  <p class="h-4 text-xs text-red-300">
     {error}
   </p>
 </div>

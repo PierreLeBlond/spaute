@@ -25,7 +25,7 @@
   />
 </div>
 
-<div class="flex w-full p-2 sm:w-96">
+<div class="flex w-full flex-col p-2 sm:w-96">
   {#if !presence}
     <JoinGigForm action={joinAction} />
   {:else}
@@ -34,6 +34,9 @@
       action={updateAction}
     />
   {/if}
+  <p>
+    {gig.description || ''}
+  </p>
 </div>
 
 <List>

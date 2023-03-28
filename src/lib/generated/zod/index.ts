@@ -14,7 +14,7 @@ export const AdminRoleScalarFieldEnumSchema = z.enum(['id','bandId','playerId'])
 
 export const BandScalarFieldEnumSchema = z.enum(['id','name']);
 
-export const GigScalarFieldEnumSchema = z.enum(['id','name','bandId','date','location','playable']);
+export const GigScalarFieldEnumSchema = z.enum(['id','name','bandId','date','location','description','playable']);
 
 export const InstrumentScalarFieldEnumSchema = z.enum(['id','name']);
 
@@ -69,6 +69,7 @@ export const GigSchema = z.object({
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().nullable(),
   playable: z.boolean(),
 })
 
@@ -261,6 +262,7 @@ export const GigSelectSchema: z.ZodType<Prisma.GigSelect> = z.object({
   bandId: z.boolean().optional(),
   date: z.boolean().optional(),
   location: z.boolean().optional(),
+  description: z.boolean().optional(),
   playable: z.boolean().optional(),
   presences: z.union([z.boolean(),z.lazy(() => PresenceFindManyArgsSchema)]).optional(),
   band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
@@ -509,6 +511,7 @@ export const GigWhereInputSchema: z.ZodType<Prisma.GigWhereInput> = z.object({
   bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   presences: z.lazy(() => PresenceListRelationFilterSchema).optional(),
   band: z.union([ z.lazy(() => BandRelationFilterSchema),z.lazy(() => BandWhereInputSchema) ]).optional(),
@@ -521,6 +524,7 @@ export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithR
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   presences: z.lazy(() => PresenceOrderByRelationAggregateInputSchema).optional(),
   band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
@@ -537,6 +541,7 @@ export const GigOrderByWithAggregationInputSchema: z.ZodType<Prisma.GigOrderByWi
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => GigCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => GigAvgOrderByAggregateInputSchema).optional(),
@@ -554,6 +559,7 @@ export const GigScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.GigScalar
   bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
@@ -928,6 +934,7 @@ export const GigCreateInputSchema: z.ZodType<Prisma.GigCreateInput> = z.object({
   name: z.string().min(1, { message: "C\'est vide :(" }).max(32),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema),
@@ -940,6 +947,7 @@ export const GigUncheckedCreateInputSchema: z.ZodType<Prisma.GigUncheckedCreateI
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
@@ -949,6 +957,7 @@ export const GigUpdateInputSchema: z.ZodType<Prisma.GigUpdateInput> = z.object({
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional(),
@@ -961,6 +970,7 @@ export const GigUncheckedUpdateInputSchema: z.ZodType<Prisma.GigUncheckedUpdateI
   bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
@@ -972,6 +982,7 @@ export const GigCreateManyInputSchema: z.ZodType<Prisma.GigCreateManyInput> = z.
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional()
 }).strict();
 
@@ -979,6 +990,7 @@ export const GigUpdateManyMutationInputSchema: z.ZodType<Prisma.GigUpdateManyMut
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -988,6 +1000,7 @@ export const GigUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GigUncheckedUpd
   bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -1427,6 +1440,21 @@ export const DateTimeFilterSchema: z.ZodType<Prisma.DateTimeFilter> = z.object({
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
 }).strict();
 
+export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
+}).strict();
+
 export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
   equals: z.boolean().optional(),
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
@@ -1443,6 +1471,7 @@ export const GigCountOrderByAggregateInputSchema: z.ZodType<Prisma.GigCountOrder
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1457,6 +1486,7 @@ export const GigMaxOrderByAggregateInputSchema: z.ZodType<Prisma.GigMaxOrderByAg
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1466,6 +1496,7 @@ export const GigMinOrderByAggregateInputSchema: z.ZodType<Prisma.GigMinOrderByAg
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1486,6 +1517,24 @@ export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAg
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
+}).strict();
+
+export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNullableWithAggregatesFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
 }).strict();
 
 export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
@@ -2130,6 +2179,10 @@ export const DateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.DateTime
   set: z.coerce.date().optional()
 }).strict();
 
+export const NullableStringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableStringFieldUpdateOperationsInput> = z.object({
+  set: z.string().optional().nullable()
+}).strict();
+
 export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
   set: z.boolean().optional()
 }).strict();
@@ -2502,6 +2555,20 @@ export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> 
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
 }).strict();
 
+export const NestedStringNullableFilterSchema: z.ZodType<Prisma.NestedStringNullableFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
+}).strict();
+
 export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.object({
   equals: z.boolean().optional(),
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
@@ -2519,6 +2586,34 @@ export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDa
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
+}).strict();
+
+export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
+}).strict();
+
+export const NestedIntNullableFilterSchema: z.ZodType<Prisma.NestedIntNullableFilter> = z.object({
+  equals: z.number().optional().nullable(),
+  in: z.number().array().optional().nullable(),
+  notIn: z.number().array().optional().nullable(),
+  lt: z.number().optional(),
+  lte: z.number().optional(),
+  gt: z.number().optional(),
+  gte: z.number().optional(),
+  not: z.union([ z.number(),z.lazy(() => NestedIntNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
 export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWithAggregatesFilter> = z.object({
@@ -2555,6 +2650,7 @@ export const GigCreateWithoutBandInputSchema: z.ZodType<Prisma.GigCreateWithoutB
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutGigInputSchema).optional()
@@ -2565,6 +2661,7 @@ export const GigUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.GigUnche
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
@@ -2667,6 +2764,7 @@ export const GigScalarWhereInputSchema: z.ZodType<Prisma.GigScalarWhereInput> = 
   bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
@@ -3053,6 +3151,7 @@ export const GigCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateWit
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema),
   organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutGigInputSchema).optional()
@@ -3064,6 +3163,7 @@ export const GigUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
   bandId: z.number(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
@@ -3104,6 +3204,7 @@ export const GigUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpdateWit
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutGigNestedInputSchema).optional()
@@ -3115,6 +3216,7 @@ export const GigUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
   bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
@@ -3365,6 +3467,7 @@ export const GigCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigCrea
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema)
@@ -3376,6 +3479,7 @@ export const GigUncheckedCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prism
   bandId: z.number(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
@@ -3416,6 +3520,7 @@ export const GigUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigUpda
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional()
@@ -3427,6 +3532,7 @@ export const GigUncheckedUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prism
   bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
@@ -3542,6 +3648,7 @@ export const GigCreateManyBandInputSchema: z.ZodType<Prisma.GigCreateManyBandInp
   name: z.string().min(1, { message: "C\'est vide :(" }).max(32),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional()
 }).strict();
 
@@ -3581,6 +3688,7 @@ export const GigUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUpdateWithoutB
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutGigNestedInputSchema).optional()
@@ -3591,6 +3699,7 @@ export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUnche
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional(),
   organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
@@ -3601,6 +3710,7 @@ export const GigUncheckedUpdateManyWithoutGigsInputSchema: z.ZodType<Prisma.GigU
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 

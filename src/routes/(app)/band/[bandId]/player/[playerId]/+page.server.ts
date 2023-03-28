@@ -1,5 +1,3 @@
-import { join } from '$lib/api/gig/join';
-import { update } from '$lib/api/gig/update';
 import { AdminRoleCreateInputSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma'
 import type { Prisma } from '@prisma/client';
@@ -8,7 +6,7 @@ import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
   const { bandId, playerId } = params;
 
-  const player = async () => await prisma.player.findUnique({
+  const player = async () => await prisma.player.findUniqueOrThrow({
     where: {
       id: Number(playerId)
     }
