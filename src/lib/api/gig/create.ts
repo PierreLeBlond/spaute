@@ -35,6 +35,7 @@ export const create = async (playerId: string, bandId: string, formData: { [k: s
       name: formated.name?._errors.pop(),
       location: formated.location?._errors.pop(),
       date: formated.date?._errors.pop(),
+      description: formated.description?._errors.pop()
     }
 
     return {

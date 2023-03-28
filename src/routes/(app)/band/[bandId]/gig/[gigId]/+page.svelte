@@ -1,5 +1,6 @@
 <script lang="ts">
   import GigPage from '$lib/components/GigPage.svelte';
+  import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import type { PageData } from './$types';
 
@@ -12,7 +13,12 @@
   $: remainingPlayers = data.remainingPlayers;
 </script>
 
-<ReturnLink href="/band/{data['band'].id}/gigs" />
+<div class="flex justify-between">
+  <ReturnLink href="/band/{data['band'].id}/gigs" />
+  {#if data['isAdmin']}
+    <EditLink href="/band/{data['band'].id}/gig/{gig.id}/edit" />
+  {/if}
+</div>
 
 <GigPage
   {gig}
