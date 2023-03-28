@@ -20,6 +20,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
           band: true
         }
       }
+    },
+    orderBy: {
+      gig: {
+        date: 'asc'
+      }
     }
   });
 
@@ -38,6 +43,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
     },
     include: {
       band: true
+    },
+    orderBy: {
+      date: 'asc'
     }
   });
 
