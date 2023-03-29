@@ -37,6 +37,7 @@
             {gig}
             band={gig.band}
             presence={null}
+            showLink={false}
           />
         </a>
       </ListLinkItem>
