@@ -11,6 +11,9 @@
 </script>
 
 <div class="grid grid-cols-6 items-center justify-center text-sm">
+  <p class="col-span-6 text-center">
+    {gig.name}
+  </p>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="16"
