@@ -2,8 +2,8 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
-  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
 
   export let data: PageData;
 
@@ -30,12 +30,12 @@
             {voice.instrument.name}
           </p>
           {#if data.isAdmin}
-            <DeleteButton
-              icon={true}
-              label="Supprimer"
-              url="/api/voice/{voice.id}"
-              backUrl="./voices"
-            />
+            <form
+              method="POST"
+              action="?/delete&voiceId={voice.id}"
+            >
+              <DeleteButtonIcon />
+            </form>
           {/if}
         </div>
       </ListItem>
