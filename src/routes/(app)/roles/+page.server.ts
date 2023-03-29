@@ -1,10 +1,11 @@
 import { RoleUpdateArgsSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma'
 import type { Prisma } from '@prisma/client';
+import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent }) => {
-  const { playerId } = await parent();
+export const load: PageServerLoad = async ({ locals }) => {
+  const { playerId } = locals;
   const roles = await prisma.role.findMany({
     where: {
       playerId: Number(playerId)
@@ -23,7 +24,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 }
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  update: async ({ request }) => {
     const formData = Object.fromEntries(await request.formData());
 
     const args: Prisma.RoleUpdateArgs = {
@@ -54,5 +55,29 @@ export const actions: Actions = {
     );
 
     return { success: true, message: 'Pupitre mis à jour :)', response };
+  },
+  delete: async ({ url, locals }) => {
+    const { playerId } = locals;
+    const roleId = url.searchParams.get('roleId');
+    const role = await prisma.role.findUnique({
+      where: {
+        id: Number(roleId)
+      },
+      include: {
+        player: true
+      }
+    });
+
+    const isOwner = role && role.player.id == Number(playerId);
+
+    if (!isOwner) {
+      throw error(401);
+    }
+
+    const response = await prisma.role.delete({
+      where: { id: Number(roleId) }
+    });
+
+    return { success: true, message: 'Pupitre supprimé :)', response };
   }
 }
