@@ -1,6 +1,5 @@
 <script lang="ts">
   import Button from '$lib/components/forms/Button.svelte';
-  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
@@ -63,13 +62,3 @@
     {/each}
   {/if}
 </List>
-
-{#if data.isAdmin}
-  <div class="w-full p-2">
-    <DeleteButton
-      label="Supprimer la fanfare :o"
-      url="/api/band/{data.band.id}"
-      backUrl="/bands"
-    />
-  </div>
-{/if}
