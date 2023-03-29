@@ -3,54 +3,62 @@ import { update } from '$lib/api/gig/update';
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, parent }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
+  const { bandId, gigId } = params;
   const { playerId } = locals;
-  const { gig } = await parent();
-  const presence = await prisma.presence.findUnique({
+  const presence = async () => await prisma.presence.findUnique({
     where: {
       gigId_playerId: {
-        gigId: gig.id,
+        gigId: Number(gigId),
         playerId: Number(playerId)
       }
     }
   });
-  const availablePlayers = await prisma.player.findMany({
+  const presences = async () => await prisma.presence.findMany({
     where: {
-      presences: {
-        some: {
-          gigId: gig.id,
-          value: true
+      gigId: Number(gigId)
+    },
+    include: {
+      player: {
+        include: {
+          organizerRoles: {
+            where: {
+              gigId: Number(gigId)
+            }
+          }
         }
       }
     }
   });
-  const unavailablePlayers = await prisma.player.findMany({
+  const players = async () => await prisma.player.findMany({
     where: {
-      presences: {
-        some: {
-          gigId: gig.id,
-          value: false
+      AND: {
+        bands: {
+          some: {
+            id: Number(bandId)
+          }
+        },
+        NOT: {
+          presences: {
+            some: {
+              gigId: Number(gigId)
+            }
+          }
         }
       }
-    }
-  })
-  const remainingPlayers = await prisma.player.findMany({
-    where: {
-      NOT: {
-        presences: {
-          some: {
-            gigId: gig.id
-          }
+    },
+    include: {
+      organizerRoles: {
+        where: {
+          gigId: Number(gigId)
         }
       }
     }
   })
   return {
-    availablePlayers,
-    unavailablePlayers,
-    remainingPlayers,
-    presence,
-    title: gig.name,
+    presence: presence(),
+    presences: presences(),
+    players: players(),
     index: 202
   }
 }

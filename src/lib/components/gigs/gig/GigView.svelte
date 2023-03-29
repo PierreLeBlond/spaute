@@ -79,7 +79,7 @@
     >
   {/if}
   {#if !presence}
-    <p class="col-span-6 text-neutral-300">Je ne sais pas si j'y participe.</p>
+    <p class="col-span-6">Je ne sais pas si j'y participe.</p>
   {:else if presence.value}
     <p class="col-span-6 text-green-300">Je participe !</p>
   {:else}

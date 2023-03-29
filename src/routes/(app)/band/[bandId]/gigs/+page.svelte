@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import GigsPage from '$lib/components/GigsPage.svelte';
+  import GigsPage from '$lib/components/gigs/GigsPage.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
 
   export let data: PageData;

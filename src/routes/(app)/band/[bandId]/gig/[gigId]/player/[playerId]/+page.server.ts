@@ -1,10 +1,10 @@
-import { AdminRoleCreateInputSchema } from '$lib/generated/zod';
+import { OrganizerRoleCreateInputSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma'
 import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-  const { bandId, playerId } = params;
+  const { gigId, playerId } = params;
 
   const player = async () => await prisma.player.findUniqueOrThrow({
     where: {
@@ -12,10 +12,10 @@ export const load: PageServerLoad = async ({ params }) => {
     }
   });
 
-  const adminRole = async () => await prisma.adminRole.findUnique({
+  const organizerRole = async () => await prisma.organizerRole.findUnique({
     where: {
-      bandId_playerId: {
-        bandId: Number(bandId),
+      gigId_playerId: {
+        gigId: Number(gigId),
         playerId: Number(playerId)
       }
     }
@@ -23,19 +23,19 @@ export const load: PageServerLoad = async ({ params }) => {
 
   return {
     player: player(),
-    adminRole: adminRole(),
-    index: 101
+    playerOrganizerRole: organizerRole(),
+    index: 204
   }
 }
 
 export const actions: Actions = {
   default: async ({ params }) => {
-    const { bandId, playerId } = params;
+    const { gigId, playerId } = params;
 
-    const data: Prisma.AdminRoleCreateInput = {
-      band: {
+    const data: Prisma.OrganizerRoleCreateInput = {
+      gig: {
         connect: {
-          id: Number(bandId)
+          id: Number(gigId)
         }
       },
       player: {
@@ -45,7 +45,7 @@ export const actions: Actions = {
       }
     }
 
-    const result = AdminRoleCreateInputSchema.safeParse(data);
+    const result = OrganizerRoleCreateInputSchema.safeParse(data);
 
     if (!result.success) {
       const formated = result.error.format();
@@ -59,11 +59,11 @@ export const actions: Actions = {
       }
     }
 
-    const response = await prisma.adminRole.create({
+    const response = await prisma.organizerRole.create({
       data
     });
 
-    return { success: true, message: 'Nouvelleau admin :)', response };
+    return { success: true, message: 'Nouvelleau organisateurice :)', response };
   }
 }
 

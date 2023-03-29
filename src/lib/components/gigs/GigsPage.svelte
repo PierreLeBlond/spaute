@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Band, Gig, Presence } from '@prisma/client';
-  import GigView from './GigView.svelte';
+  import GigView from './gig/GigView.svelte';
 
-  import List from './layout/List.svelte';
-  import ListLinkItem from './layout/ListLinkItem.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
 
   export let presences: (Presence & { gig: Gig & { band: Band } })[];
   export let newGigs: (Gig & { band: Band })[];
@@ -23,6 +23,7 @@
             gig={presence.gig}
             band={presence.gig.band}
             {presence}
+            showLink={false}
           />
         </a>
       </ListLinkItem>

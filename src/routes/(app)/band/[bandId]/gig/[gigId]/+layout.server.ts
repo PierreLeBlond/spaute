@@ -1,9 +1,10 @@
 import prisma from "$lib/prisma";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+  const { playerId } = locals;
   const { gigId } = params;
-  const gig = await prisma.gig.findUniqueOrThrow({
+  const gig = async () => await prisma.gig.findUniqueOrThrow({
     where: {
       id: Number(gigId)
     },
@@ -11,7 +12,16 @@ export const load: PageServerLoad = async ({ params }) => {
       band: true
     }
   });
+  const organizerRole = async () => await prisma.organizerRole.findUnique({
+    where: {
+      gigId_playerId: {
+        gigId: Number(gigId),
+        playerId: Number(playerId)
+      }
+    }
+  });
   return {
-    gig
+    gig: gig(),
+    organizerRole: organizerRole()
   };
 }
