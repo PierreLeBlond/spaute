@@ -1,6 +1,7 @@
 import { GigUpdateArgsSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma';
 import type { Prisma } from '@prisma/client';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -10,17 +11,19 @@ export const load: PageServerLoad = async () => {
 }
 
 export const actions: Actions = {
-  default: async ({ request, params }) => {
+  update: async ({ request, params }) => {
     const { gigId } = params;
     const formData = Object.fromEntries(await request.formData());
 
+    const data = {
+      name: formData["name"] as string,
+      location: formData["location"] as string,
+      date: new Date(formData["date"] as string),
+      description: formData["description"] as string,
+    }
+
     const args: Prisma.GigUpdateArgs = {
-      data: {
-        name: formData["name"] as string,
-        location: formData["location"] as string,
-        date: new Date(formData["date"] as string),
-        description: formData["description"] as string,
-      },
+      data,
       where: {
         id: Number(gigId)
       },
@@ -41,14 +44,69 @@ export const actions: Actions = {
       return {
         success: false,
         message: 'Impossible de mettre à jour :(',
-        data: args.data,
-        errors
+        updateData: data,
+        updateErrors: errors
       }
     }
 
     const response = await prisma.gig.update(args);
 
     return { success: true, message: 'presta mise à jour :)', response };
+  },
+  delete: async ({ url, params, locals, request }) => {
+    const { playerId } = locals;
+    const { bandId } = params;
+    const gigId = url.searchParams.get('gigId');
+    const formData = Object.fromEntries(await request.formData());
+    const gig = await prisma.gig.findUniqueOrThrow({
+      where: {
+        id: Number(gigId)
+      },
+      include: {
+        organizerRoles: {
+          include: {
+            player: true
+          }
+        },
+        band: {
+          include: {
+            adminRoles: {
+              include: {
+                player: true
+              }
+            }
+          }
+        }
+      }
+    })
+
+    const data = {
+      confirm: formData['confirm'] as string
+    }
+
+    if (formData['confirm'] != gig.name) {
+      return {
+        success: false,
+        message: 'Impossible de mettre à jour :(',
+        confirmData: data,
+        confirmErrors: {
+          confirm: 'Ne correspond pas au titre'
+        }
+      }
+    }
+
+    const isAdmin = gig && gig.band.adminRoles.some(adminRole => adminRole.player.id == Number(playerId));
+    const isOrganizer = gig && gig.organizerRoles.some(organizerRole => organizerRole.player.id == Number(playerId));
+
+    if (!isOrganizer && !isAdmin) {
+      throw error(404);
+    }
+
+    await prisma.gig.delete({
+      where: { id: Number(gigId) },
+    });
+
+    throw redirect(303, `/band/${bandId}/gigs`);
   }
 }
 

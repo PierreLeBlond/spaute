@@ -1,7 +1,7 @@
 import prisma from "$lib/prisma";
-import type { PageServerLoad } from "./$types";
+import type { LayoutServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: LayoutServerLoad = async ({ params, locals }) => {
   const { playerId } = locals;
   const { gigId } = params;
   const gig = async () => await prisma.gig.findUniqueOrThrow({
@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
       }
     }
   });
+
   return {
     gig: gig(),
     organizerRole: organizerRole()

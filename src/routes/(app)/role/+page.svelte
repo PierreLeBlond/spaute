@@ -9,8 +9,6 @@
   export let data: PageData;
   export let form: ActionData;
 
-  console.log(form);
-
   $: instruments = data.instruments;
 </script>
 

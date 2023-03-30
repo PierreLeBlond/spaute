@@ -6,17 +6,18 @@
   import type { ActionData, PageData } from './$types';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
+  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
 
   export let data: PageData;
   export let form: ActionData;
 
-  const date = form?.data?.date ? (form.data.date as string | Date) : undefined;
+  const date = form?.updateData?.date ? (form.updateData.date as string | Date) : undefined;
 </script>
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
 
 <div class="w-full grow p-2 sm:w-96">
-  <Form>
+  <Form action="?/update">
     <div
       class="grid h-full grid-cols-2 gap-y-2 gap-x-2"
       style:grid-template-rows="auto auto auto 1fr auto"
@@ -25,28 +26,28 @@
       <Text
         id="name"
         label="titre"
-        value={form?.data?.name ?? data['gig'].name}
-        error={form?.errors?.name}
+        value={form?.updateData?.name ?? data['gig'].name}
+        error={form?.updateErrors?.name}
         maxlength={32}
       />
       <Text
         id="location"
         label="lieu"
-        value={form?.data?.location ?? data['gig'].location}
-        error={form?.errors?.location}
+        value={form?.updateData?.location ?? data['gig'].location}
+        error={form?.updateErrors?.location}
         maxlength={60}
       />
       <DateInput
         id="date"
         label="date"
         value={date ? new Date(date) : new Date(data['gig'].date)}
-        error={form?.errors?.date}
+        error={form?.updateErrors?.date}
       />
       <div class="col-span-2">
         <TextArea
           id="description"
           label="description"
-          value={form?.data?.description ?? data['gig'].description ?? ''}
+          value={form?.updateData?.description ?? data['gig'].description ?? ''}
         />
       </div>
       <div class="col-span-2">
@@ -54,4 +55,20 @@
       </div>
     </div>
   </Form>
+</div>
+<div class="w-full p-2 sm:w-96">
+  <form
+    class="p-2 text-red-300"
+    method="POST"
+    action="?/delete&gigId={data['gig'].id}"
+  >
+    <Text
+      id="confirm"
+      label="recopier le titre pour confirmer la suppression"
+      value={form?.confirmData?.confirm ?? ''}
+      error={form?.confirmErrors?.confirm}
+      maxlength={32}
+    />
+    <DeleteButton label={'Supprimer'} />
+  </form>
 </div>
