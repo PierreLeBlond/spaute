@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import type { Band, Gig, Presence } from '@prisma/client';
+  import { DateTime } from 'luxon';
 
   export let gig: Gig;
   export let band: Band;
@@ -55,7 +56,9 @@
     />
   </svg>
   <p class="col-span-5">
-    {gig.date.toDateString()}
+    {DateTime.fromJSDate(gig.date)
+      .setLocale('fr')
+      .toLocaleString({ ...DateTime.DATETIME_MED })}
   </p>
   {#if showLink}
     <svg

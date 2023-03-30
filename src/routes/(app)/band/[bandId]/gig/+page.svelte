@@ -6,9 +6,13 @@
   import type { ActionData, PageData } from './$types';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
+  import TimeInput from '$lib/components/forms/TimeInput.svelte';
+  import { DateTime } from 'luxon';
 
   export let data: PageData;
   export let form: ActionData;
+
+  const date = form?.data?.date ? DateTime.fromISO(form.data.date) : DateTime.now();
 </script>
 
 <ReturnLink href="/band/{data.band.id}/gigs" />
@@ -37,7 +41,13 @@
       <DateInput
         id="date"
         label="date"
-        value={form?.data?.date ? new Date(form.data.date) : new Date()}
+        {date}
+        error={form?.errors?.date}
+      />
+      <TimeInput
+        id="time"
+        label="heure"
+        {date}
         error={form?.errors?.date}
       />
       <div class="col-span-2">

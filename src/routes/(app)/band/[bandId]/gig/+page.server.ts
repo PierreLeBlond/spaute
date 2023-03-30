@@ -1,6 +1,7 @@
 import { GigCreateInputSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma';
 import type { Prisma } from '@prisma/client';
+import { DateTime } from 'luxon';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -15,6 +16,17 @@ export const actions: Actions = {
     const { bandId } = params;
 
     const formData = Object.fromEntries(await request.formData());
+
+    const date = DateTime.fromISO(`${formData["date"]}T${formData["time"]}`).toISO();
+
+    console.log(date);
+
+    const createData = {
+      name: formData["name"] as string,
+      location: formData["location"] as string,
+      description: formData["description"] as string,
+      date
+    }
 
     const data: Prisma.GigCreateInput = {
       band: {
@@ -33,10 +45,7 @@ export const actions: Actions = {
           playerId: Number(playerId)
         }
       },
-      name: formData["name"] as string,
-      location: formData["location"] as string,
-      description: formData["description"] as string,
-      date: new Date(formData["date"] as string)
+      ...createData
     }
 
     const result = GigCreateInputSchema.safeParse(data);
@@ -53,7 +62,7 @@ export const actions: Actions = {
       return {
         success: false,
         message: 'Presta non valide :(',
-        data,
+        data: createData,
         errors
       }
     }

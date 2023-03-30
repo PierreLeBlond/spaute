@@ -7,11 +7,13 @@
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
   import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
+  import { DateTime } from 'luxon';
+  import TimeInput from '$lib/components/forms/TimeInput.svelte';
 
   export let data: PageData;
   export let form: ActionData;
 
-  const date = form?.updateData?.date ? (form.updateData.date as string | Date) : undefined;
+  const date = form?.updateData?.date ? DateTime.fromISO(form.updateData.date) : DateTime.fromJSDate(data.gig.date);
 </script>
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
@@ -40,7 +42,13 @@
       <DateInput
         id="date"
         label="date"
-        value={date ? new Date(date) : new Date(data['gig'].date)}
+        {date}
+        error={form?.updateErrors?.date}
+      />
+      <TimeInput
+        id="time"
+        label="heure"
+        {date}
         error={form?.updateErrors?.date}
       />
       <div class="col-span-2">

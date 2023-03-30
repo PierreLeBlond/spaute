@@ -2,6 +2,7 @@ import { GigUpdateArgsSchema } from '$lib/generated/zod';
 import prisma from '$lib/prisma';
 import type { Prisma } from '@prisma/client';
 import { error, redirect } from '@sveltejs/kit';
+import { DateTime } from 'luxon';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -15,11 +16,13 @@ export const actions: Actions = {
     const { gigId } = params;
     const formData = Object.fromEntries(await request.formData());
 
+    const date = DateTime.fromISO(`${formData["date"]}T${formData["time"]}`).toISO();
+
     const data = {
       name: formData["name"] as string,
       location: formData["location"] as string,
-      date: new Date(formData["date"] as string),
       description: formData["description"] as string,
+      date
     }
 
     const args: Prisma.GigUpdateArgs = {
