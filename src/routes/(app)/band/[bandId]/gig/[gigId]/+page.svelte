@@ -25,50 +25,52 @@
   {/if}
 </div>
 
-<GigPage
-  {gig}
-  {presence}
-  joinAction={'?/join'}
-  updateAction={'?/update'}
-/>
+<div class="h-full w-full overflow-y-auto">
+  <GigPage
+    {gig}
+    {presence}
+    joinAction={'?/join'}
+    updateAction={'?/update'}
+  />
 
-<List>
-  {#each presences as presence}
-    {#if organizerRole}
-      <ListLinkItem>
-        <div
-          class="contents text-red-300"
-          class:!text-green-300={presence.value}
-        >
+  <List>
+    {#each presences as presence}
+      {#if organizerRole}
+        <ListLinkItem>
+          <div
+            class="contents text-red-300"
+            class:!text-green-300={presence.value}
+          >
+            <PlayerLinkItem
+              player={presence.player}
+              href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{presence.player.id}"
+            />
+          </div>
+        </ListLinkItem>
+      {:else}
+        <ListItem>
+          <div
+            class="contents text-red-300"
+            class:!text-green-300={presence.value}
+          >
+            <PlayerItem player={presence.player} />
+          </div>
+        </ListItem>
+      {/if}
+    {/each}
+    {#each players as player}
+      {#if organizerRole}
+        <ListLinkItem>
           <PlayerLinkItem
-            player={presence.player}
-            href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{presence.player.id}"
+            {player}
+            href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{player.id}"
           />
-        </div>
-      </ListLinkItem>
-    {:else}
-      <ListItem>
-        <div
-          class="contents text-red-300"
-          class:!text-green-300={presence.value}
-        >
-          <PlayerItem player={presence.player} />
-        </div>
-      </ListItem>
-    {/if}
-  {/each}
-  {#each players as player}
-    {#if organizerRole}
-      <ListLinkItem>
-        <PlayerLinkItem
-          {player}
-          href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{player.id}"
-        />
-      </ListLinkItem>
-    {:else}
-      <ListItem>
-        <PlayerItem {player} />
-      </ListItem>
-    {/if}
-  {/each}
-</List>
+        </ListLinkItem>
+      {:else}
+        <ListItem>
+          <PlayerItem {player} />
+        </ListItem>
+      {/if}
+    {/each}
+  </List>
+</div>
