@@ -12,7 +12,7 @@
 
 <ReturnLink href="/band/{data.band.id}/voices" />
 
-<div class="w-full p-2 sm:w-96">
+<div class="w-full p-2">
   <Form>
     <div class="grid grid-cols-1 gap-y-2">
       <h2 class="text-xs">Ajouter un pupitre</h2>

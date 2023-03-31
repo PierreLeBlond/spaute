@@ -12,10 +12,10 @@
 
 <ReturnLink href="/band/{data['band'].id}/players" />
 
-<p class="w-full p-2 pl-4 text-sm sm:w-96">{player.name}</p>
+<p class="w-full p-2 pl-4 text-sm">{player.name}</p>
 
 {#if !adminRole}
-  <div class="flex w-full p-2 sm:w-96">
+  <div class="flex w-full p-2">
     <Form>
       <Button label={'Promouvoir en admin'} />
     </Form>

@@ -12,14 +12,14 @@
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
 
-<p class="w-full p-2 pl-4 text-sm sm:w-96">{player.name}</p>
+<p class="w-full p-2 pl-4 text-sm">{player.name}</p>
 
 {#if !playerOrganizerRole}
-  <div class="flex w-full p-2 sm:w-96">
+  <div class="flex w-full p-2">
     <Form>
       <Button label={'Promouvoir en organisateurice'} />
     </Form>
   </div>
 {:else}
-  <div class="flex w-full p-2 pl-4 text-xs sm:w-96">Déjà organisateurice</div>
+  <div class="flex w-full p-2 pl-4 text-xs">Déjà organisateurice</div>
 {/if}

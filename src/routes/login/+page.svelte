@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Form from '$lib/components/forms/Form.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
@@ -18,7 +17,10 @@
 <List>
   {#each data.players as player}
     <ListLinkItem>
-      <Form>
+      <form
+        method="POST"
+        class="hover: cursor-pointer"
+      >
         <input
           type="hidden"
           name="playerId"
@@ -27,9 +29,9 @@
         <input
           type="submit"
           value={player.name}
-          class="h-8 w-full text-sm text-orange-300"
+          class="w-full p-2 text-start text-sm hover:cursor-pointer"
         />
-      </Form>
+      </form>
     </ListLinkItem>
   {/each}
 </List>

@@ -10,7 +10,7 @@
   $: selectedOffset = offsetMap.get(selectedHref);
 </script>
 
-<ul class="relative grid w-full grid-cols-3 items-center justify-center bg-neutral-800 py-2 sm:w-64">
+<ul class="relative grid w-full grid-cols-3 items-center justify-center bg-neutral-800 py-2">
   <li
     class="absolute col-span-1 col-start-1 h-full w-full rounded-t bg-neutral-900 transition-all"
     style:left={selectedOffset}
