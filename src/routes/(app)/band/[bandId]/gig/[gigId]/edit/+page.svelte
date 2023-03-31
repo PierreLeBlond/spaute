@@ -18,10 +18,10 @@
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
 
-<div class="w-full grow p-2">
+<div class="w-full overflow-y-auto p-2">
   <Form action="?/update">
     <div
-      class="grid h-full grid-cols-2 gap-y-2 gap-x-2"
+      class="grid grid-cols-2 gap-y-2 gap-x-2"
       style:grid-template-rows="auto auto auto 1fr auto"
     >
       <p class="col-span-2 text-xs">Modifier la presta</p>
@@ -51,7 +51,7 @@
         {date}
         error={form?.updateErrors?.date}
       />
-      <div class="col-span-2">
+      <div class="col-span-2 h-64">
         <TextArea
           id="description"
           label="description"
@@ -63,8 +63,6 @@
       </div>
     </div>
   </Form>
-</div>
-<div class="w-full p-2">
   <form
     class="p-2 text-red-300"
     method="POST"

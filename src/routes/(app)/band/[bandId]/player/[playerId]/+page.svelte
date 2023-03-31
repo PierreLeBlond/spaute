@@ -20,4 +20,6 @@
       <Button label={'Promouvoir en admin'} />
     </Form>
   </div>
+{:else}
+  <div class="flex w-full p-2 pl-4 text-xs">Déjà admin</div>
 {/if}
