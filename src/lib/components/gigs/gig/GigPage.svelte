@@ -28,7 +28,7 @@
       action={updateAction}
     />
   {/if}
-  <p>
+  <p class="text-sm">
     {gig.description || ''}
   </p>
 </div>

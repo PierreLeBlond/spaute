@@ -16,27 +16,29 @@
 
 <ReturnLink href="/gigs" />
 
-<GigPage
-  {gig}
-  {presence}
-  joinAction={'?/join'}
-  updateAction={'?/update'}
-/>
+<div class="h-full w-full overflow-y-auto">
+  <GigPage
+    {gig}
+    {presence}
+    joinAction={'?/join'}
+    updateAction={'?/update'}
+  />
 
-<List>
-  {#each presences as presence}
-    <ListItem>
-      <div
-        class="contents text-red-300"
-        class:!text-green-300={presence.value}
-      >
-        <PlayerItem player={presence.player} />
-      </div>
-    </ListItem>
-  {/each}
-  {#each players as player}
-    <ListItem>
-      <PlayerItem {player} />
-    </ListItem>
-  {/each}
-</List>
+  <List>
+    {#each presences as presence}
+      <ListItem>
+        <div
+          class="contents text-red-300"
+          class:!text-green-300={presence.value}
+        >
+          <PlayerItem player={presence.player} />
+        </div>
+      </ListItem>
+    {/each}
+    {#each players as player}
+      <ListItem>
+        <PlayerItem {player} />
+      </ListItem>
+    {/each}
+  </List>
+</div>
