@@ -39,7 +39,7 @@
       />
     </g>
   </svg>
-  <div class="z-10 grid w-full grid-cols-5 sm:w-96">
+  <div class="z-10 grid h-full w-full auto-rows-fr grid-cols-5 sm:w-96">
     <div class="relative col-span-1 flex flex-col items-center justify-evenly py-2">
       {#if $page.data['backPathname']}
         <a
@@ -105,7 +105,7 @@
         <p class="text-xs">logout</p>
       {/if}
     </div>
-    <div class="relative col-span-3 row-start-2 flex h-16 flex-col items-start justify-center truncate pl-8">
+    <div class="relative col-span-3 row-start-2 flex flex-col items-start justify-start overflow-y-auto pl-8">
       <h1 class="text-xl">
         {$page.data['title']}
       </h1>
