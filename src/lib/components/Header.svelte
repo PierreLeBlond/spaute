@@ -8,7 +8,7 @@
   }
 </script>
 
-<header class="relative grid h-full w-full grid-cols-5 bg-neutral-900">
+<header class="relative flex h-full w-full justify-center bg-neutral-900">
   <svg
     width="100%"
     height="110%"
@@ -39,7 +39,7 @@
       />
     </g>
   </svg>
-  <div class="z-10 contents">
+  <div class="z-10 grid w-full grid-cols-5 sm:w-96">
     <div class="relative col-span-1 flex flex-col items-center justify-evenly py-2">
       {#if $page.data['backPathname']}
         <a

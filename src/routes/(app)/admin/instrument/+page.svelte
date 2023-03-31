@@ -10,7 +10,7 @@
 
 <ReturnLink href="/admin/instruments" />
 
-<div class="w-full p-2 sm:w-96">
+<div class="w-full p-2">
   <Form>
     <div class="grid grid-cols-2 gap-y-2">
       <p class="col-span-2 w-full text-sm">Ajouter un instrument</p>

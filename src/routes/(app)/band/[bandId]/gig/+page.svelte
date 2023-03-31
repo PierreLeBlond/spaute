@@ -17,7 +17,7 @@
 
 <ReturnLink href="/band/{data.band.id}/gigs" />
 
-<div class="w-full grow p-2 sm:w-96">
+<div class="w-full grow p-2">
   <Form>
     <div
       class="grid h-full grid-cols-2 gap-y-2 gap-x-2"

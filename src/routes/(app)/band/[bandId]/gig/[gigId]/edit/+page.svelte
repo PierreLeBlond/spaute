@@ -18,7 +18,7 @@
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
 
-<div class="w-full grow p-2 sm:w-96">
+<div class="w-full grow p-2">
   <Form action="?/update">
     <div
       class="grid h-full grid-cols-2 gap-y-2 gap-x-2"
@@ -64,7 +64,7 @@
     </div>
   </Form>
 </div>
-<div class="w-full p-2 sm:w-96">
+<div class="w-full p-2">
   <form
     class="p-2 text-red-300"
     method="POST"
