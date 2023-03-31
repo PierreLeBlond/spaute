@@ -82,6 +82,10 @@ prisma.$use(async (params, next) => {
 
   const result = await next(params);
 
+  if (action == 'delete' && model == 'Gig') {
+    return result;
+  }
+
   const gigs = getGigs(result);
   await computePlayabilities(gigs);
 

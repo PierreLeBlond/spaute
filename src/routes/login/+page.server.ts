@@ -1,14 +1,8 @@
 import { redirect } from "@sveltejs/kit";
 import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
-import type { Prisma } from "@prisma/client";
-import { PlayerCreateInputSchema } from "$lib/generated/zod";
 
-export const load: PageServerLoad = async ({ locals }) => {
-  if (locals.playerId) {
-    throw redirect(302, '/');
-  }
-
+export const load: PageServerLoad = async () => {
   const players = await prisma.player.findMany({
     orderBy: {
       name: 'asc'
@@ -16,38 +10,12 @@ export const load: PageServerLoad = async ({ locals }) => {
   });
   return {
     players,
-    title: 'Login'
+    index: 1
   }
 }
 
 export const actions: Actions = {
-  addPlayer: async ({ request }) => {
-    const formData = Object.fromEntries(await request.formData());
-
-    const data: Prisma.PlayerCreateInput = {
-      name: formData["name"] as string,
-    };
-
-    const result = PlayerCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = {
-        name: formated.name?._errors.pop(),
-      }
-
-      return {
-        success: false,
-        message: 'Musicien non valide :(',
-        data,
-        errors
-      }
-    }
-
-    const response = await prisma.player.create({ data });
-    return { success: true, messagge: 'Musicien créé :)', response };
-  },
-  login: async ({ cookies, request, locals }) => {
+  default: async ({ cookies, request, locals }) => {
     const data = await request.formData();
     const playerId = data.get("playerId") as string;
     cookies.set('playerId', playerId);

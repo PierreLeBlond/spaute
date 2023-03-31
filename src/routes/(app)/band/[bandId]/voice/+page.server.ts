@@ -8,7 +8,7 @@ export const load: PageServerLoad = async () => {
 
   return {
     instruments,
-    index: 31
+    index: 301
   }
 }
 

@@ -1,7 +1,11 @@
 <script lang="ts">
+  import type { DateTime } from 'luxon';
+
   export let id: string;
   export let label: string;
-  export let value: Date;
+  export let date: DateTime;
+
+  $: value = date.toISODate();
 
   export let error: string = '';
 </script>
@@ -17,9 +21,9 @@
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
     class:border={error}
     type="date"
-    value={value.toISOString().substring(0, 10)}
+    {value}
   />
-  <p class="h-8 text-xs text-red-300">
+  <p class="h-4 text-xs text-red-300">
     {error}
   </p>
 </div>

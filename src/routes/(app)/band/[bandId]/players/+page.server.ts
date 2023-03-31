@@ -24,6 +24,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
       players: {
         orderBy: {
           name: 'asc'
+        },
+        include: {
+          adminRoles: {
+            where: {
+              bandId: Number(bandId)
+            }
+          }
         }
       }
     }
@@ -31,7 +38,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
   return {
     band,
     players,
-    index: 10
+    index: 100
   }
 }
 

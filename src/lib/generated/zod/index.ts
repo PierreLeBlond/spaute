@@ -10,11 +10,15 @@ import type { Prisma } from '@prisma/client';
 // ENUMS
 /////////////////////////////////////////
 
+export const AdminRoleScalarFieldEnumSchema = z.enum(['id','bandId','playerId']);
+
 export const BandScalarFieldEnumSchema = z.enum(['id','name']);
 
-export const GigScalarFieldEnumSchema = z.enum(['id','name','bandId','date','location','playable']);
+export const GigScalarFieldEnumSchema = z.enum(['id','name','bandId','date','location','description','playable']);
 
 export const InstrumentScalarFieldEnumSchema = z.enum(['id','name']);
+
+export const OrganizerRoleScalarFieldEnumSchema = z.enum(['id','gigId','playerId']);
 
 export const PlayerScalarFieldEnumSchema = z.enum(['id','name']);
 
@@ -65,6 +69,7 @@ export const GigSchema = z.object({
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().nullable(),
   playable: z.boolean(),
 })
 
@@ -123,6 +128,30 @@ export const VoiceSchema = z.object({
 export type Voice = z.infer<typeof VoiceSchema>
 
 /////////////////////////////////////////
+// ORGANIZER ROLE SCHEMA
+/////////////////////////////////////////
+
+export const OrganizerRoleSchema = z.object({
+  id: z.number().int(),
+  gigId: z.number().int(),
+  playerId: z.number().int(),
+})
+
+export type OrganizerRole = z.infer<typeof OrganizerRoleSchema>
+
+/////////////////////////////////////////
+// ADMIN ROLE SCHEMA
+/////////////////////////////////////////
+
+export const AdminRoleSchema = z.object({
+  id: z.number().int(),
+  bandId: z.number().int(),
+  playerId: z.number().int(),
+})
+
+export type AdminRole = z.infer<typeof AdminRoleSchema>
+
+/////////////////////////////////////////
 // SELECT & INCLUDE
 /////////////////////////////////////////
 
@@ -133,6 +162,7 @@ export const BandIncludeSchema: z.ZodType<Prisma.BandInclude> = z.object({
   players: z.union([z.boolean(),z.lazy(() => PlayerFindManyArgsSchema)]).optional(),
   gigs: z.union([z.boolean(),z.lazy(() => GigFindManyArgsSchema)]).optional(),
   voices: z.union([z.boolean(),z.lazy(() => VoiceFindManyArgsSchema)]).optional(),
+  adminRoles: z.union([z.boolean(),z.lazy(() => AdminRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => BandCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -149,6 +179,7 @@ export const BandCountOutputTypeSelectSchema: z.ZodType<Prisma.BandCountOutputTy
   players: z.boolean().optional(),
   gigs: z.boolean().optional(),
   voices: z.boolean().optional(),
+  adminRoles: z.boolean().optional(),
 }).strict();
 
 export const BandSelectSchema: z.ZodType<Prisma.BandSelect> = z.object({
@@ -157,6 +188,7 @@ export const BandSelectSchema: z.ZodType<Prisma.BandSelect> = z.object({
   players: z.union([z.boolean(),z.lazy(() => PlayerFindManyArgsSchema)]).optional(),
   gigs: z.union([z.boolean(),z.lazy(() => GigFindManyArgsSchema)]).optional(),
   voices: z.union([z.boolean(),z.lazy(() => VoiceFindManyArgsSchema)]).optional(),
+  adminRoles: z.union([z.boolean(),z.lazy(() => AdminRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => BandCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -167,6 +199,8 @@ export const PlayerIncludeSchema: z.ZodType<Prisma.PlayerInclude> = z.object({
   presences: z.union([z.boolean(),z.lazy(() => PresenceFindManyArgsSchema)]).optional(),
   roles: z.union([z.boolean(),z.lazy(() => RoleFindManyArgsSchema)]).optional(),
   bands: z.union([z.boolean(),z.lazy(() => BandFindManyArgsSchema)]).optional(),
+  organizerRoles: z.union([z.boolean(),z.lazy(() => OrganizerRoleFindManyArgsSchema)]).optional(),
+  adminRoles: z.union([z.boolean(),z.lazy(() => AdminRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => PlayerCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -183,6 +217,8 @@ export const PlayerCountOutputTypeSelectSchema: z.ZodType<Prisma.PlayerCountOutp
   presences: z.boolean().optional(),
   roles: z.boolean().optional(),
   bands: z.boolean().optional(),
+  organizerRoles: z.boolean().optional(),
+  adminRoles: z.boolean().optional(),
 }).strict();
 
 export const PlayerSelectSchema: z.ZodType<Prisma.PlayerSelect> = z.object({
@@ -191,6 +227,8 @@ export const PlayerSelectSchema: z.ZodType<Prisma.PlayerSelect> = z.object({
   presences: z.union([z.boolean(),z.lazy(() => PresenceFindManyArgsSchema)]).optional(),
   roles: z.union([z.boolean(),z.lazy(() => RoleFindManyArgsSchema)]).optional(),
   bands: z.union([z.boolean(),z.lazy(() => BandFindManyArgsSchema)]).optional(),
+  organizerRoles: z.union([z.boolean(),z.lazy(() => OrganizerRoleFindManyArgsSchema)]).optional(),
+  adminRoles: z.union([z.boolean(),z.lazy(() => AdminRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => PlayerCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -200,6 +238,7 @@ export const PlayerSelectSchema: z.ZodType<Prisma.PlayerSelect> = z.object({
 export const GigIncludeSchema: z.ZodType<Prisma.GigInclude> = z.object({
   presences: z.union([z.boolean(),z.lazy(() => PresenceFindManyArgsSchema)]).optional(),
   band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
+  organizerRoles: z.union([z.boolean(),z.lazy(() => OrganizerRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => GigCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -214,6 +253,7 @@ export const GigCountOutputTypeArgsSchema: z.ZodType<Prisma.GigCountOutputTypeAr
 
 export const GigCountOutputTypeSelectSchema: z.ZodType<Prisma.GigCountOutputTypeSelect> = z.object({
   presences: z.boolean().optional(),
+  organizerRoles: z.boolean().optional(),
 }).strict();
 
 export const GigSelectSchema: z.ZodType<Prisma.GigSelect> = z.object({
@@ -222,9 +262,11 @@ export const GigSelectSchema: z.ZodType<Prisma.GigSelect> = z.object({
   bandId: z.boolean().optional(),
   date: z.boolean().optional(),
   location: z.boolean().optional(),
+  description: z.boolean().optional(),
   playable: z.boolean().optional(),
   presences: z.union([z.boolean(),z.lazy(() => PresenceFindManyArgsSchema)]).optional(),
   band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
+  organizerRoles: z.union([z.boolean(),z.lazy(() => OrganizerRoleFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => GigCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -324,6 +366,48 @@ export const VoiceSelectSchema: z.ZodType<Prisma.VoiceSelect> = z.object({
   band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
 }).strict()
 
+// ORGANIZER ROLE
+//------------------------------------------------------
+
+export const OrganizerRoleIncludeSchema: z.ZodType<Prisma.OrganizerRoleInclude> = z.object({
+  gig: z.union([z.boolean(),z.lazy(() => GigArgsSchema)]).optional(),
+  player: z.union([z.boolean(),z.lazy(() => PlayerArgsSchema)]).optional(),
+}).strict()
+
+export const OrganizerRoleArgsSchema: z.ZodType<Prisma.OrganizerRoleArgs> = z.object({
+  select: z.lazy(() => OrganizerRoleSelectSchema).optional(),
+  include: z.lazy(() => OrganizerRoleIncludeSchema).optional(),
+}).strict();
+
+export const OrganizerRoleSelectSchema: z.ZodType<Prisma.OrganizerRoleSelect> = z.object({
+  id: z.boolean().optional(),
+  gigId: z.boolean().optional(),
+  playerId: z.boolean().optional(),
+  gig: z.union([z.boolean(),z.lazy(() => GigArgsSchema)]).optional(),
+  player: z.union([z.boolean(),z.lazy(() => PlayerArgsSchema)]).optional(),
+}).strict()
+
+// ADMIN ROLE
+//------------------------------------------------------
+
+export const AdminRoleIncludeSchema: z.ZodType<Prisma.AdminRoleInclude> = z.object({
+  band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
+  player: z.union([z.boolean(),z.lazy(() => PlayerArgsSchema)]).optional(),
+}).strict()
+
+export const AdminRoleArgsSchema: z.ZodType<Prisma.AdminRoleArgs> = z.object({
+  select: z.lazy(() => AdminRoleSelectSchema).optional(),
+  include: z.lazy(() => AdminRoleIncludeSchema).optional(),
+}).strict();
+
+export const AdminRoleSelectSchema: z.ZodType<Prisma.AdminRoleSelect> = z.object({
+  id: z.boolean().optional(),
+  bandId: z.boolean().optional(),
+  playerId: z.boolean().optional(),
+  band: z.union([z.boolean(),z.lazy(() => BandArgsSchema)]).optional(),
+  player: z.union([z.boolean(),z.lazy(() => PlayerArgsSchema)]).optional(),
+}).strict()
+
 
 /////////////////////////////////////////
 // INPUT TYPES
@@ -337,7 +421,8 @@ export const BandWhereInputSchema: z.ZodType<Prisma.BandWhereInput> = z.object({
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   players: z.lazy(() => PlayerListRelationFilterSchema).optional(),
   gigs: z.lazy(() => GigListRelationFilterSchema).optional(),
-  voices: z.lazy(() => VoiceListRelationFilterSchema).optional()
+  voices: z.lazy(() => VoiceListRelationFilterSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleListRelationFilterSchema).optional()
 }).strict();
 
 export const BandOrderByWithRelationInputSchema: z.ZodType<Prisma.BandOrderByWithRelationInput> = z.object({
@@ -345,7 +430,8 @@ export const BandOrderByWithRelationInputSchema: z.ZodType<Prisma.BandOrderByWit
   name: z.lazy(() => SortOrderSchema).optional(),
   players: z.lazy(() => PlayerOrderByRelationAggregateInputSchema).optional(),
   gigs: z.lazy(() => GigOrderByRelationAggregateInputSchema).optional(),
-  voices: z.lazy(() => VoiceOrderByRelationAggregateInputSchema).optional()
+  voices: z.lazy(() => VoiceOrderByRelationAggregateInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const BandWhereUniqueInputSchema: z.ZodType<Prisma.BandWhereUniqueInput> = z.object({
@@ -379,7 +465,9 @@ export const PlayerWhereInputSchema: z.ZodType<Prisma.PlayerWhereInput> = z.obje
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   presences: z.lazy(() => PresenceListRelationFilterSchema).optional(),
   roles: z.lazy(() => RoleListRelationFilterSchema).optional(),
-  bands: z.lazy(() => BandListRelationFilterSchema).optional()
+  bands: z.lazy(() => BandListRelationFilterSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleListRelationFilterSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleListRelationFilterSchema).optional()
 }).strict();
 
 export const PlayerOrderByWithRelationInputSchema: z.ZodType<Prisma.PlayerOrderByWithRelationInput> = z.object({
@@ -387,7 +475,9 @@ export const PlayerOrderByWithRelationInputSchema: z.ZodType<Prisma.PlayerOrderB
   name: z.lazy(() => SortOrderSchema).optional(),
   presences: z.lazy(() => PresenceOrderByRelationAggregateInputSchema).optional(),
   roles: z.lazy(() => RoleOrderByRelationAggregateInputSchema).optional(),
-  bands: z.lazy(() => BandOrderByRelationAggregateInputSchema).optional()
+  bands: z.lazy(() => BandOrderByRelationAggregateInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleOrderByRelationAggregateInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const PlayerWhereUniqueInputSchema: z.ZodType<Prisma.PlayerWhereUniqueInput> = z.object({
@@ -421,9 +511,11 @@ export const GigWhereInputSchema: z.ZodType<Prisma.GigWhereInput> = z.object({
   bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   presences: z.lazy(() => PresenceListRelationFilterSchema).optional(),
   band: z.union([ z.lazy(() => BandRelationFilterSchema),z.lazy(() => BandWhereInputSchema) ]).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleListRelationFilterSchema).optional()
 }).strict();
 
 export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithRelationInput> = z.object({
@@ -432,9 +524,11 @@ export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithR
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   presences: z.lazy(() => PresenceOrderByRelationAggregateInputSchema).optional(),
-  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional()
+  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const GigWhereUniqueInputSchema: z.ZodType<Prisma.GigWhereUniqueInput> = z.object({
@@ -447,6 +541,7 @@ export const GigOrderByWithAggregationInputSchema: z.ZodType<Prisma.GigOrderByWi
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => GigCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => GigAvgOrderByAggregateInputSchema).optional(),
@@ -464,6 +559,7 @@ export const GigScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.GigScalar
   bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
@@ -537,7 +633,8 @@ export const RoleOrderByWithRelationInputSchema: z.ZodType<Prisma.RoleOrderByWit
 }).strict();
 
 export const RoleWhereUniqueInputSchema: z.ZodType<Prisma.RoleWhereUniqueInput> = z.object({
-  id: z.number().int().optional()
+  id: z.number().int().optional(),
+  instrumentId_playerId: z.lazy(() => RoleInstrumentIdPlayerIdCompoundUniqueInputSchema).optional()
 }).strict();
 
 export const RoleOrderByWithAggregationInputSchema: z.ZodType<Prisma.RoleOrderByWithAggregationInput> = z.object({
@@ -645,11 +742,100 @@ export const VoiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.VoiceSc
   bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
 }).strict();
 
+export const OrganizerRoleWhereInputSchema: z.ZodType<Prisma.OrganizerRoleWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => OrganizerRoleWhereInputSchema),z.lazy(() => OrganizerRoleWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => OrganizerRoleWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => OrganizerRoleWhereInputSchema),z.lazy(() => OrganizerRoleWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional(),
+  player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
+}).strict();
+
+export const OrganizerRoleOrderByWithRelationInputSchema: z.ZodType<Prisma.OrganizerRoleOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional(),
+  gig: z.lazy(() => GigOrderByWithRelationInputSchema).optional(),
+  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleWhereUniqueInputSchema: z.ZodType<Prisma.OrganizerRoleWhereUniqueInput> = z.object({
+  id: z.number().int().optional(),
+  gigId_playerId: z.lazy(() => OrganizerRoleGigIdPlayerIdCompoundUniqueInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleOrderByWithAggregationInputSchema: z.ZodType<Prisma.OrganizerRoleOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => OrganizerRoleCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => OrganizerRoleAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => OrganizerRoleMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => OrganizerRoleMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => OrganizerRoleSumOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.OrganizerRoleScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => OrganizerRoleScalarWhereWithAggregatesInputSchema),z.lazy(() => OrganizerRoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => OrganizerRoleScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => OrganizerRoleScalarWhereWithAggregatesInputSchema),z.lazy(() => OrganizerRoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+}).strict();
+
+export const AdminRoleWhereInputSchema: z.ZodType<Prisma.AdminRoleWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => AdminRoleWhereInputSchema),z.lazy(() => AdminRoleWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AdminRoleWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AdminRoleWhereInputSchema),z.lazy(() => AdminRoleWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  band: z.union([ z.lazy(() => BandRelationFilterSchema),z.lazy(() => BandWhereInputSchema) ]).optional(),
+  player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
+}).strict();
+
+export const AdminRoleOrderByWithRelationInputSchema: z.ZodType<Prisma.AdminRoleOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional(),
+  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
+  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+}).strict();
+
+export const AdminRoleWhereUniqueInputSchema: z.ZodType<Prisma.AdminRoleWhereUniqueInput> = z.object({
+  id: z.number().int().optional(),
+  bandId_playerId: z.lazy(() => AdminRoleBandIdPlayerIdCompoundUniqueInputSchema).optional()
+}).strict();
+
+export const AdminRoleOrderByWithAggregationInputSchema: z.ZodType<Prisma.AdminRoleOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => AdminRoleCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => AdminRoleAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => AdminRoleMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => AdminRoleMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => AdminRoleSumOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const AdminRoleScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.AdminRoleScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => AdminRoleScalarWhereWithAggregatesInputSchema),z.lazy(() => AdminRoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AdminRoleScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AdminRoleScalarWhereWithAggregatesInputSchema),z.lazy(() => AdminRoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+}).strict();
+
 export const BandCreateInputSchema: z.ZodType<Prisma.BandCreateInput> = z.object({
   name: z.string().min(1, { message: "Pas de nom, pas de fanfare." }).max(32),
   players: z.lazy(() => PlayerCreateNestedManyWithoutBandsInputSchema).optional(),
   gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
-  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateInputSchema: z.ZodType<Prisma.BandUncheckedCreateInput> = z.object({
@@ -657,14 +843,16 @@ export const BandUncheckedCreateInputSchema: z.ZodType<Prisma.BandUncheckedCreat
   name: z.string().min(1, { message: "Pas de nom, pas de fanfare." }).max(32),
   players: z.lazy(() => PlayerUncheckedCreateNestedManyWithoutBandsInputSchema).optional(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUpdateInputSchema: z.ZodType<Prisma.BandUpdateInput> = z.object({
   name: z.union([ z.string().min(1, { message: "Pas de nom, pas de fanfare." }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUpdateManyWithoutBandsNestedInputSchema).optional(),
   gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateInputSchema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z.object({
@@ -672,7 +860,8 @@ export const BandUncheckedUpdateInputSchema: z.ZodType<Prisma.BandUncheckedUpdat
   name: z.union([ z.string().min(1, { message: "Pas de nom, pas de fanfare." }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUncheckedUpdateManyWithoutBandsNestedInputSchema).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandCreateManyInputSchema: z.ZodType<Prisma.BandCreateManyInput> = z.object({
@@ -693,7 +882,9 @@ export const PlayerCreateInputSchema: z.ZodType<Prisma.PlayerCreateInput> = z.ob
   name: z.string().min(1, { message: "J'ai pas compris." }).max(32),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedCreateInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateInput> = z.object({
@@ -701,14 +892,18 @@ export const PlayerUncheckedCreateInputSchema: z.ZodType<Prisma.PlayerUncheckedC
   name: z.string().min(1, { message: "J'ai pas compris." }).max(32),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerUpdateInputSchema: z.ZodType<Prisma.PlayerUpdateInput> = z.object({
   name: z.union([ z.string().min(1, { message: "J'ai pas compris." }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedUpdateInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateInput> = z.object({
@@ -716,7 +911,9 @@ export const PlayerUncheckedUpdateInputSchema: z.ZodType<Prisma.PlayerUncheckedU
   name: z.union([ z.string().min(1, { message: "J'ai pas compris." }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerCreateManyInputSchema: z.ZodType<Prisma.PlayerCreateManyInput> = z.object({
@@ -737,9 +934,11 @@ export const GigCreateInputSchema: z.ZodType<Prisma.GigCreateInput> = z.object({
   name: z.string().min(1, { message: "C\'est vide :(" }).max(32),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
-  band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema)
+  band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigUncheckedCreateInputSchema: z.ZodType<Prisma.GigUncheckedCreateInput> = z.object({
@@ -748,17 +947,21 @@ export const GigUncheckedCreateInputSchema: z.ZodType<Prisma.GigUncheckedCreateI
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
-  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional()
+  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigUpdateInputSchema: z.ZodType<Prisma.GigUpdateInput> = z.object({
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
-  band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional()
+  band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const GigUncheckedUpdateInputSchema: z.ZodType<Prisma.GigUncheckedUpdateInput> = z.object({
@@ -767,8 +970,10 @@ export const GigUncheckedUpdateInputSchema: z.ZodType<Prisma.GigUncheckedUpdateI
   bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
+  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const GigCreateManyInputSchema: z.ZodType<Prisma.GigCreateManyInput> = z.object({
@@ -777,6 +982,7 @@ export const GigCreateManyInputSchema: z.ZodType<Prisma.GigCreateManyInput> = z.
   bandId: z.number().int(),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional()
 }).strict();
 
@@ -784,6 +990,7 @@ export const GigUpdateManyMutationInputSchema: z.ZodType<Prisma.GigUpdateManyMut
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -793,6 +1000,7 @@ export const GigUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GigUncheckedUpd
   bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -961,6 +1169,80 @@ export const VoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.VoiceUnchecke
   bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
+export const OrganizerRoleCreateInputSchema: z.ZodType<Prisma.OrganizerRoleCreateInput> = z.object({
+  gig: z.lazy(() => GigCreateNestedOneWithoutOrganizerRolesInputSchema),
+  player: z.lazy(() => PlayerCreateNestedOneWithoutOrganizerRolesInputSchema)
+}).strict();
+
+export const OrganizerRoleUncheckedCreateInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedCreateInput> = z.object({
+  id: z.number().int().optional(),
+  gigId: z.number().int(),
+  playerId: z.number().int()
+}).strict();
+
+export const OrganizerRoleUpdateInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateInput> = z.object({
+  gig: z.lazy(() => GigUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema).optional(),
+  player: z.lazy(() => PlayerUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const OrganizerRoleCreateManyInputSchema: z.ZodType<Prisma.OrganizerRoleCreateManyInput> = z.object({
+  id: z.number().int().optional(),
+  gigId: z.number().int(),
+  playerId: z.number().int()
+}).strict();
+
+export const OrganizerRoleUpdateManyMutationInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyMutationInput> = z.object({
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateManyInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const AdminRoleCreateInputSchema: z.ZodType<Prisma.AdminRoleCreateInput> = z.object({
+  band: z.lazy(() => BandCreateNestedOneWithoutAdminRolesInputSchema),
+  player: z.lazy(() => PlayerCreateNestedOneWithoutAdminRolesInputSchema)
+}).strict();
+
+export const AdminRoleUncheckedCreateInputSchema: z.ZodType<Prisma.AdminRoleUncheckedCreateInput> = z.object({
+  id: z.number().int().optional(),
+  bandId: z.number().int(),
+  playerId: z.number().int()
+}).strict();
+
+export const AdminRoleUpdateInputSchema: z.ZodType<Prisma.AdminRoleUpdateInput> = z.object({
+  band: z.lazy(() => BandUpdateOneRequiredWithoutAdminRolesNestedInputSchema).optional(),
+  player: z.lazy(() => PlayerUpdateOneRequiredWithoutAdminRolesNestedInputSchema).optional()
+}).strict();
+
+export const AdminRoleUncheckedUpdateInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const AdminRoleCreateManyInputSchema: z.ZodType<Prisma.AdminRoleCreateManyInput> = z.object({
+  id: z.number().int().optional(),
+  bandId: z.number().int(),
+  playerId: z.number().int()
+}).strict();
+
+export const AdminRoleUpdateManyMutationInputSchema: z.ZodType<Prisma.AdminRoleUpdateManyMutationInput> = z.object({
+}).strict();
+
+export const AdminRoleUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
   equals: z.number().optional(),
   in: z.number().array().optional(),
@@ -1005,6 +1287,12 @@ export const VoiceListRelationFilterSchema: z.ZodType<Prisma.VoiceListRelationFi
   none: z.lazy(() => VoiceWhereInputSchema).optional()
 }).strict();
 
+export const AdminRoleListRelationFilterSchema: z.ZodType<Prisma.AdminRoleListRelationFilter> = z.object({
+  every: z.lazy(() => AdminRoleWhereInputSchema).optional(),
+  some: z.lazy(() => AdminRoleWhereInputSchema).optional(),
+  none: z.lazy(() => AdminRoleWhereInputSchema).optional()
+}).strict();
+
 export const PlayerOrderByRelationAggregateInputSchema: z.ZodType<Prisma.PlayerOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1014,6 +1302,10 @@ export const GigOrderByRelationAggregateInputSchema: z.ZodType<Prisma.GigOrderBy
 }).strict();
 
 export const VoiceOrderByRelationAggregateInputSchema: z.ZodType<Prisma.VoiceOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleOrderByRelationAggregateInputSchema: z.ZodType<Prisma.AdminRoleOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1092,6 +1384,12 @@ export const BandListRelationFilterSchema: z.ZodType<Prisma.BandListRelationFilt
   none: z.lazy(() => BandWhereInputSchema).optional()
 }).strict();
 
+export const OrganizerRoleListRelationFilterSchema: z.ZodType<Prisma.OrganizerRoleListRelationFilter> = z.object({
+  every: z.lazy(() => OrganizerRoleWhereInputSchema).optional(),
+  some: z.lazy(() => OrganizerRoleWhereInputSchema).optional(),
+  none: z.lazy(() => OrganizerRoleWhereInputSchema).optional()
+}).strict();
+
 export const PresenceOrderByRelationAggregateInputSchema: z.ZodType<Prisma.PresenceOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -1101,6 +1399,10 @@ export const RoleOrderByRelationAggregateInputSchema: z.ZodType<Prisma.RoleOrder
 }).strict();
 
 export const BandOrderByRelationAggregateInputSchema: z.ZodType<Prisma.BandOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const OrganizerRoleOrderByRelationAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1138,6 +1440,21 @@ export const DateTimeFilterSchema: z.ZodType<Prisma.DateTimeFilter> = z.object({
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
 }).strict();
 
+export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
+}).strict();
+
 export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
   equals: z.boolean().optional(),
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
@@ -1154,6 +1471,7 @@ export const GigCountOrderByAggregateInputSchema: z.ZodType<Prisma.GigCountOrder
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1168,6 +1486,7 @@ export const GigMaxOrderByAggregateInputSchema: z.ZodType<Prisma.GigMaxOrderByAg
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1177,6 +1496,7 @@ export const GigMinOrderByAggregateInputSchema: z.ZodType<Prisma.GigMinOrderByAg
   bandId: z.lazy(() => SortOrderSchema).optional(),
   date: z.lazy(() => SortOrderSchema).optional(),
   location: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1197,6 +1517,24 @@ export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAg
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
+}).strict();
+
+export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNullableWithAggregatesFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
 }).strict();
 
 export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
@@ -1258,6 +1596,11 @@ export const PresenceSumOrderByAggregateInputSchema: z.ZodType<Prisma.PresenceSu
 export const InstrumentRelationFilterSchema: z.ZodType<Prisma.InstrumentRelationFilter> = z.object({
   is: z.lazy(() => InstrumentWhereInputSchema).optional(),
   isNot: z.lazy(() => InstrumentWhereInputSchema).optional()
+}).strict();
+
+export const RoleInstrumentIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.RoleInstrumentIdPlayerIdCompoundUniqueInput> = z.object({
+  instrumentId: z.number(),
+  playerId: z.number()
 }).strict();
 
 export const RoleCountOrderByAggregateInputSchema: z.ZodType<Prisma.RoleCountOrderByAggregateInput> = z.object({
@@ -1346,6 +1689,76 @@ export const VoiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.VoiceSumOrder
   bandId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
+export const OrganizerRoleGigIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.OrganizerRoleGigIdPlayerIdCompoundUniqueInput> = z.object({
+  gigId: z.number(),
+  playerId: z.number()
+}).strict();
+
+export const OrganizerRoleCountOrderByAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const OrganizerRoleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleAvgOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const OrganizerRoleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const OrganizerRoleMinOrderByAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const OrganizerRoleSumOrderByAggregateInputSchema: z.ZodType<Prisma.OrganizerRoleSumOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  gigId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleBandIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.AdminRoleBandIdPlayerIdCompoundUniqueInput> = z.object({
+  bandId: z.number(),
+  playerId: z.number()
+}).strict();
+
+export const AdminRoleCountOrderByAggregateInputSchema: z.ZodType<Prisma.AdminRoleCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.AdminRoleAvgOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AdminRoleMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleMinOrderByAggregateInputSchema: z.ZodType<Prisma.AdminRoleMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const AdminRoleSumOrderByAggregateInputSchema: z.ZodType<Prisma.AdminRoleSumOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  bandId: z.lazy(() => SortOrderSchema).optional(),
+  playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
 export const PlayerCreateNestedManyWithoutBandsInputSchema: z.ZodType<Prisma.PlayerCreateNestedManyWithoutBandsInput> = z.object({
   create: z.union([ z.lazy(() => PlayerCreateWithoutBandsInputSchema),z.lazy(() => PlayerCreateWithoutBandsInputSchema).array(),z.lazy(() => PlayerUncheckedCreateWithoutBandsInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutBandsInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PlayerCreateOrConnectWithoutBandsInputSchema),z.lazy(() => PlayerCreateOrConnectWithoutBandsInputSchema).array() ]).optional(),
@@ -1366,6 +1779,13 @@ export const VoiceCreateNestedManyWithoutBandInputSchema: z.ZodType<Prisma.Voice
   connect: z.union([ z.lazy(() => VoiceWhereUniqueInputSchema),z.lazy(() => VoiceWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
+export const AdminRoleCreateNestedManyWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleCreateNestedManyWithoutBandInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleCreateWithoutBandInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyBandInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const PlayerUncheckedCreateNestedManyWithoutBandsInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateNestedManyWithoutBandsInput> = z.object({
   create: z.union([ z.lazy(() => PlayerCreateWithoutBandsInputSchema),z.lazy(() => PlayerCreateWithoutBandsInputSchema).array(),z.lazy(() => PlayerUncheckedCreateWithoutBandsInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutBandsInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PlayerCreateOrConnectWithoutBandsInputSchema),z.lazy(() => PlayerCreateOrConnectWithoutBandsInputSchema).array() ]).optional(),
@@ -1384,6 +1804,13 @@ export const VoiceUncheckedCreateNestedManyWithoutBandInputSchema: z.ZodType<Pri
   connectOrCreate: z.union([ z.lazy(() => VoiceCreateOrConnectWithoutBandInputSchema),z.lazy(() => VoiceCreateOrConnectWithoutBandInputSchema).array() ]).optional(),
   createMany: z.lazy(() => VoiceCreateManyBandInputEnvelopeSchema).optional(),
   connect: z.union([ z.lazy(() => VoiceWhereUniqueInputSchema),z.lazy(() => VoiceWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleUncheckedCreateNestedManyWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUncheckedCreateNestedManyWithoutBandInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleCreateWithoutBandInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyBandInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const StringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.StringFieldUpdateOperationsInput> = z.object({
@@ -1429,6 +1856,20 @@ export const VoiceUpdateManyWithoutBandNestedInputSchema: z.ZodType<Prisma.Voice
   update: z.union([ z.lazy(() => VoiceUpdateWithWhereUniqueWithoutBandInputSchema),z.lazy(() => VoiceUpdateWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => VoiceUpdateManyWithWhereWithoutBandInputSchema),z.lazy(() => VoiceUpdateManyWithWhereWithoutBandInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => VoiceScalarWhereInputSchema),z.lazy(() => VoiceScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleUpdateManyWithoutBandNestedInputSchema: z.ZodType<Prisma.AdminRoleUpdateManyWithoutBandNestedInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleCreateWithoutBandInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutBandInputSchema),z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyBandInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutBandInputSchema),z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => AdminRoleUpdateManyWithWhereWithoutBandInputSchema),z.lazy(() => AdminRoleUpdateManyWithWhereWithoutBandInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.object({
@@ -1480,6 +1921,20 @@ export const VoiceUncheckedUpdateManyWithoutBandNestedInputSchema: z.ZodType<Pri
   deleteMany: z.union([ z.lazy(() => VoiceScalarWhereInputSchema),z.lazy(() => VoiceScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
+export const AdminRoleUncheckedUpdateManyWithoutBandNestedInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateManyWithoutBandNestedInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleCreateWithoutBandInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutBandInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutBandInputSchema),z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyBandInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutBandInputSchema),z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => AdminRoleUpdateManyWithWhereWithoutBandInputSchema),z.lazy(() => AdminRoleUpdateManyWithWhereWithoutBandInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCreateNestedManyWithoutPlayerInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutPlayerInputSchema),z.lazy(() => PresenceCreateWithoutPlayerInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
@@ -1500,6 +1955,20 @@ export const BandCreateNestedManyWithoutPlayersInputSchema: z.ZodType<Prisma.Ban
   connect: z.union([ z.lazy(() => BandWhereUniqueInputSchema),z.lazy(() => BandWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrganizerRoleCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleCreateNestedManyWithoutPlayerInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleCreateNestedManyWithoutPlayerInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateNestedManyWithoutPlayerInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutPlayerInputSchema),z.lazy(() => PresenceCreateWithoutPlayerInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
@@ -1518,6 +1987,20 @@ export const BandUncheckedCreateNestedManyWithoutPlayersInputSchema: z.ZodType<P
   create: z.union([ z.lazy(() => BandCreateWithoutPlayersInputSchema),z.lazy(() => BandCreateWithoutPlayersInputSchema).array(),z.lazy(() => BandUncheckedCreateWithoutPlayersInputSchema),z.lazy(() => BandUncheckedCreateWithoutPlayersInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => BandCreateOrConnectWithoutPlayersInputSchema),z.lazy(() => BandCreateOrConnectWithoutPlayersInputSchema).array() ]).optional(),
   connect: z.union([ z.lazy(() => BandWhereUniqueInputSchema),z.lazy(() => BandWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUncheckedCreateNestedManyWithoutPlayerInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const PresenceUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.PresenceUpdateManyWithoutPlayerNestedInput> = z.object({
@@ -1561,6 +2044,34 @@ export const BandUpdateManyWithoutPlayersNestedInputSchema: z.ZodType<Prisma.Ban
   deleteMany: z.union([ z.lazy(() => BandScalarWhereInputSchema),z.lazy(() => BandScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyWithoutPlayerNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutPlayerInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.AdminRoleUpdateManyWithoutPlayerNestedInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => AdminRoleUpdateManyWithWhereWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpdateManyWithWhereWithoutPlayerInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyWithoutPlayerNestedInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutPlayerInputSchema),z.lazy(() => PresenceCreateWithoutPlayerInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
@@ -1602,6 +2113,34 @@ export const BandUncheckedUpdateManyWithoutPlayersNestedInputSchema: z.ZodType<P
   deleteMany: z.union([ z.lazy(() => BandScalarWhereInputSchema),z.lazy(() => BandScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutPlayerInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateManyWithoutPlayerNestedInput> = z.object({
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema).array(),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema),z.lazy(() => AdminRoleCreateOrConnectWithoutPlayerInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpsertWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => AdminRoleCreateManyPlayerInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => AdminRoleWhereUniqueInputSchema),z.lazy(() => AdminRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpdateWithWhereUniqueWithoutPlayerInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => AdminRoleUpdateManyWithWhereWithoutPlayerInputSchema),z.lazy(() => AdminRoleUpdateManyWithWhereWithoutPlayerInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceCreateNestedManyWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreateNestedManyWithoutGigInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutGigInputSchema),z.lazy(() => PresenceCreateWithoutGigInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
@@ -1615,6 +2154,13 @@ export const BandCreateNestedOneWithoutGigsInputSchema: z.ZodType<Prisma.BandCre
   connect: z.lazy(() => BandWhereUniqueInputSchema).optional()
 }).strict();
 
+export const OrganizerRoleCreateNestedManyWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleCreateNestedManyWithoutGigInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyGigInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceUncheckedCreateNestedManyWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateNestedManyWithoutGigInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutGigInputSchema),z.lazy(() => PresenceCreateWithoutGigInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
@@ -1622,8 +2168,19 @@ export const PresenceUncheckedCreateNestedManyWithoutGigInputSchema: z.ZodType<P
   connect: z.union([ z.lazy(() => PresenceWhereUniqueInputSchema),z.lazy(() => PresenceWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedCreateNestedManyWithoutGigInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyGigInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const DateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.DateTimeFieldUpdateOperationsInput> = z.object({
   set: z.coerce.date().optional()
+}).strict();
+
+export const NullableStringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableStringFieldUpdateOperationsInput> = z.object({
+  set: z.string().optional().nullable()
 }).strict();
 
 export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
@@ -1652,6 +2209,20 @@ export const BandUpdateOneRequiredWithoutGigsNestedInputSchema: z.ZodType<Prisma
   update: z.union([ z.lazy(() => BandUpdateWithoutGigsInputSchema),z.lazy(() => BandUncheckedUpdateWithoutGigsInputSchema) ]).optional(),
 }).strict();
 
+export const OrganizerRoleUpdateManyWithoutGigNestedInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyWithoutGigNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutGigInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyGigInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutGigInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutGigInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const PresenceUncheckedUpdateManyWithoutGigNestedInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyWithoutGigNestedInput> = z.object({
   create: z.union([ z.lazy(() => PresenceCreateWithoutGigInputSchema),z.lazy(() => PresenceCreateWithoutGigInputSchema).array(),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema),z.lazy(() => PresenceUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema),z.lazy(() => PresenceCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
@@ -1664,6 +2235,20 @@ export const PresenceUncheckedUpdateManyWithoutGigNestedInputSchema: z.ZodType<P
   update: z.union([ z.lazy(() => PresenceUpdateWithWhereUniqueWithoutGigInputSchema),z.lazy(() => PresenceUpdateWithWhereUniqueWithoutGigInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => PresenceUpdateManyWithWhereWithoutGigInputSchema),z.lazy(() => PresenceUpdateManyWithWhereWithoutGigInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => PresenceScalarWhereInputSchema),z.lazy(() => PresenceScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateManyWithoutGigNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema).array(),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema),z.lazy(() => OrganizerRoleCreateOrConnectWithoutGigInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpsertWithWhereUniqueWithoutGigInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => OrganizerRoleCreateManyGigInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrganizerRoleWhereUniqueInputSchema),z.lazy(() => OrganizerRoleWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpdateWithWhereUniqueWithoutGigInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutGigInputSchema),z.lazy(() => OrganizerRoleUpdateManyWithWhereWithoutGigInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const GigCreateNestedOneWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateNestedOneWithoutPresencesInput> = z.object({
@@ -1834,6 +2419,62 @@ export const BandUpdateOneRequiredWithoutVoicesNestedInputSchema: z.ZodType<Pris
   update: z.union([ z.lazy(() => BandUpdateWithoutVoicesInputSchema),z.lazy(() => BandUncheckedUpdateWithoutVoicesInputSchema) ]).optional(),
 }).strict();
 
+export const GigCreateNestedOneWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigCreateNestedOneWithoutOrganizerRolesInput> = z.object({
+  create: z.union([ z.lazy(() => GigCreateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedCreateWithoutOrganizerRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => GigCreateOrConnectWithoutOrganizerRolesInputSchema).optional(),
+  connect: z.lazy(() => GigWhereUniqueInputSchema).optional()
+}).strict();
+
+export const PlayerCreateNestedOneWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerCreateNestedOneWithoutOrganizerRolesInput> = z.object({
+  create: z.union([ z.lazy(() => PlayerCreateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutOrganizerRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PlayerCreateOrConnectWithoutOrganizerRolesInputSchema).optional(),
+  connect: z.lazy(() => PlayerWhereUniqueInputSchema).optional()
+}).strict();
+
+export const GigUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema: z.ZodType<Prisma.GigUpdateOneRequiredWithoutOrganizerRolesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => GigCreateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedCreateWithoutOrganizerRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => GigCreateOrConnectWithoutOrganizerRolesInputSchema).optional(),
+  upsert: z.lazy(() => GigUpsertWithoutOrganizerRolesInputSchema).optional(),
+  connect: z.lazy(() => GigWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => GigUpdateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedUpdateWithoutOrganizerRolesInputSchema) ]).optional(),
+}).strict();
+
+export const PlayerUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema: z.ZodType<Prisma.PlayerUpdateOneRequiredWithoutOrganizerRolesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => PlayerCreateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutOrganizerRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PlayerCreateOrConnectWithoutOrganizerRolesInputSchema).optional(),
+  upsert: z.lazy(() => PlayerUpsertWithoutOrganizerRolesInputSchema).optional(),
+  connect: z.lazy(() => PlayerWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => PlayerUpdateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedUpdateWithoutOrganizerRolesInputSchema) ]).optional(),
+}).strict();
+
+export const BandCreateNestedOneWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandCreateNestedOneWithoutAdminRolesInput> = z.object({
+  create: z.union([ z.lazy(() => BandCreateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedCreateWithoutAdminRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => BandCreateOrConnectWithoutAdminRolesInputSchema).optional(),
+  connect: z.lazy(() => BandWhereUniqueInputSchema).optional()
+}).strict();
+
+export const PlayerCreateNestedOneWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerCreateNestedOneWithoutAdminRolesInput> = z.object({
+  create: z.union([ z.lazy(() => PlayerCreateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutAdminRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PlayerCreateOrConnectWithoutAdminRolesInputSchema).optional(),
+  connect: z.lazy(() => PlayerWhereUniqueInputSchema).optional()
+}).strict();
+
+export const BandUpdateOneRequiredWithoutAdminRolesNestedInputSchema: z.ZodType<Prisma.BandUpdateOneRequiredWithoutAdminRolesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => BandCreateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedCreateWithoutAdminRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => BandCreateOrConnectWithoutAdminRolesInputSchema).optional(),
+  upsert: z.lazy(() => BandUpsertWithoutAdminRolesInputSchema).optional(),
+  connect: z.lazy(() => BandWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => BandUpdateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedUpdateWithoutAdminRolesInputSchema) ]).optional(),
+}).strict();
+
+export const PlayerUpdateOneRequiredWithoutAdminRolesNestedInputSchema: z.ZodType<Prisma.PlayerUpdateOneRequiredWithoutAdminRolesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => PlayerCreateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutAdminRolesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PlayerCreateOrConnectWithoutAdminRolesInputSchema).optional(),
+  upsert: z.lazy(() => PlayerUpsertWithoutAdminRolesInputSchema).optional(),
+  connect: z.lazy(() => PlayerWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => PlayerUpdateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedUpdateWithoutAdminRolesInputSchema) ]).optional(),
+}).strict();
+
 export const NestedIntFilterSchema: z.ZodType<Prisma.NestedIntFilter> = z.object({
   equals: z.number().optional(),
   in: z.number().array().optional(),
@@ -1914,6 +2555,20 @@ export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> 
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
 }).strict();
 
+export const NestedStringNullableFilterSchema: z.ZodType<Prisma.NestedStringNullableFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
+}).strict();
+
 export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.object({
   equals: z.boolean().optional(),
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
@@ -1933,6 +2588,34 @@ export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDa
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
 }).strict();
 
+export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
+  lt: z.string().optional(),
+  lte: z.string().optional(),
+  gt: z.string().optional(),
+  gte: z.string().optional(),
+  contains: z.string().optional(),
+  startsWith: z.string().optional(),
+  endsWith: z.string().optional(),
+  not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
+}).strict();
+
+export const NestedIntNullableFilterSchema: z.ZodType<Prisma.NestedIntNullableFilter> = z.object({
+  equals: z.number().optional().nullable(),
+  in: z.number().array().optional().nullable(),
+  notIn: z.number().array().optional().nullable(),
+  lt: z.number().optional(),
+  lte: z.number().optional(),
+  gt: z.number().optional(),
+  gte: z.number().optional(),
+  not: z.union([ z.number(),z.lazy(() => NestedIntNullableFilterSchema) ]).optional().nullable(),
+}).strict();
+
 export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWithAggregatesFilter> = z.object({
   equals: z.boolean().optional(),
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
@@ -1944,14 +2627,18 @@ export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWi
 export const PlayerCreateWithoutBandsInputSchema: z.ZodType<Prisma.PlayerCreateWithoutBandsInput> = z.object({
   name: z.string(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
-  roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional()
+  roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedCreateWithoutBandsInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutBandsInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
-  roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
+  roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerCreateOrConnectWithoutBandsInputSchema: z.ZodType<Prisma.PlayerCreateOrConnectWithoutBandsInput> = z.object({
@@ -1963,8 +2650,10 @@ export const GigCreateWithoutBandInputSchema: z.ZodType<Prisma.GigCreateWithoutB
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
-  presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional()
+  presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutBandInput> = z.object({
@@ -1972,8 +2661,10 @@ export const GigUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.GigUnche
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
-  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional()
+  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.GigCreateOrConnectWithoutBandInput> = z.object({
@@ -2002,6 +2693,25 @@ export const VoiceCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.VoiceC
 
 export const VoiceCreateManyBandInputEnvelopeSchema: z.ZodType<Prisma.VoiceCreateManyBandInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => VoiceCreateManyBandInputSchema),z.lazy(() => VoiceCreateManyBandInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
+export const AdminRoleCreateWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleCreateWithoutBandInput> = z.object({
+  player: z.lazy(() => PlayerCreateNestedOneWithoutAdminRolesInputSchema)
+}).strict();
+
+export const AdminRoleUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUncheckedCreateWithoutBandInput> = z.object({
+  id: z.number().optional(),
+  playerId: z.number()
+}).strict();
+
+export const AdminRoleCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleCreateOrConnectWithoutBandInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema) ]),
+}).strict();
+
+export const AdminRoleCreateManyBandInputEnvelopeSchema: z.ZodType<Prisma.AdminRoleCreateManyBandInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => AdminRoleCreateManyBandInputSchema),z.lazy(() => AdminRoleCreateManyBandInputSchema).array() ]),
   skipDuplicates: z.boolean().optional()
 }).strict();
 
@@ -2054,6 +2764,7 @@ export const GigScalarWhereInputSchema: z.ZodType<Prisma.GigScalarWhereInput> = 
   bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
@@ -2080,6 +2791,31 @@ export const VoiceScalarWhereInputSchema: z.ZodType<Prisma.VoiceScalarWhereInput
   id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+}).strict();
+
+export const AdminRoleUpsertWithWhereUniqueWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUpsertWithWhereUniqueWithoutBandInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedUpdateWithoutBandInputSchema) ]),
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutBandInputSchema) ]),
+}).strict();
+
+export const AdminRoleUpdateWithWhereUniqueWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUpdateWithWhereUniqueWithoutBandInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => AdminRoleUpdateWithoutBandInputSchema),z.lazy(() => AdminRoleUncheckedUpdateWithoutBandInputSchema) ]),
+}).strict();
+
+export const AdminRoleUpdateManyWithWhereWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUpdateManyWithWhereWithoutBandInput> = z.object({
+  where: z.lazy(() => AdminRoleScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => AdminRoleUpdateManyMutationInputSchema),z.lazy(() => AdminRoleUncheckedUpdateManyWithoutAdminRolesInputSchema) ]),
+}).strict();
+
+export const AdminRoleScalarWhereInputSchema: z.ZodType<Prisma.AdminRoleScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AdminRoleScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AdminRoleScalarWhereInputSchema),z.lazy(() => AdminRoleScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
 }).strict();
 
 export const PresenceCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCreateWithoutPlayerInput> = z.object({
@@ -2127,19 +2863,59 @@ export const RoleCreateManyPlayerInputEnvelopeSchema: z.ZodType<Prisma.RoleCreat
 export const BandCreateWithoutPlayersInputSchema: z.ZodType<Prisma.BandCreateWithoutPlayersInput> = z.object({
   name: z.string(),
   gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
-  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutPlayersInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutPlayersInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandCreateOrConnectWithoutPlayersInputSchema: z.ZodType<Prisma.BandCreateOrConnectWithoutPlayersInput> = z.object({
   where: z.lazy(() => BandWhereUniqueInputSchema),
   create: z.union([ z.lazy(() => BandCreateWithoutPlayersInputSchema),z.lazy(() => BandUncheckedCreateWithoutPlayersInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleCreateWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleCreateWithoutPlayerInput> = z.object({
+  gig: z.lazy(() => GigCreateNestedOneWithoutOrganizerRolesInputSchema)
+}).strict();
+
+export const OrganizerRoleUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedCreateWithoutPlayerInput> = z.object({
+  id: z.number().optional(),
+  gigId: z.number()
+}).strict();
+
+export const OrganizerRoleCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleCreateOrConnectWithoutPlayerInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleCreateManyPlayerInputEnvelopeSchema: z.ZodType<Prisma.OrganizerRoleCreateManyPlayerInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => OrganizerRoleCreateManyPlayerInputSchema),z.lazy(() => OrganizerRoleCreateManyPlayerInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
+export const AdminRoleCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleCreateWithoutPlayerInput> = z.object({
+  band: z.lazy(() => BandCreateNestedOneWithoutAdminRolesInputSchema)
+}).strict();
+
+export const AdminRoleUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUncheckedCreateWithoutPlayerInput> = z.object({
+  id: z.number().optional(),
+  bandId: z.number()
+}).strict();
+
+export const AdminRoleCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleCreateOrConnectWithoutPlayerInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const AdminRoleCreateManyPlayerInputEnvelopeSchema: z.ZodType<Prisma.AdminRoleCreateManyPlayerInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => AdminRoleCreateManyPlayerInputSchema),z.lazy(() => AdminRoleCreateManyPlayerInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const PresenceUpsertWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUpsertWithWhereUniqueWithoutPlayerInput> = z.object({
@@ -2218,6 +2994,47 @@ export const BandScalarWhereInputSchema: z.ZodType<Prisma.BandScalarWhereInput> 
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
+export const OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUpsertWithWhereUniqueWithoutPlayerInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateWithoutPlayerInputSchema) ]),
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateWithWhereUniqueWithoutPlayerInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => OrganizerRoleUpdateWithoutPlayerInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleUpdateManyWithWhereWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyWithWhereWithoutPlayerInput> = z.object({
+  where: z.lazy(() => OrganizerRoleScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => OrganizerRoleUpdateManyMutationInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutOrganizerRolesInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleScalarWhereInputSchema: z.ZodType<Prisma.OrganizerRoleScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => OrganizerRoleScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => OrganizerRoleScalarWhereInputSchema),z.lazy(() => OrganizerRoleScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+}).strict();
+
+export const AdminRoleUpsertWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUpsertWithWhereUniqueWithoutPlayerInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => AdminRoleUpdateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedUpdateWithoutPlayerInputSchema) ]),
+  create: z.union([ z.lazy(() => AdminRoleCreateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedCreateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const AdminRoleUpdateWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUpdateWithWhereUniqueWithoutPlayerInput> = z.object({
+  where: z.lazy(() => AdminRoleWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => AdminRoleUpdateWithoutPlayerInputSchema),z.lazy(() => AdminRoleUncheckedUpdateWithoutPlayerInputSchema) ]),
+}).strict();
+
+export const AdminRoleUpdateManyWithWhereWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUpdateManyWithWhereWithoutPlayerInput> = z.object({
+  where: z.lazy(() => AdminRoleScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => AdminRoleUpdateManyMutationInputSchema),z.lazy(() => AdminRoleUncheckedUpdateManyWithoutAdminRolesInputSchema) ]),
+}).strict();
+
 export const PresenceCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreateWithoutGigInput> = z.object({
   value: z.boolean().optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutPresencesInputSchema)
@@ -2242,19 +3059,40 @@ export const PresenceCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.Presence
 export const BandCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandCreateWithoutGigsInput> = z.object({
   name: z.string(),
   players: z.lazy(() => PlayerCreateNestedManyWithoutBandsInputSchema).optional(),
-  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutGigsInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   players: z.lazy(() => PlayerUncheckedCreateNestedManyWithoutBandsInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandCreateOrConnectWithoutGigsInputSchema: z.ZodType<Prisma.BandCreateOrConnectWithoutGigsInput> = z.object({
   where: z.lazy(() => BandWhereUniqueInputSchema),
   create: z.union([ z.lazy(() => BandCreateWithoutGigsInputSchema),z.lazy(() => BandUncheckedCreateWithoutGigsInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleCreateWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleCreateWithoutGigInput> = z.object({
+  player: z.lazy(() => PlayerCreateNestedOneWithoutOrganizerRolesInputSchema)
+}).strict();
+
+export const OrganizerRoleUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedCreateWithoutGigInput> = z.object({
+  id: z.number().optional(),
+  playerId: z.number()
+}).strict();
+
+export const OrganizerRoleCreateOrConnectWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleCreateOrConnectWithoutGigInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.OrganizerRoleCreateManyGigInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => OrganizerRoleCreateManyGigInputSchema),z.lazy(() => OrganizerRoleCreateManyGigInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const PresenceUpsertWithWhereUniqueWithoutGigInputSchema: z.ZodType<Prisma.PresenceUpsertWithWhereUniqueWithoutGigInput> = z.object({
@@ -2281,22 +3119,42 @@ export const BandUpsertWithoutGigsInputSchema: z.ZodType<Prisma.BandUpsertWithou
 export const BandUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUpdateWithoutGigsInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUpdateManyWithoutBandsNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutGigsInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUncheckedUpdateManyWithoutBandsNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleUpsertWithWhereUniqueWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUpsertWithWhereUniqueWithoutGigInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => OrganizerRoleUpdateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateWithoutGigInputSchema) ]),
+  create: z.union([ z.lazy(() => OrganizerRoleCreateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedCreateWithoutGigInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleUpdateWithWhereUniqueWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateWithWhereUniqueWithoutGigInput> = z.object({
+  where: z.lazy(() => OrganizerRoleWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => OrganizerRoleUpdateWithoutGigInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateWithoutGigInputSchema) ]),
+}).strict();
+
+export const OrganizerRoleUpdateManyWithWhereWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyWithWhereWithoutGigInput> = z.object({
+  where: z.lazy(() => OrganizerRoleScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => OrganizerRoleUpdateManyMutationInputSchema),z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutOrganizerRolesInputSchema) ]),
 }).strict();
 
 export const GigCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateWithoutPresencesInput> = z.object({
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional(),
-  band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema)
+  band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutPresencesInput> = z.object({
@@ -2305,7 +3163,9 @@ export const GigUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
   bandId: z.number(),
   date: z.coerce.date(),
   location: z.string(),
-  playable: z.boolean().optional()
+  description: z.string().optional().nullable(),
+  playable: z.boolean().optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutGigInputSchema).optional()
 }).strict();
 
 export const GigCreateOrConnectWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateOrConnectWithoutPresencesInput> = z.object({
@@ -2316,14 +3176,18 @@ export const GigCreateOrConnectWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
 export const PlayerCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutPresencesInput> = z.object({
   name: z.string(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutPresencesInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerCreateOrConnectWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerCreateOrConnectWithoutPresencesInput> = z.object({
@@ -2340,8 +3204,10 @@ export const GigUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpdateWit
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional()
+  band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const GigUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutPresencesInput> = z.object({
@@ -2350,7 +3216,9 @@ export const GigUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
   bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUpsertWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUpsertWithoutPresencesInput> = z.object({
@@ -2361,14 +3229,18 @@ export const PlayerUpsertWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUps
 export const PlayerUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutPresencesInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutPresencesInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const InstrumentCreateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentCreateWithoutRolesInput> = z.object({
@@ -2390,14 +3262,18 @@ export const InstrumentCreateOrConnectWithoutRolesInputSchema: z.ZodType<Prisma.
 export const PlayerCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutRolesInput> = z.object({
   name: z.string(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutRolesInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
 }).strict();
 
 export const PlayerCreateOrConnectWithoutRolesInputSchema: z.ZodType<Prisma.PlayerCreateOrConnectWithoutRolesInput> = z.object({
@@ -2429,14 +3305,18 @@ export const PlayerUpsertWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpsertW
 export const PlayerUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutRolesInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutRolesInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional()
+  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const RoleCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleCreateWithoutInstrumentInput> = z.object({
@@ -2530,14 +3410,16 @@ export const InstrumentCreateOrConnectWithoutVoicesInputSchema: z.ZodType<Prisma
 export const BandCreateWithoutVoicesInputSchema: z.ZodType<Prisma.BandCreateWithoutVoicesInput> = z.object({
   name: z.string(),
   players: z.lazy(() => PlayerCreateNestedManyWithoutBandsInputSchema).optional(),
-  gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional()
+  gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutVoicesInput> = z.object({
   id: z.number().optional(),
   name: z.string(),
   players: z.lazy(() => PlayerUncheckedCreateNestedManyWithoutBandsInputSchema).optional(),
-  gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional()
+  gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandCreateOrConnectWithoutVoicesInputSchema: z.ZodType<Prisma.BandCreateOrConnectWithoutVoicesInput> = z.object({
@@ -2569,14 +3451,196 @@ export const BandUpsertWithoutVoicesInputSchema: z.ZodType<Prisma.BandUpsertWith
 export const BandUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUpdateWithoutVoicesInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUpdateManyWithoutBandsNestedInputSchema).optional(),
-  gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional()
+  gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutVoicesInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   players: z.lazy(() => PlayerUncheckedUpdateManyWithoutBandsNestedInputSchema).optional(),
-  gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+  gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+}).strict();
+
+export const GigCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigCreateWithoutOrganizerRolesInput> = z.object({
+  name: z.string(),
+  date: z.coerce.date(),
+  location: z.string(),
+  description: z.string().optional().nullable(),
+  playable: z.boolean().optional(),
+  presences: z.lazy(() => PresenceCreateNestedManyWithoutGigInputSchema).optional(),
+  band: z.lazy(() => BandCreateNestedOneWithoutGigsInputSchema)
+}).strict();
+
+export const GigUncheckedCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutOrganizerRolesInput> = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  bandId: z.number(),
+  date: z.coerce.date(),
+  location: z.string(),
+  description: z.string().optional().nullable(),
+  playable: z.boolean().optional(),
+  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutGigInputSchema).optional()
+}).strict();
+
+export const GigCreateOrConnectWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigCreateOrConnectWithoutOrganizerRolesInput> = z.object({
+  where: z.lazy(() => GigWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => GigCreateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedCreateWithoutOrganizerRolesInputSchema) ]),
+}).strict();
+
+export const PlayerCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutOrganizerRolesInput> = z.object({
+  name: z.string(),
+  presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
+  roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleCreateNestedManyWithoutPlayerInputSchema).optional()
+}).strict();
+
+export const PlayerUncheckedCreateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutOrganizerRolesInput> = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
+}).strict();
+
+export const PlayerCreateOrConnectWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerCreateOrConnectWithoutOrganizerRolesInput> = z.object({
+  where: z.lazy(() => PlayerWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => PlayerCreateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutOrganizerRolesInputSchema) ]),
+}).strict();
+
+export const GigUpsertWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigUpsertWithoutOrganizerRolesInput> = z.object({
+  update: z.union([ z.lazy(() => GigUpdateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedUpdateWithoutOrganizerRolesInputSchema) ]),
+  create: z.union([ z.lazy(() => GigCreateWithoutOrganizerRolesInputSchema),z.lazy(() => GigUncheckedCreateWithoutOrganizerRolesInputSchema) ]),
+}).strict();
+
+export const GigUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigUpdateWithoutOrganizerRolesInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
+  band: z.lazy(() => BandUpdateOneRequiredWithoutGigsNestedInputSchema).optional()
+}).strict();
+
+export const GigUncheckedUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutOrganizerRolesInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
+}).strict();
+
+export const PlayerUpsertWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerUpsertWithoutOrganizerRolesInput> = z.object({
+  update: z.union([ z.lazy(() => PlayerUpdateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedUpdateWithoutOrganizerRolesInputSchema) ]),
+  create: z.union([ z.lazy(() => PlayerCreateWithoutOrganizerRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutOrganizerRolesInputSchema) ]),
+}).strict();
+
+export const PlayerUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutOrganizerRolesInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
+}).strict();
+
+export const PlayerUncheckedUpdateWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutOrganizerRolesInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
+}).strict();
+
+export const BandCreateWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandCreateWithoutAdminRolesInput> = z.object({
+  name: z.string(),
+  players: z.lazy(() => PlayerCreateNestedManyWithoutBandsInputSchema).optional(),
+  gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
+  voices: z.lazy(() => VoiceCreateNestedManyWithoutBandInputSchema).optional()
+}).strict();
+
+export const BandUncheckedCreateWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutAdminRolesInput> = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  players: z.lazy(() => PlayerUncheckedCreateNestedManyWithoutBandsInputSchema).optional(),
+  gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
+  voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
+}).strict();
+
+export const BandCreateOrConnectWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandCreateOrConnectWithoutAdminRolesInput> = z.object({
+  where: z.lazy(() => BandWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => BandCreateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedCreateWithoutAdminRolesInputSchema) ]),
+}).strict();
+
+export const PlayerCreateWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutAdminRolesInput> = z.object({
+  name: z.string(),
+  presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
+  roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
+  bands: z.lazy(() => BandCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleCreateNestedManyWithoutPlayerInputSchema).optional()
+}).strict();
+
+export const PlayerUncheckedCreateWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutAdminRolesInput> = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
+  bands: z.lazy(() => BandUncheckedCreateNestedManyWithoutPlayersInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional()
+}).strict();
+
+export const PlayerCreateOrConnectWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerCreateOrConnectWithoutAdminRolesInput> = z.object({
+  where: z.lazy(() => PlayerWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => PlayerCreateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutAdminRolesInputSchema) ]),
+}).strict();
+
+export const BandUpsertWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandUpsertWithoutAdminRolesInput> = z.object({
+  update: z.union([ z.lazy(() => BandUpdateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedUpdateWithoutAdminRolesInputSchema) ]),
+  create: z.union([ z.lazy(() => BandCreateWithoutAdminRolesInputSchema),z.lazy(() => BandUncheckedCreateWithoutAdminRolesInputSchema) ]),
+}).strict();
+
+export const BandUpdateWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandUpdateWithoutAdminRolesInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  players: z.lazy(() => PlayerUpdateManyWithoutBandsNestedInputSchema).optional(),
+  gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
+  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional()
+}).strict();
+
+export const BandUncheckedUpdateWithoutAdminRolesInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutAdminRolesInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  players: z.lazy(() => PlayerUncheckedUpdateManyWithoutBandsNestedInputSchema).optional(),
+  gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
+  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+}).strict();
+
+export const PlayerUpsertWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerUpsertWithoutAdminRolesInput> = z.object({
+  update: z.union([ z.lazy(() => PlayerUpdateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedUpdateWithoutAdminRolesInputSchema) ]),
+  create: z.union([ z.lazy(() => PlayerCreateWithoutAdminRolesInputSchema),z.lazy(() => PlayerUncheckedCreateWithoutAdminRolesInputSchema) ]),
+}).strict();
+
+export const PlayerUpdateWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutAdminRolesInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  bands: z.lazy(() => BandUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
+}).strict();
+
+export const PlayerUncheckedUpdateWithoutAdminRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutAdminRolesInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  bands: z.lazy(() => BandUncheckedUpdateManyWithoutPlayersNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const GigCreateManyBandInputSchema: z.ZodType<Prisma.GigCreateManyBandInput> = z.object({
@@ -2584,6 +3648,7 @@ export const GigCreateManyBandInputSchema: z.ZodType<Prisma.GigCreateManyBandInp
   name: z.string().min(1, { message: "C\'est vide :(" }).max(32),
   date: z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),
   location: z.string().min(1, { message: "Dans ton c** ?" }).max(60),
+  description: z.string().optional().nullable(),
   playable: z.boolean().optional()
 }).strict();
 
@@ -2592,17 +3657,26 @@ export const VoiceCreateManyBandInputSchema: z.ZodType<Prisma.VoiceCreateManyBan
   instrumentId: z.number().int()
 }).strict();
 
+export const AdminRoleCreateManyBandInputSchema: z.ZodType<Prisma.AdminRoleCreateManyBandInput> = z.object({
+  id: z.number().int().optional(),
+  playerId: z.number().int()
+}).strict();
+
 export const PlayerUpdateWithoutBandsInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutBandsInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional()
+  roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutBandsInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutBandsInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
-  roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
+  roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional()
 }).strict();
 
 export const PlayerUncheckedUpdateManyWithoutPlayersInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateManyWithoutPlayersInput> = z.object({
@@ -2614,8 +3688,10 @@ export const GigUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUpdateWithoutB
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional()
+  presences: z.lazy(() => PresenceUpdateManyWithoutGigNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutBandInput> = z.object({
@@ -2623,8 +3699,10 @@ export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUnche
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
+  presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutGigNestedInputSchema).optional(),
+  organizerRoles: z.lazy(() => OrganizerRoleUncheckedUpdateManyWithoutGigNestedInputSchema).optional()
 }).strict();
 
 export const GigUncheckedUpdateManyWithoutGigsInputSchema: z.ZodType<Prisma.GigUncheckedUpdateManyWithoutGigsInput> = z.object({
@@ -2632,6 +3710,7 @@ export const GigUncheckedUpdateManyWithoutGigsInputSchema: z.ZodType<Prisma.GigU
   name: z.union([ z.string().min(1, { message: "C\'est vide :(" }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date().min(new Date(), { message: "Un peu trop tard !"}),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string().min(1, { message: "Dans ton c** ?" }).max(60),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -2649,6 +3728,20 @@ export const VoiceUncheckedUpdateManyWithoutVoicesInputSchema: z.ZodType<Prisma.
   instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
+export const AdminRoleUpdateWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUpdateWithoutBandInput> = z.object({
+  player: z.lazy(() => PlayerUpdateOneRequiredWithoutAdminRolesNestedInputSchema).optional()
+}).strict();
+
+export const AdminRoleUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateWithoutBandInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const AdminRoleUncheckedUpdateManyWithoutAdminRolesInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateManyWithoutAdminRolesInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const PresenceCreateManyPlayerInputSchema: z.ZodType<Prisma.PresenceCreateManyPlayerInput> = z.object({
   id: z.number().int().optional(),
   value: z.boolean().optional(),
@@ -2659,6 +3752,16 @@ export const RoleCreateManyPlayerInputSchema: z.ZodType<Prisma.RoleCreateManyPla
   id: z.number().int().optional(),
   playable: z.boolean().optional(),
   instrumentId: z.number().int()
+}).strict();
+
+export const OrganizerRoleCreateManyPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleCreateManyPlayerInput> = z.object({
+  id: z.number().int().optional(),
+  gigId: z.number().int()
+}).strict();
+
+export const AdminRoleCreateManyPlayerInputSchema: z.ZodType<Prisma.AdminRoleCreateManyPlayerInput> = z.object({
+  id: z.number().int().optional(),
+  bandId: z.number().int()
 }).strict();
 
 export const PresenceUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUpdateWithoutPlayerInput> = z.object({
@@ -2698,14 +3801,16 @@ export const RoleUncheckedUpdateManyWithoutRolesInputSchema: z.ZodType<Prisma.Ro
 export const BandUpdateWithoutPlayersInputSchema: z.ZodType<Prisma.BandUpdateWithoutPlayersInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutPlayersInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutPlayersInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
-  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
+  voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
+  adminRoles: z.lazy(() => AdminRoleUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateManyWithoutBandsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateManyWithoutBandsInput> = z.object({
@@ -2713,9 +3818,37 @@ export const BandUncheckedUpdateManyWithoutBandsInputSchema: z.ZodType<Prisma.Ba
   name: z.union([ z.string().min(1, { message: "Pas de nom, pas de fanfare." }).max(32),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
+export const OrganizerRoleUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateWithoutPlayerInput> = z.object({
+  gig: z.lazy(() => GigUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateWithoutPlayerInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateManyWithoutOrganizerRolesInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateManyWithoutOrganizerRolesInput> = z.object({
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const AdminRoleUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUpdateWithoutPlayerInput> = z.object({
+  band: z.lazy(() => BandUpdateOneRequiredWithoutAdminRolesNestedInputSchema).optional()
+}).strict();
+
+export const AdminRoleUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.AdminRoleUncheckedUpdateWithoutPlayerInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const PresenceCreateManyGigInputSchema: z.ZodType<Prisma.PresenceCreateManyGigInput> = z.object({
   id: z.number().int().optional(),
   value: z.boolean().optional(),
+  playerId: z.number().int()
+}).strict();
+
+export const OrganizerRoleCreateManyGigInputSchema: z.ZodType<Prisma.OrganizerRoleCreateManyGigInput> = z.object({
+  id: z.number().int().optional(),
   playerId: z.number().int()
 }).strict();
 
@@ -2727,6 +3860,15 @@ export const PresenceUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUpdat
 export const PresenceUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutGigInput> = z.object({
   id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const OrganizerRoleUpdateWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUpdateWithoutGigInput> = z.object({
+  player: z.lazy(() => PlayerUpdateOneRequiredWithoutOrganizerRolesNestedInputSchema).optional()
+}).strict();
+
+export const OrganizerRoleUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.OrganizerRoleUncheckedUpdateWithoutGigInput> = z.object({
+  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -3199,6 +4341,130 @@ export const VoiceFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.VoiceFindUniqueO
   where: VoiceWhereUniqueInputSchema,
 }).strict()
 
+export const OrganizerRoleFindFirstArgsSchema: z.ZodType<Prisma.OrganizerRoleFindFirstArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereInputSchema.optional(),
+  orderBy: z.union([ OrganizerRoleOrderByWithRelationInputSchema.array(),OrganizerRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: OrganizerRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: OrganizerRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const OrganizerRoleFindFirstOrThrowArgsSchema: z.ZodType<Prisma.OrganizerRoleFindFirstOrThrowArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereInputSchema.optional(),
+  orderBy: z.union([ OrganizerRoleOrderByWithRelationInputSchema.array(),OrganizerRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: OrganizerRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: OrganizerRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const OrganizerRoleFindManyArgsSchema: z.ZodType<Prisma.OrganizerRoleFindManyArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereInputSchema.optional(),
+  orderBy: z.union([ OrganizerRoleOrderByWithRelationInputSchema.array(),OrganizerRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: OrganizerRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: OrganizerRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const OrganizerRoleAggregateArgsSchema: z.ZodType<Prisma.OrganizerRoleAggregateArgs> = z.object({
+  where: OrganizerRoleWhereInputSchema.optional(),
+  orderBy: z.union([ OrganizerRoleOrderByWithRelationInputSchema.array(),OrganizerRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: OrganizerRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const OrganizerRoleGroupByArgsSchema: z.ZodType<Prisma.OrganizerRoleGroupByArgs> = z.object({
+  where: OrganizerRoleWhereInputSchema.optional(),
+  orderBy: z.union([ OrganizerRoleOrderByWithAggregationInputSchema.array(),OrganizerRoleOrderByWithAggregationInputSchema ]).optional(),
+  by: OrganizerRoleScalarFieldEnumSchema.array(),
+  having: OrganizerRoleScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const OrganizerRoleFindUniqueArgsSchema: z.ZodType<Prisma.OrganizerRoleFindUniqueArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereUniqueInputSchema,
+}).strict()
+
+export const OrganizerRoleFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.OrganizerRoleFindUniqueOrThrowArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereUniqueInputSchema,
+}).strict()
+
+export const AdminRoleFindFirstArgsSchema: z.ZodType<Prisma.AdminRoleFindFirstArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereInputSchema.optional(),
+  orderBy: z.union([ AdminRoleOrderByWithRelationInputSchema.array(),AdminRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: AdminRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: AdminRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const AdminRoleFindFirstOrThrowArgsSchema: z.ZodType<Prisma.AdminRoleFindFirstOrThrowArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereInputSchema.optional(),
+  orderBy: z.union([ AdminRoleOrderByWithRelationInputSchema.array(),AdminRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: AdminRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: AdminRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const AdminRoleFindManyArgsSchema: z.ZodType<Prisma.AdminRoleFindManyArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereInputSchema.optional(),
+  orderBy: z.union([ AdminRoleOrderByWithRelationInputSchema.array(),AdminRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: AdminRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: AdminRoleScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const AdminRoleAggregateArgsSchema: z.ZodType<Prisma.AdminRoleAggregateArgs> = z.object({
+  where: AdminRoleWhereInputSchema.optional(),
+  orderBy: z.union([ AdminRoleOrderByWithRelationInputSchema.array(),AdminRoleOrderByWithRelationInputSchema ]).optional(),
+  cursor: AdminRoleWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const AdminRoleGroupByArgsSchema: z.ZodType<Prisma.AdminRoleGroupByArgs> = z.object({
+  where: AdminRoleWhereInputSchema.optional(),
+  orderBy: z.union([ AdminRoleOrderByWithAggregationInputSchema.array(),AdminRoleOrderByWithAggregationInputSchema ]).optional(),
+  by: AdminRoleScalarFieldEnumSchema.array(),
+  having: AdminRoleScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const AdminRoleFindUniqueArgsSchema: z.ZodType<Prisma.AdminRoleFindUniqueArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereUniqueInputSchema,
+}).strict()
+
+export const AdminRoleFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.AdminRoleFindUniqueOrThrowArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereUniqueInputSchema,
+}).strict()
+
 export const BandCreateArgsSchema: z.ZodType<Prisma.BandCreateArgs> = z.object({
   select: BandSelectSchema.optional(),
   include: BandIncludeSchema.optional(),
@@ -3484,4 +4750,86 @@ export const VoiceUpdateManyArgsSchema: z.ZodType<Prisma.VoiceUpdateManyArgs> = 
 
 export const VoiceDeleteManyArgsSchema: z.ZodType<Prisma.VoiceDeleteManyArgs> = z.object({
   where: VoiceWhereInputSchema.optional(),
+}).strict()
+
+export const OrganizerRoleCreateArgsSchema: z.ZodType<Prisma.OrganizerRoleCreateArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  data: z.union([ OrganizerRoleCreateInputSchema,OrganizerRoleUncheckedCreateInputSchema ]),
+}).strict()
+
+export const OrganizerRoleUpsertArgsSchema: z.ZodType<Prisma.OrganizerRoleUpsertArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereUniqueInputSchema,
+  create: z.union([ OrganizerRoleCreateInputSchema,OrganizerRoleUncheckedCreateInputSchema ]),
+  update: z.union([ OrganizerRoleUpdateInputSchema,OrganizerRoleUncheckedUpdateInputSchema ]),
+}).strict()
+
+export const OrganizerRoleCreateManyArgsSchema: z.ZodType<Prisma.OrganizerRoleCreateManyArgs> = z.object({
+  data: z.union([ OrganizerRoleCreateManyInputSchema,OrganizerRoleCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict()
+
+export const OrganizerRoleDeleteArgsSchema: z.ZodType<Prisma.OrganizerRoleDeleteArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  where: OrganizerRoleWhereUniqueInputSchema,
+}).strict()
+
+export const OrganizerRoleUpdateArgsSchema: z.ZodType<Prisma.OrganizerRoleUpdateArgs> = z.object({
+  select: OrganizerRoleSelectSchema.optional(),
+  include: OrganizerRoleIncludeSchema.optional(),
+  data: z.union([ OrganizerRoleUpdateInputSchema,OrganizerRoleUncheckedUpdateInputSchema ]),
+  where: OrganizerRoleWhereUniqueInputSchema,
+}).strict()
+
+export const OrganizerRoleUpdateManyArgsSchema: z.ZodType<Prisma.OrganizerRoleUpdateManyArgs> = z.object({
+  data: z.union([ OrganizerRoleUpdateManyMutationInputSchema,OrganizerRoleUncheckedUpdateManyInputSchema ]),
+  where: OrganizerRoleWhereInputSchema.optional(),
+}).strict()
+
+export const OrganizerRoleDeleteManyArgsSchema: z.ZodType<Prisma.OrganizerRoleDeleteManyArgs> = z.object({
+  where: OrganizerRoleWhereInputSchema.optional(),
+}).strict()
+
+export const AdminRoleCreateArgsSchema: z.ZodType<Prisma.AdminRoleCreateArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  data: z.union([ AdminRoleCreateInputSchema,AdminRoleUncheckedCreateInputSchema ]),
+}).strict()
+
+export const AdminRoleUpsertArgsSchema: z.ZodType<Prisma.AdminRoleUpsertArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereUniqueInputSchema,
+  create: z.union([ AdminRoleCreateInputSchema,AdminRoleUncheckedCreateInputSchema ]),
+  update: z.union([ AdminRoleUpdateInputSchema,AdminRoleUncheckedUpdateInputSchema ]),
+}).strict()
+
+export const AdminRoleCreateManyArgsSchema: z.ZodType<Prisma.AdminRoleCreateManyArgs> = z.object({
+  data: z.union([ AdminRoleCreateManyInputSchema,AdminRoleCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict()
+
+export const AdminRoleDeleteArgsSchema: z.ZodType<Prisma.AdminRoleDeleteArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  where: AdminRoleWhereUniqueInputSchema,
+}).strict()
+
+export const AdminRoleUpdateArgsSchema: z.ZodType<Prisma.AdminRoleUpdateArgs> = z.object({
+  select: AdminRoleSelectSchema.optional(),
+  include: AdminRoleIncludeSchema.optional(),
+  data: z.union([ AdminRoleUpdateInputSchema,AdminRoleUncheckedUpdateInputSchema ]),
+  where: AdminRoleWhereUniqueInputSchema,
+}).strict()
+
+export const AdminRoleUpdateManyArgsSchema: z.ZodType<Prisma.AdminRoleUpdateManyArgs> = z.object({
+  data: z.union([ AdminRoleUpdateManyMutationInputSchema,AdminRoleUncheckedUpdateManyInputSchema ]),
+  where: AdminRoleWhereInputSchema.optional(),
+}).strict()
+
+export const AdminRoleDeleteManyArgsSchema: z.ZodType<Prisma.AdminRoleDeleteManyArgs> = z.object({
+  where: AdminRoleWhereInputSchema.optional(),
 }).strict()

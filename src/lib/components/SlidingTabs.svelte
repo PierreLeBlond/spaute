@@ -3,13 +3,10 @@
   import type { EasingFunction } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import { page } from '$app/stores';
+  import type { Tab } from './Tab';
 
   export let href: string | undefined;
 
-  interface Tab {
-    href: string;
-    label: string;
-  }
   export let tabs: Tab[];
 
   let lastIndex: number;
@@ -55,8 +52,8 @@
 >
   {#key href}
     <div
-      in:slide={{ sign: 1 }}
-      out:slide={{ sign: -1 }}
+      in:slide|local={{ sign: 1 }}
+      out:slide|local={{ sign: -1 }}
       class="absolute flex h-full w-full flex-col py-2"
     >
       <slot />

@@ -1,6 +1,13 @@
 <script lang="ts">
   import '../app.css';
   import Header from '$lib/components/Header.svelte';
+  import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+  import type { LayoutData } from './$types';
+  import { page } from '$app/stores';
+
+  export let data: LayoutData;
+
+  $: tabs = $page.data['tabs'];
 </script>
 
 <main
@@ -11,6 +18,9 @@
     <Header />
   </div>
   <div class="flex w-full grow flex-col items-center overflow-y-hidden pt-40">
-    <slot />
+    <SlidingTabs
+      href={data.href}
+      {tabs}><slot /></SlidingTabs
+    >
   </div>
 </main>

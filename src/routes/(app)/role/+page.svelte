@@ -4,9 +4,10 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
+  export let form: ActionData;
 
   $: instruments = data.instruments;
 </script>
@@ -20,17 +21,24 @@
       <Select
         id="instrumentId"
         label="instrument"
+        error={form?.errors?.instrument}
       >
-        {#each instruments as instrument}
-          <option value={instrument.id}>
+        {#each instruments as instrument, index}
+          <option
+            value={instrument.id}
+            selected={form?.data?.instrument ? form?.data?.instrument?.connect?.id == instrument.id : index == 0}
+          >
             {instrument.name}
           </option>
         {/each}
       </Select>
-      <Checkbox
-        id="playable"
-        label="je gère mon pupitre"
-      />
+      <div class="col-span-2">
+        <Checkbox
+          id="playable"
+          label="je gère mon pupitre"
+          checked={form?.data?.playable}
+        />
+      </div>
       <div class="col-span-2">
         <Button label={'Ajouter'} />
       </div>

@@ -2,20 +2,22 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
-  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
 
   export let data: PageData;
 
   $: voices = data.voices;
 </script>
 
-<div class="p-2">
-  <RightLink
-    href="/band/{data.band.id}/voice"
-    label="Ajouter un pupitre"
-  />
-</div>
+{#if data.isAdmin}
+  <div class="p-2">
+    <RightLink
+      href="/band/{data.band.id}/voice"
+      label="Ajouter un pupitre"
+    />
+  </div>
+{/if}
 
 <List>
   {#if voices.length == 0}
@@ -27,12 +29,14 @@
           <p class="w-full rounded p-2 text-sm">
             {voice.instrument.name}
           </p>
-          <DeleteButton
-            icon={true}
-            label="Supprimer"
-            url="/api/voice/{voice.id}"
-            backUrl="./voices"
-          />
+          {#if data.isAdmin}
+            <form
+              method="POST"
+              action="?/delete&voiceId={voice.id}"
+            >
+              <DeleteButtonIcon />
+            </form>
+          {/if}
         </div>
       </ListItem>
     {/each}
