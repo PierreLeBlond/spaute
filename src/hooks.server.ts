@@ -1,7 +1,11 @@
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
 import { redirect, type Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 import * as cookie from 'cookie';
+import { createTRPCHandle } from 'trpc-sveltekit';
 
-export const handle: Handle = async ({ event, resolve }) => {
+const ownHandle: Handle = async ({ event, resolve }) => {
   const cookies = cookie.parse(event.request.headers.get('cookie') || '');
   const playerId = cookies['playerId'];
 
@@ -22,3 +26,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   return resolve(event);
 }
+
+const trpcHandle: Handle = createTRPCHandle({ router, createContext });
+
+export const handle = sequence(ownHandle, trpcHandle)
