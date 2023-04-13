@@ -38,10 +38,10 @@ export const actions: Actions = {
       const formated = result.error.format();
 
       const errors = {
-        name: formated.data?.name?._errors.pop(),
-        location: formated.data?.location?._errors.pop(),
-        date: formated.data?.date?._errors.pop(),
-        description: formated.data?.description?._errors.pop()
+        name: formated.data?.name?._errors,
+        location: formated.data?.location?._errors,
+        date: formated.data?.date?._errors,
+        description: formated.data?.description?._errors
       }
 
       return {
@@ -93,7 +93,7 @@ export const actions: Actions = {
         message: 'Impossible de mettre à jour :(',
         confirmData: data,
         confirmErrors: {
-          confirm: 'Ne correspond pas au titre'
+          confirm: ['Ne correspond pas au titre']
         }
       }
     }

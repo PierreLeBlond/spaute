@@ -11,14 +11,14 @@
 <ReturnLink href="/admin/instruments" />
 
 <div class="w-full p-2">
-  <Form>
+  <Form errors={form?.errors?.['global']}>
     <div class="grid grid-cols-2 gap-y-2">
       <p class="col-span-2 w-full text-sm">Ajouter un instrument</p>
       <Text
         id="name"
         label="nom"
-        value={form?.data?.name ?? ''}
-        error={form?.errors?.name}
+        value={form?.input?.name ?? ''}
+        errors={form?.errors?.['name']}
       />
       <div class="col-span-2">
         <Button label={'Ajouter'} />

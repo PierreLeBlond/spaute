@@ -4,7 +4,7 @@
   import { sendToast } from './sendToast';
 
   $: if ($page?.form?.message) {
-    sendToast($page.form.message, !$page.form.success);
+    sendToast($page.form.message, $page.form.errors);
   }
 </script>
 

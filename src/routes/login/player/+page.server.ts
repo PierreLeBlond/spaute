@@ -20,7 +20,7 @@ export const actions: Actions = {
     if (!result.success) {
       const formated = result.error.format();
       const errors = {
-        name: formated.name?._errors.pop(),
+        name: formated.name?._errors,
       }
 
       return {

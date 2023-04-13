@@ -19,8 +19,6 @@ export const actions: Actions = {
 
     const date = DateTime.fromISO(`${formData["date"]}T${formData["time"]}`).toISO();
 
-    console.log(date);
-
     const createData = {
       name: formData["name"] as string,
       location: formData["location"] as string,
@@ -53,10 +51,10 @@ export const actions: Actions = {
     if (!result.success) {
       const formated = result.error.format();
       const errors = {
-        name: formated.name?._errors.pop(),
-        location: formated.location?._errors.pop(),
-        date: formated.date?._errors.pop(),
-        description: formated.description?._errors.pop()
+        name: formated.name?._errors,
+        location: formated.location?._errors,
+        date: formated.date?._errors,
+        description: formated.description?._errors
       }
 
       return {

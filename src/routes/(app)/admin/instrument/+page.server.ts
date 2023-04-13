@@ -1,6 +1,7 @@
 import { InstrumentCreateInputSchema } from "$lib/generated/zod";
-import prisma from "$lib/prisma";
-import { Prisma } from "@prisma/client";
+import { createContext } from "$lib/trpc/context";
+import { router } from "$lib/trpc/router";
+import { TRPCError } from "@trpc/server";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
@@ -10,43 +11,42 @@ export const load: PageServerLoad = async () => {
 }
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async (event) => {
+    const { request } = event;
 
     const formData = Object.fromEntries(await request.formData());
 
-    const data: Prisma.InstrumentCreateInput = {
+    const input = {
       name: formData["name"] as string
     }
 
-    const result = InstrumentCreateInputSchema.safeParse(data);
+    const result = InstrumentCreateInputSchema.safeParse(input);
 
     if (!result.success) {
       const formated = result.error.format();
-      const errors = {
-        name: formated.name?._errors.pop()
+      const errors: { [key: string]: string[] | undefined } = {
+        name: formated.name?._errors
       }
 
       return {
-        success: false,
         message: 'Instrument non valide :(',
-        data,
+        input,
         errors
       }
     }
 
     try {
-      const response = await prisma.instrument.create({ data });
-      return { success: true, message: 'Instrument créé !', response };
+      await router.createCaller(await createContext(event)).instruments.create(input);
+      return { message: 'Instrument créé !', input }
     } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
-        throw error;
-      }
-      if (error.code !== 'P2002') {
+      if (!(error instanceof TRPCError)) {
         throw error;
       }
       return {
-        success: false, message: 'Instrument non valide :(', errors: {
-          name: 'Nom déjà utilisé...'
+        message: 'Instrument non valide :(',
+        input,
+        errors: {
+          global: [error.message]
         }
       }
     }

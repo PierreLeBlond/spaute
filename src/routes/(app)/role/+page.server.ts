@@ -35,7 +35,7 @@ export const actions: Actions = {
     if (!result.success) {
       const formated = result.error.format();
       const errors = {
-        instrument: formated.instrument?._errors.pop(),
+        instrument: formated.instrument?._errors,
       }
 
 
@@ -59,7 +59,7 @@ export const actions: Actions = {
       }
       return {
         success: false, message: 'Pupitre non valide :(', data, errors: {
-          instrument: 'Pupitre déjà existant...'
+          instrument: ['Pupitre déjà existant...']
         }
       }
     }

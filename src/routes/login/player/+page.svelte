@@ -20,7 +20,7 @@
         id={'name'}
         label={'nom'}
         value={form?.data?.name ?? ''}
-        error={form?.errors?.name}
+        errors={form?.errors?.name}
       />
       <div class="col-span-2">
         <Button label="Ajouter" />

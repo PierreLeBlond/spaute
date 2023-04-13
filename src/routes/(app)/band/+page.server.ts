@@ -31,7 +31,7 @@ export const actions: Actions = {
     if (!result.success) {
       const formated = result.error.format();
       const errors = {
-        name: formated.name?._errors.pop(),
+        name: formated.name?._errors,
       }
 
       return {
@@ -53,8 +53,8 @@ export const actions: Actions = {
         throw error;
       }
       return {
-        success: false, message: 'Fanfare non valide :(', errors: {
-          name: 'Nom déjà utilisé...'
+        success: false, data, message: 'Fanfare non valide :(', errors: {
+          name: ['Nom déjà utilisé...']
         }
       }
     }

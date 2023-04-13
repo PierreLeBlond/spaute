@@ -1,9 +1,10 @@
 <script lang="ts">
+  import Errors from './Errors.svelte';
+
   export let id: string;
   export let label: string;
 
-  export let info: string = ' ';
-  export let error: string = '';
+  export let errors: string[] = [];
 </script>
 
 <div class="flex flex-col">
@@ -15,14 +16,10 @@
     name={id}
     id="{id}-input"
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
-    class:border={!!error}
+    class:border={errors.length != 0}
   >
     <slot />
   </select>
-  <p
-    class="h-4 text-xs"
-    class:text-red-300={error}
-  >
-    {error || info}
-  </p>
+
+  <Errors {errors} />
 </div>

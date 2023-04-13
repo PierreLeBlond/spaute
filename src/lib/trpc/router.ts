@@ -1,7 +1,8 @@
 import { t } from "./t";
+import { instruments } from "./routes/instruments";
 
 export const router = t.router({
-  // routes
+  instruments
 });
 
 // Export type router type signature,

@@ -20,7 +20,7 @@
 <div class="w-full grow p-2">
   <Form>
     <div
-      class="grid h-full grid-cols-2 gap-y-2 gap-x-2"
+      class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
       style:grid-template-rows="auto auto auto 1fr auto"
     >
       <p class="col-span-2 text-xs">Ajouter une presta</p>
@@ -28,27 +28,27 @@
         id="name"
         label="titre"
         value={form?.data?.name ?? ''}
-        error={form?.errors?.name}
+        errors={form?.errors?.name}
         maxlength={32}
       />
       <Text
         id="location"
         label="lieu"
         value={form?.data?.location ?? ''}
-        error={form?.errors?.location}
+        errors={form?.errors?.location}
         maxlength={60}
       />
       <DateInput
         id="date"
         label="date"
         {date}
-        error={form?.errors?.date}
+        errors={form?.errors?.date}
       />
       <TimeInput
         id="time"
         label="heure"
         {date}
-        error={form?.errors?.date}
+        errors={form?.errors?.date}
       />
       <div class="col-span-2">
         <TextArea

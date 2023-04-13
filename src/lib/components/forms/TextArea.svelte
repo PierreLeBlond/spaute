@@ -1,11 +1,12 @@
 <script lang="ts">
+  import Errors from './Errors.svelte';
+
   export let id: string;
   export let label: string;
   export let value: string = '';
   export let maxlength: number = 320;
 
-  export let info: string = ' ';
-  export let error: string = '';
+  export let errors: string[] = [];
 </script>
 
 <div class="flex h-full flex-col">
@@ -20,14 +21,9 @@
     id="{id}-input"
     name={id}
     class="grow rounded border-red-300 bg-neutral-800 text-sm"
-    class:border={!!error}
+    class:border={errors.length != 0}
     bind:value
     {maxlength}
   />
-  <p
-    class="h-4 text-xs"
-    class:text-red-300={error}
-  >
-    {error || info}
-  </p>
+  <Errors {errors} />
 </div>

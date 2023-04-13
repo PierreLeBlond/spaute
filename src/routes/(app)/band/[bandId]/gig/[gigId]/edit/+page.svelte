@@ -21,7 +21,7 @@
 <div class="w-full overflow-y-auto p-2">
   <Form action="?/update">
     <div
-      class="grid grid-cols-2 gap-y-2 gap-x-2"
+      class="grid grid-cols-2 gap-x-2 gap-y-2"
       style:grid-template-rows="auto auto auto 1fr auto"
     >
       <p class="col-span-2 text-xs">Modifier la presta</p>
@@ -29,27 +29,27 @@
         id="name"
         label="titre"
         value={form?.updateData?.name ?? data['gig'].name}
-        error={form?.updateErrors?.name}
+        errors={form?.updateErrors?.name}
         maxlength={32}
       />
       <Text
         id="location"
         label="lieu"
         value={form?.updateData?.location ?? data['gig'].location}
-        error={form?.updateErrors?.location}
+        errors={form?.updateErrors?.location}
         maxlength={60}
       />
       <DateInput
         id="date"
         label="date"
         {date}
-        error={form?.updateErrors?.date}
+        errors={form?.updateErrors?.date}
       />
       <TimeInput
         id="time"
         label="heure"
         {date}
-        error={form?.updateErrors?.date}
+        errors={form?.updateErrors?.date}
       />
       <div class="col-span-2 h-64">
         <TextArea
@@ -72,7 +72,7 @@
       id="confirm"
       label="recopier le titre pour confirmer la suppression"
       value={form?.confirmData?.confirm ?? ''}
-      error={form?.confirmErrors?.confirm}
+      errors={form?.confirmErrors?.confirm}
       maxlength={32}
     />
     <DeleteButton label={'Supprimer'} />

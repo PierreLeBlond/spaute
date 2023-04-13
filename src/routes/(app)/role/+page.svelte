@@ -16,12 +16,12 @@
 
 <div class="w-full p-2">
   <Form>
-    <div class="grid grid-cols-2 gap-y-2 gap-x-2">
+    <div class="grid grid-cols-2 gap-x-2 gap-y-2">
       <p class="col-span-2 text-xs">Ajouter un pupitre</p>
       <Select
         id="instrumentId"
         label="instrument"
-        error={form?.errors?.instrument}
+        errors={form?.errors?.instrument}
       >
         {#each instruments as instrument, index}
           <option

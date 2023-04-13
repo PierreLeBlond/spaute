@@ -1,5 +1,6 @@
 <script lang="ts">
   import { DateTime } from 'luxon';
+  import Errors from './Errors.svelte';
 
   export let id: string;
   export let label: string;
@@ -7,7 +8,7 @@
 
   $: time = date.toLocaleString(DateTime.TIME_24_SIMPLE);
 
-  export let error: string = '';
+  export let errors: string[] = [];
 </script>
 
 <div class="flex flex-col">
@@ -19,11 +20,9 @@
     id="{id}-input"
     name={id}
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
-    class:border={error}
+    class:border={errors.length != 0}
     type="time"
     value={time}
   />
-  <p class="h-4 text-xs text-red-300">
-    {error}
-  </p>
+  <Errors {errors} />
 </div>
