@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+
   import type { ActionData } from './$types';
-  import { enhance } from '$app/forms';
 
   export let form: ActionData;
 </script>

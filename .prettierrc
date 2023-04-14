@@ -6,6 +6,12 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"singleAttributePerLine": true,
+	"importOrder": [
+		"^$app/(.*)$",
+		"^$lib/(.*)$",
+		"^[./]"
+	],
+	"importOrderSeparation": true,
 	"plugins": [
 		"prettier-plugin-svelte"
 	],
