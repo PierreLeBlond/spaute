@@ -8,6 +8,7 @@
   import TextArea from '$lib/components/forms/TextArea.svelte';
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
   import { DateTime } from 'luxon';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
   export let form: ActionData;
@@ -18,7 +19,10 @@
 <ReturnLink href="/band/{data.band.id}/gigs" />
 
 <div class="w-full grow p-2">
-  <Form>
+  <Form
+    errors={[]}
+    {enhance}
+  >
     <div
       class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
       style:grid-template-rows="auto auto auto 1fr auto"
@@ -28,15 +32,13 @@
         id="name"
         label="titre"
         value={form?.data?.name ?? ''}
-        errors={form?.errors?.name}
-        maxlength={32}
+        errors={form?.errors?.name || []}
       />
       <Text
         id="location"
         label="lieu"
         value={form?.data?.location ?? ''}
-        errors={form?.errors?.location}
-        maxlength={60}
+        errors={form?.errors?.location || []}
       />
       <DateInput
         id="date"

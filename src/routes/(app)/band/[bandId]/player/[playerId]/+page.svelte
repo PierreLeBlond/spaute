@@ -3,6 +3,7 @@
   import Form from '$lib/components/forms/Form.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import type { PageData } from './$types';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
 
@@ -16,7 +17,10 @@
 
 {#if !adminRole}
   <div class="flex w-full p-2">
-    <Form>
+    <Form
+      errors={[]}
+      {enhance}
+    >
       <Button label={'Promouvoir en admin'} />
     </Form>
   </div>

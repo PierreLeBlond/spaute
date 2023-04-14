@@ -9,6 +9,7 @@
   import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
   import { DateTime } from 'luxon';
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
   export let form: ActionData;
@@ -19,7 +20,11 @@
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
 
 <div class="w-full overflow-y-auto p-2">
-  <Form action="?/update">
+  <Form
+    action="?/update"
+    errors={[]}
+    {enhance}
+  >
     <div
       class="grid grid-cols-2 gap-x-2 gap-y-2"
       style:grid-template-rows="auto auto auto 1fr auto"
@@ -29,21 +34,19 @@
         id="name"
         label="titre"
         value={form?.updateData?.name ?? data['gig'].name}
-        errors={form?.updateErrors?.name}
-        maxlength={32}
+        errors={form?.updateErrors?.name || []}
       />
       <Text
         id="location"
         label="lieu"
         value={form?.updateData?.location ?? data['gig'].location}
-        errors={form?.updateErrors?.location}
-        maxlength={60}
+        errors={form?.updateErrors?.location || []}
       />
       <DateInput
         id="date"
         label="date"
         {date}
-        errors={form?.updateErrors?.date}
+        errors={form?.updateErrors?.date || []}
       />
       <TimeInput
         id="time"
@@ -72,8 +75,7 @@
       id="confirm"
       label="recopier le titre pour confirmer la suppression"
       value={form?.confirmData?.confirm ?? ''}
-      errors={form?.confirmErrors?.confirm}
-      maxlength={32}
+      errors={form?.confirmErrors?.confirm || []}
     />
     <DeleteButton label={'Supprimer'} />
   </form>

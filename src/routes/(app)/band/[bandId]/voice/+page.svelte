@@ -4,6 +4,7 @@
   import Button from '$lib/components/forms/Button.svelte';
   import type { PageData } from './$types';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
 
@@ -13,7 +14,10 @@
 <ReturnLink href="/band/{data.band.id}/voices" />
 
 <div class="w-full p-2">
-  <Form>
+  <Form
+    errors={[]}
+    {enhance}
+  >
     <div class="grid grid-cols-1 gap-y-2">
       <h2 class="text-xs">Ajouter un pupitre</h2>
       <Select

@@ -2,9 +2,12 @@
   import { page } from '$app/stores';
   import { Toaster } from 'svelte-french-toast';
   import { sendToast } from './sendToast';
+  import { superForm } from 'sveltekit-superforms/client';
 
-  $: if ($page?.form?.message) {
-    sendToast($page.form.message, $page.form.errors);
+  const { message } = superForm($page.data['form']);
+
+  $: if ($message) {
+    sendToast($message as string, $page.status != 200);
   }
 </script>
 

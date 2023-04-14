@@ -1,12 +1,13 @@
 <script lang="ts">
+  import type { Constraints } from './Constraints';
   import Errors from './Errors.svelte';
 
   export let id: string;
   export let label: string;
   export let value: string = '';
-  export let maxlength: number = 32;
+  export let constraints: Constraints = {};
 
-  export let errors: string[] = [];
+  export let errors: string[];
 </script>
 
 <div class="flex flex-col">
@@ -15,7 +16,9 @@
       for="{id}-input"
       class="text-xs">{label}</label
     >
-    <p>{value.length}/{maxlength}</p>
+    {#if !!constraints.maxlength}
+      <p>{value.length}/{constraints.maxlength}</p>
+    {/if}
   </div>
   <input
     id="{id}-input"
@@ -24,7 +27,7 @@
     class:border={errors.length != 0}
     type="text"
     bind:value
-    {maxlength}
+    {...constraints}
   />
   <Errors {errors} />
 </div>

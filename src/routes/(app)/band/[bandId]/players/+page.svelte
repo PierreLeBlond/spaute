@@ -4,6 +4,7 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { PageData } from './$types';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
 </script>
@@ -14,7 +15,10 @@
   </div>
 {:else}
   <div class="w-full p-2">
-    <Form>
+    <Form
+      errors={[]}
+      {enhance}
+    >
       <p class="text-xs">Allez viens, on est bien !</p>
       <Button label={'Rejoindre'} />
     </Form>

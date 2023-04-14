@@ -5,6 +5,7 @@
   import Select from '$lib/components/forms/Select.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import type { ActionData, PageData } from './$types';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
   export let form: ActionData;
@@ -15,7 +16,10 @@
 <ReturnLink href="/roles" />
 
 <div class="w-full p-2">
-  <Form>
+  <Form
+    errors={[]}
+    {enhance}
+  >
     <div class="grid grid-cols-2 gap-x-2 gap-y-2">
       <p class="col-span-2 text-xs">Ajouter un pupitre</p>
       <Select

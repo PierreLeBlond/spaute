@@ -6,6 +6,7 @@
   import List from '$lib/components/layout/List.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
   import type { PageData } from './$types';
+  import { enhance } from '$app/forms';
 
   export let data: PageData;
 
@@ -25,7 +26,11 @@
   {:else}
     {#each roles as role}
       <li class="mb-2">
-        <Form action="?/update">
+        <Form
+          action="?/update"
+          errors={[]}
+          {enhance}
+        >
           <div class="grid grid-cols-6 gap-y-2">
             <div class="col-span-4 col-start-2 flex items-center justify-center">
               <p class="text-center text-xs">
