@@ -1,68 +1,50 @@
-import { RoleCreateInputSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma'
-import { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { z } from 'zod';
+import { router } from '$lib/trpc/router';
+import { createContext } from '$lib/trpc/context';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async () => {
-  const instruments = await prisma.instrument.findMany();
+const schema = z.object({
+  playerId: z.number(),
+  instrumentId: z.number(),
+  playable: z.boolean()
+})
+
+export const load: PageServerLoad = async (event) => {
+  const caller = router.createCaller(await createContext(event));
+  const instruments = () => caller.instruments.list();
+
+  const form = () => superValidate(schema);
+
   return {
-    instruments,
+    form: form(),
+    instruments: instruments(),
     index: 31
   }
 }
 
 export const actions: Actions = {
-  default: async ({ locals, request }) => {
-    const { playerId } = locals;
-    const formData = Object.fromEntries(await request.formData());
+  default: async (event) => {
+    const { request } = event;
 
-    const data: Prisma.RoleCreateInput = {
-      player: {
-        connect: {
-          id: Number(playerId)
-        }
-      },
-      instrument: {
-        connect: {
-          id: Number(formData['instrumentId'])
-        }
-      },
-      playable: !!formData['playable']
-    }
-
-    const result = RoleCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = {
-        instrument: formated.instrument?._errors,
-      }
-
-
-      return {
-        success: false,
-        message: 'Pupitre non valide :(',
-        data,
-        errors
-      }
-    }
+    const form = await superValidate(request, schema);
 
     try {
-      const response = await prisma.role.create({ data });
-      return { success: true, message: 'Pupitre créé :)', response };
+      await router.createCaller(await createContext(event)).roles.create(form.data);
+      return message(form, 'Et un pupitre de plus :)');
     } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+      if (!(error instanceof TRPCError)) {
         throw error;
       }
-      if (error.code !== 'P2002') {
-        throw error;
-      }
-      return {
-        success: false, message: 'Pupitre non valide :(', data, errors: {
-          instrument: ['Pupitre déjà existant...']
-        }
-      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Pupitre non valide :(');
     }
+
 
   }
 }

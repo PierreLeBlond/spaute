@@ -1,8 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { Toaster } from 'svelte-french-toast';
-  import { sendToast } from './sendToast';
   import { superForm } from 'sveltekit-superforms/client';
+
+  import { sendToast } from './sendToast';
 
   const { message } = superForm($page.data['form']);
 
@@ -68,7 +69,7 @@
       {/if}
     </div>
     <div class="relative col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
-      {#if $page.data['playerName']}
+      {#if $page.data['currentPlayer']}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
@@ -83,7 +84,7 @@
             d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
           />
         </svg>
-        <p class="truncate text-xs">{$page.data['playerName']}</p>
+        <p class="truncate text-xs">{$page.data['currentPlayer'].name}</p>
       {/if}
     </div>
     <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">

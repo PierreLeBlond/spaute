@@ -7,35 +7,36 @@
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  $: organizerRole = data['organizerRole'];
-  $: gig = data['gig'];
-  $: presence = data.presence;
-  $: presences = data.presences;
-  $: players = data.players;
+  $: remainingMemberships = data.band.memberships.filter((membership) =>
+    data.gig.presences.every((presence) => presence.player.id != membership.player.id)
+  );
 </script>
 
 <div class="flex justify-between">
-  <ReturnLink href="/band/{data['band'].id}/gigs" />
-  {#if data['isAdmin'] || data['organizerRole']}
-    <EditLink href="/band/{data['band'].id}/gig/{gig.id}/edit" />
+  <ReturnLink href="/band/{data.band.id}/gigs" />
+  {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
+    <EditLink href="/band/{data.band.id}/gig/{data.gig.id}/edit" />
   {/if}
 </div>
 
 <div class="h-full w-full overflow-y-auto">
   <GigPage
-    {gig}
-    {presence}
-    joinAction={'?/join'}
+    player={data.currentPlayer}
+    gig={data.gig}
+    presence={data.currentPresence}
+    createAction={'?/create'}
     updateAction={'?/update'}
+    data={data.form}
   />
 
   <List>
-    {#each presences as presence}
-      {#if organizerRole}
+    {#each data.gig.presences as presence}
+      {#if data.currentPresence?.isOrganizer}
         <ListLinkItem>
           <div
             class="contents text-red-300"
@@ -43,6 +44,7 @@
           >
             <PlayerLinkItem
               player={presence.player}
+              isOrganizer={presence.isOrganizer}
               href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{presence.player.id}"
             />
           </div>
@@ -53,24 +55,18 @@
             class="contents text-red-300"
             class:!text-green-300={presence.value}
           >
-            <PlayerItem player={presence.player} />
+            <PlayerItem
+              player={presence.player}
+              isOrganizer={presence.isOrganizer}
+            />
           </div>
         </ListItem>
       {/if}
     {/each}
-    {#each players as player}
-      {#if organizerRole}
-        <ListLinkItem>
-          <PlayerLinkItem
-            {player}
-            href="/band/{data['band'].id}/gig/{data['gig'].id}/player/{player.id}"
-          />
-        </ListLinkItem>
-      {:else}
-        <ListItem>
-          <PlayerItem {player} />
-        </ListItem>
-      {/if}
+    {#each remainingMemberships as membership}
+      <ListItem>
+        <PlayerItem player={membership.player} />
+      </ListItem>
     {/each}
   </List>
 </div>

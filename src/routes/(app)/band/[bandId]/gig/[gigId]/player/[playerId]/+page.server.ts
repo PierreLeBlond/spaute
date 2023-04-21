@@ -1,69 +1,53 @@
-import { OrganizerRoleCreateInputSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { router } from '$lib/trpc/router';
+import { createContext } from '$lib/trpc/context';
+import { z } from 'zod';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async ({ params }) => {
-  const { gigId, playerId } = params;
+const schema = z.object({
+  gigId: z.number(),
+  playerId: z.number()
+});
 
-  const player = async () => await prisma.player.findUniqueOrThrow({
-    where: {
-      id: Number(playerId)
-    }
+export const load: PageServerLoad = async (event) => {
+  const { gigId, playerId } = event.params;
+  const caller = router.createCaller(await createContext(event));
+
+  const player = () => caller.players.read({
+    id: Number(playerId)
   });
+  const presence = () => caller.presences.read({ gigId: Number(gigId), playerId: Number(playerId) });
 
-  const organizerRole = async () => await prisma.organizerRole.findUnique({
-    where: {
-      gigId_playerId: {
-        gigId: Number(gigId),
-        playerId: Number(playerId)
-      }
-    }
-  });
+  const form = () => superValidate(schema);
 
   return {
+    form: form(),
     player: player(),
-    playerOrganizerRole: organizerRole(),
+    presence: presence(),
     index: 204
   }
 }
 
 export const actions: Actions = {
-  default: async ({ params }) => {
-    const { gigId, playerId } = params;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const data: Prisma.OrganizerRoleCreateInput = {
-      gig: {
-        connect: {
-          id: Number(gigId)
-        }
-      },
-      player: {
-        connect: {
-          id: Number(playerId)
-        }
+    try {
+      await router.createCaller(await createContext(event)).presences.makeOrganizer(form.data);
+      return message(form, 'Nouveleau organisateurise :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Echec :(');
     }
-
-    const result = OrganizerRoleCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = formated._errors;
-
-      return {
-        success: false,
-        message: 'Echec de l\'opération :(',
-        data,
-        errors
-      }
-    }
-
-    const response = await prisma.organizerRole.create({
-      data
-    });
-
-    return { success: true, message: 'Nouvelleau organisateurice :)', response };
   }
 }
 

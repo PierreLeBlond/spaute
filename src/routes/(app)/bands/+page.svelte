@@ -1,12 +1,15 @@
 <script lang="ts">
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
+  import { superForm } from 'sveltekit-superforms/client';
+
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  $: bands = data.bands;
+  const { enhance } = superForm(data.form);
 </script>
 
 <div class="p-2">
@@ -16,17 +19,29 @@
   />
 </div>
 <List>
-  {#if bands.length == 0}
+  {#if data.memberships.length == 0}
     <p class="text-xs">T'as pas de fanfare ? la tristesse...</p>
   {:else}
-    {#each bands as band}
+    {#each data.memberships as membership}
       <ListLinkItem>
-        <a
-          href="./band/{band.id}/players"
-          class="flex w-full rounded p-2 text-sm"
-        >
-          {band.name}
-        </a>
+        <div class="flex w-full items-center justify-between">
+          <a
+            href="./band/{membership.band.id}/players"
+            class="grow rounded p-2 text-sm">{membership.band.name}</a
+          >
+          <form
+            method="POST"
+            action="?/delete"
+            use:enhance
+          >
+            <input
+              type="hidden"
+              name="bandId"
+              value={membership.band.id}
+            />
+            <DeleteButtonIcon />
+          </form>
+        </div>
       </ListLinkItem>
     {/each}
   {/if}

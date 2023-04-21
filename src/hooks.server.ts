@@ -4,6 +4,7 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import * as cookie from 'cookie';
 import { createTRPCHandle } from 'trpc-sveltekit';
+import { dev } from '$app/environment';
 
 const authHandle: Handle = async ({ event, resolve }) => {
   const cookies = cookie.parse(event.request.headers.get('cookie') || '');
@@ -27,6 +28,10 @@ const authHandle: Handle = async ({ event, resolve }) => {
   return resolve(event);
 }
 
-const trpcHandle: Handle = createTRPCHandle({ router, createContext });
+const trpcHandle: Handle = createTRPCHandle({
+  router, createContext, onError: dev
+    ? ({ type, path, error }) => console.error(`Encountered error while trying to process ${type} @ ${path}:`, error)
+    : undefined
+});
 
 export const handle = sequence(authHandle, trpcHandle);

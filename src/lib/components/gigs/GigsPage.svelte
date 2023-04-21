@@ -1,34 +1,23 @@
 <script lang="ts">
-  import type { Band, Gig, Presence } from '@prisma/client';
-  import GigView from './gig/GigView.svelte';
-
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
+  import type { Band, Gig, Player, Presence } from '@prisma/client';
 
-  export let presences: (Presence & { gig: Gig & { band: Band } })[];
-  export let newGigs: (Gig & { band: Band })[];
+  import GigView from './gig/GigView.svelte';
+
+  export let player: Player;
+  export let gigs: (Gig & { band: Band; presences: Presence[] })[];
+
+  const presences = new Map<Gig, Presence | null>(
+    gigs.map((gig) => [gig, gig.presences.find((presence) => presence.playerId == player.id) || null])
+  );
 </script>
 
 <List>
-  {#if presences.length == 0 && newGigs.length == 0}
+  {#if gigs.length == 0}
     <p class="text-xs">Pas de prestas à l'horizon. On se fait chier...</p>
   {:else}
-    {#each presences as presence}
-      <ListLinkItem>
-        <a
-          href="./gig/{presence.gig.id}"
-          class="block w-full rounded p-2 text-sm"
-        >
-          <GigView
-            gig={presence.gig}
-            band={presence.gig.band}
-            {presence}
-            showLink={false}
-          />
-        </a>
-      </ListLinkItem>
-    {/each}
-    {#each newGigs as gig}
+    {#each gigs as gig}
       <ListLinkItem>
         <a
           href="./gig/{gig.id}"
@@ -37,7 +26,7 @@
           <GigView
             {gig}
             band={gig.band}
-            presence={null}
+            presence={presences.get(gig) || null}
             showLink={false}
           />
         </a>

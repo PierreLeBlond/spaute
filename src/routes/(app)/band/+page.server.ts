@@ -1,65 +1,46 @@
-import { BandCreateInputSchema } from "$lib/generated/zod";
-import prisma from "$lib/prisma";
-import { Prisma } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types"
+import { z } from "zod";
+import { setError, message, superValidate } from "sveltekit-superforms/server";
+import { router } from "$lib/trpc/router";
+import { TRPCError } from "@trpc/server";
+import { createContext } from "$lib/trpc/context";
 
-export const load: PageServerLoad = () => ({
-  index: 11
+const schema = z.object({
+  name: z.string().min(1, { message: 'Mais vous êtes qui ?' }).max(32)
 });
 
+export const load: PageServerLoad = async () => {
+  const form = await superValidate(schema);
+
+  return {
+    form,
+    index: 11
+  }
+};
+
 export const actions: Actions = {
-  default: async ({ request, locals }) => {
-    const { playerId } = locals;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const formData = Object.fromEntries(await request.formData());
-    const data: Prisma.BandCreateInput = {
-      name: formData["name"] as string,
-      players: {
-        connect: [{
-          id: Number(playerId)
-        }]
-      },
-      adminRoles: {
-        create: [{
-          playerId: Number(playerId)
-        }]
-      }
-    };
-
-    const result = BandCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = {
-        name: formated.name?._errors,
-      }
-
-      return {
-        success: false,
-        message: 'Fanfare non valide :(',
-        data,
-        errors
-      }
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
     }
 
     try {
-      const response = await prisma.band.create({ data });
-      return { success: true, message: 'Fanfare créée !', response };
+      await router.createCaller(await createContext(event)).bands.create(form.data);
+      return message(form, 'Fanfare créée :)');
     } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+      if (!(error instanceof TRPCError)) {
         throw error;
       }
-      if (error.code !== 'P2002') {
-        throw error;
-      }
-      return {
-        success: false, data, message: 'Fanfare non valide :(', errors: {
-          name: ['Nom déjà utilisé...']
-        }
-      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Fanfare non valide :(');
     }
-
-
   }
 }
 

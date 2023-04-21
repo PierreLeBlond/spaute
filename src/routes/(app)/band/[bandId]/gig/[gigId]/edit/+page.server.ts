@@ -1,115 +1,97 @@
-import { GigUpdateArgsSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma';
-import type { Prisma } from '@prisma/client';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
 import type { Actions, PageServerLoad } from './$types';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { gigSchema } from '$lib/components/gigs/gig/gigSchema';
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
-export const load: PageServerLoad = async () => {
+const updateSchema = gigSchema.extend({ gigId: z.number() });
+const deleteSchema = z.object({ gigId: z.number(), name: z.string(), nameCopy: z.string() })
+
+export const load: PageServerLoad = async ({ parent }) => {
+  const { gig } = await parent();
+
+  const date = DateTime.fromJSDate(gig.date);
+
+  const updateForm = () => superValidate({
+    ...gig,
+    date: date.toISODate(),
+    time: date.toLocaleString(DateTime.TIME_24_SIMPLE)
+  }, updateSchema, { id: 'updateForm' });
+  const deleteForm = () => superValidate(deleteSchema, { id: 'deleteForm' });
+
   return {
+    updateForm: updateForm(),
+    deleteForm: deleteForm(),
     index: 203
   }
 }
 
 export const actions: Actions = {
-  update: async ({ request, params }) => {
-    const { gigId } = params;
-    const formData = Object.fromEntries(await request.formData());
+  update: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, updateSchema, { id: 'updateForm' });
 
-    const date = DateTime.fromISO(`${formData["date"]}T${formData["time"]}`).toISO();
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
+    }
+
+    const { date, time, ...rest } = form.data;
 
     const data = {
-      name: formData["name"] as string,
-      location: formData["location"] as string,
-      description: formData["description"] as string,
-      date
+      date: DateTime.fromISO(`${date}T${time}`).toJSDate(),
+      ...rest
     }
 
-    const args: Prisma.GigUpdateArgs = {
-      data,
-      where: {
-        id: Number(gigId)
-      },
-    }
-
-    const result = GigUpdateArgsSchema.safeParse(args);
-
-    if (!result.success) {
-      const formated = result.error.format();
-
-      const errors = {
-        name: formated.data?.name?._errors,
-        location: formated.data?.location?._errors,
-        date: formated.data?.date?._errors,
-        description: formated.data?.description?._errors
+    try {
+      await router.createCaller(await createContext(event)).gigs.update(data);
+      return message(form, 'Presta mise à jour :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
-
-      return {
-        success: false,
-        message: 'Impossible de mettre à jour :(',
-        updateData: data,
-        updateErrors: errors
-      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Presta non valide :(');
     }
-
-    const response = await prisma.gig.update(args);
-
-    return { success: true, message: 'presta mise à jour :)', response };
   },
-  delete: async ({ url, params, locals, request }) => {
-    const { playerId } = locals;
-    const { bandId } = params;
-    const gigId = url.searchParams.get('gigId');
-    const formData = Object.fromEntries(await request.formData());
-    const gig = await prisma.gig.findUniqueOrThrow({
-      where: {
-        id: Number(gigId)
-      },
-      include: {
-        organizerRoles: {
-          include: {
-            player: true
-          }
-        },
-        band: {
-          include: {
-            adminRoles: {
-              include: {
-                player: true
-              }
-            }
-          }
-        }
+  delete: async (event) => {
+    const { request } = event;
+    const { bandId } = event.params;
+    const form = await superValidate(request, deleteSchema, { id: 'deleteForm' });
+
+    if (form.data.name != form.data.nameCopy) {
+      setError(form, 'nameCopy', 'titre incorrect');
+    }
+
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
+    }
+
+    try {
+      await router.createCaller(await createContext(event)).gigs.delete({
+        gigId: form.data.gigId
+      });
+      message(form, 'Hasta la vista, presta :)');
+      throw redirect(303, `/band/${bandId}/gigs`);
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
-    })
-
-    const data = {
-      confirm: formData['confirm'] as string
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Suppression impossible :(');
     }
 
-    if (formData['confirm'] != gig.name) {
-      return {
-        success: false,
-        message: 'Impossible de mettre à jour :(',
-        confirmData: data,
-        confirmErrors: {
-          confirm: ['Ne correspond pas au titre']
-        }
-      }
-    }
-
-    const isAdmin = gig && gig.band.adminRoles.some(adminRole => adminRole.player.id == Number(playerId));
-    const isOrganizer = gig && gig.organizerRoles.some(organizerRole => organizerRole.player.id == Number(playerId));
-
-    if (!isOrganizer && !isAdmin) {
-      throw error(404);
-    }
-
-    await prisma.gig.delete({
-      where: { id: Number(gigId) },
-    });
-
-    throw redirect(303, `/band/${bandId}/gigs`);
   }
 }
 

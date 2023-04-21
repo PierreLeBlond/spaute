@@ -1,13 +1,16 @@
 <script lang="ts">
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
-  import type { PageData } from './$types';
   import RightLink from '$lib/components/links/RightLink.svelte';
-  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
+  import { superForm } from 'sveltekit-superforms/client';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
-
   $: instruments = data.instruments;
+
+  const { enhance } = superForm(data.form);
 </script>
 
 <div class="p-2">
@@ -24,8 +27,14 @@
         <p class="w-full rounded p-2 text-sm">{instrument.name}</p>
         <form
           method="POST"
-          action="?/delete&instrumentId={instrument.id}"
+          action="?/delete"
+          use:enhance
         >
+          <input
+            type="hidden"
+            name="id"
+            value={instrument.id}
+          />
           <DeleteButtonIcon />
         </form>
       </div>

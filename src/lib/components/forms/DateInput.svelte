@@ -1,28 +1,25 @@
 <script lang="ts">
-  import type { DateTime } from 'luxon';
   import Errors from './Errors.svelte';
 
-  export let id: string;
+  export let name: string;
   export let label: string;
-  export let date: DateTime;
-
-  $: value = date.toISODate();
+  export let value: string;
 
   export let errors: string[] = [];
 </script>
 
 <div class="flex flex-col">
   <label
-    for="{id}-input"
+    for="{name}-input"
     class="text-xs">{label}</label
   >
   <input
-    id="{id}-input"
-    name={id}
+    id="{name}-input"
+    {name}
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
     class:border={errors.length != 0}
     type="date"
-    {value}
+    bind:value
   />
   <Errors {errors} />
 </div>

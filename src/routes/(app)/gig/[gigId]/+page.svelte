@@ -4,28 +4,30 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  $: gig = data['gig'];
-  $: presence = data.presence;
-  $: presences = data.presences;
-  $: players = data.players;
+  $: remainingMemberships = data.band.memberships.filter((membership) =>
+    data.gig.presences.every((presence) => presence.player.id != membership.player.id)
+  );
 </script>
 
 <ReturnLink href="/gigs" />
 
 <div class="h-full w-full overflow-y-auto">
   <GigPage
-    {gig}
-    {presence}
-    joinAction={'?/join'}
+    player={data.currentPlayer}
+    gig={data.gig}
+    presence={data.currentPresence}
+    createAction={'?/create'}
     updateAction={'?/update'}
+    data={data.form}
   />
 
   <List>
-    {#each presences as presence}
+    {#each data.gig.presences as presence}
       <ListItem>
         <div
           class="contents text-red-300"
@@ -35,9 +37,9 @@
         </div>
       </ListItem>
     {/each}
-    {#each players as player}
+    {#each remainingMemberships as membership}
       <ListItem>
-        <PlayerItem {player} />
+        <PlayerItem player={membership.player} />
       </ListItem>
     {/each}
   </List>

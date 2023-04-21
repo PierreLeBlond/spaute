@@ -1,9 +1,9 @@
 <script lang="ts">
   import Errors from './Errors.svelte';
 
-  export let id: string;
+  export let name: string;
   export let label: string;
-  export let value: string = '';
+  export let value: string | null = '';
   export let maxlength: number = 320;
 
   export let errors: string[] = [];
@@ -12,14 +12,14 @@
 <div class="flex h-full flex-col">
   <div class="flex justify-between text-xs">
     <label
-      for="{id}-input"
+      for="{name}-input"
       class="text-xs">{label}</label
     >
-    <p>{value.length}/{maxlength}</p>
+    <p>{value?.length || 0}/{maxlength}</p>
   </div>
   <textarea
-    id="{id}-input"
-    name={id}
+    id="{name}-input"
+    {name}
     class="grow rounded border-red-300 bg-neutral-800 text-sm"
     class:border={errors.length != 0}
     bind:value

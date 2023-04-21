@@ -4,20 +4,20 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import type { ActionData, PageData } from './$types';
-  import { enhance } from '$app/forms';
+  import { superForm } from 'sveltekit-superforms/client';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
-  export let form: ActionData;
 
-  $: instruments = data.instruments;
+  const { errors, enhance } = superForm(data.form);
 </script>
 
 <ReturnLink href="/roles" />
 
 <div class="w-full p-2">
   <Form
-    errors={[]}
+    errors={$errors._errors || []}
     {enhance}
   >
     <div class="grid grid-cols-2 gap-x-2 gap-y-2">
@@ -25,24 +25,24 @@
       <Select
         id="instrumentId"
         label="instrument"
-        errors={form?.errors?.instrument}
       >
-        {#each instruments as instrument, index}
-          <option
-            value={instrument.id}
-            selected={form?.data?.instrument ? form?.data?.instrument?.connect?.id == instrument.id : index == 0}
-          >
+        {#each data.instruments as instrument}
+          <option value={instrument.id}>
             {instrument.name}
           </option>
         {/each}
       </Select>
       <div class="col-span-2">
         <Checkbox
-          id="playable"
+          name="playable"
           label="je gère mon pupitre"
-          checked={form?.data?.playable}
         />
       </div>
+      <input
+        type="hidden"
+        name="playerId"
+        value={data.currentPlayer.id}
+      />
       <div class="col-span-2">
         <Button label={'Ajouter'} />
       </div>

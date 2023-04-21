@@ -1,80 +1,64 @@
-import { join } from '$lib/api/gig/join';
-import { update } from '$lib/api/gig/update';
-import prisma from '$lib/prisma'
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
 import type { Actions, PageServerLoad } from './$types';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
+import { presenceSchema } from '$lib/components/gigs/presence/presenceSchema';
 
-export const load: PageServerLoad = async ({ locals, params }) => {
-  const { bandId, gigId } = params;
-  const { playerId } = locals;
-  const presence = async () => await prisma.presence.findUnique({
-    where: {
-      gigId_playerId: {
-        gigId: Number(gigId),
-        playerId: Number(playerId)
-      }
-    }
-  });
-  const presences = async () => await prisma.presence.findMany({
-    where: {
-      gigId: Number(gigId)
-    },
-    include: {
-      player: {
-        include: {
-          organizerRoles: {
-            where: {
-              gigId: Number(gigId)
-            }
-          }
-        }
-      }
-    }
-  });
-  const players = async () => await prisma.player.findMany({
-    where: {
-      AND: {
-        bands: {
-          some: {
-            id: Number(bandId)
-          }
-        },
-        NOT: {
-          presences: {
-            some: {
-              gigId: Number(gigId)
-            }
-          }
-        }
-      }
-    },
-    include: {
-      organizerRoles: {
-        where: {
-          gigId: Number(gigId)
-        }
-      }
-    }
-  })
+export const load: PageServerLoad = async ({ parent }) => {
+  const { currentPresence } = await parent();
+  const form = await superValidate({
+    value: currentPresence?.value
+  }, presenceSchema);
+
   return {
-    presence: presence(),
-    presences: presences(),
-    players: players(),
+    form,
     index: 202
   }
 }
 
 export const actions: Actions = {
-  join: async ({ params, locals, request }) => {
-    const { gigId } = params;
-    const { playerId } = locals;
-    const formData = Object.fromEntries(await request.formData());
+  create: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, presenceSchema);
 
-    return await join(gigId, playerId, formData);
+    try {
+      await router.createCaller(await createContext(event)).presences.create(form.data);
+      return message(form, 'Presta rejointe :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
+      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Impossible de rejoindre :(');
+    }
   },
-  update: async ({ request }) => {
-    const formData = Object.fromEntries(await request.formData());
+  update: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, presenceSchema);
 
-    return await update(formData);
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
+    }
+
+    try {
+      await router.createCaller(await createContext(event)).presences.update(form.data);
+      return message(form, 'Presence mise à jour :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
+      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Impossible de mettre à jour :(');
+    }
   }
 }
 

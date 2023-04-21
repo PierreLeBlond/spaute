@@ -14,49 +14,52 @@ generator zod {
 }
 
 model Band {
-  id         Int         @id @default(autoincrement())
-  /// @zod.string.min(1, { message: "Pas de nom, pas de fanfare." }).max(32)
-  name       String      @unique
-  players    Player[]
-  gigs       Gig[]
-  voices     Voice[]
-  adminRoles AdminRole[]
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  gigs        Gig[]
+  voices      Voice[]
+  memberships Membership[]
 }
 
 model Player {
-  id             Int             @id @default(autoincrement())
-  /// @zod.string.min(1, { message: "J'ai pas compris." }).max(32)
-  name           String
-  presences      Presence[]
-  roles          Role[]
-  bands          Band[]
-  organizerRoles OrganizerRole[]
-  adminRoles     AdminRole[]
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  presences   Presence[]
+  roles       Role[]
+  memberShips Membership[]
+}
+
+model Membership {
+  id       Int     @id @default(autoincrement())
+  isAdmin  Boolean @default(false)
+  band     Band    @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId   Int
+  player   Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId Int
+
+  @@unique([bandId, playerId])
 }
 
 model Gig {
-  id             Int             @id @default(autoincrement())
-  /// @zod.string.min(1, { message: "C\'est vide :(" }).max(32)
-  name           String
-  presences      Presence[]
-  band           Band            @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId         Int
-  /// @zod.date.min(new Date(), { message: "Un peu trop tard !"})
-  date           DateTime
-  /// @zod.string.min(1, { message: "Dans ton c** ?" }).max(60)
-  location       String
-  description    String?
-  playable       Boolean         @default(false)
-  organizerRoles OrganizerRole[]
+  id          Int        @id @default(autoincrement())
+  name        String
+  presences   Presence[]
+  band        Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId      Int
+  date        DateTime
+  location    String
+  description String?
+  playable    Boolean    @default(false)
 }
 
 model Presence {
-  id       Int     @id @default(autoincrement())
-  value    Boolean @default(false)
-  gig      Gig     @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  gigId    Int
-  player   Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId Int
+  id          Int     @id @default(autoincrement())
+  value       Boolean @default(false)
+  isOrganizer Boolean @default(false)
+  gig         Gig     @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  gigId       Int
+  player      Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId    Int
 
   @@unique([gigId, playerId])
 }
@@ -85,24 +88,4 @@ model Voice {
   instrumentId Int
   band         Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
   bandId       Int
-}
-
-model OrganizerRole {
-  id       Int    @id @default(autoincrement())
-  gig      Gig    @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  gigId    Int
-  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId Int
-
-  @@unique([gigId, playerId])
-}
-
-model AdminRole {
-  id       Int    @id @default(autoincrement())
-  band     Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId   Int
-  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId Int
-
-  @@unique([bandId, playerId])
 }

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { OrganizerRole, Player } from '@prisma/client';
+  import type { Player } from '@prisma/client';
 
-  export let player: Player & { organizerRoles: OrganizerRole[] };
+  export let player: Player;
+  export let isOrganizer: boolean = false;
   export let href: string;
 </script>
 
@@ -12,7 +13,7 @@
   <p>
     {player.name}
   </p>
-  {#if player.organizerRoles.length != 0}
+  {#if isOrganizer}
     <p>organisateurice</p>
   {/if}
 </a>

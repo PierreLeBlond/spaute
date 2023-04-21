@@ -1,10 +1,11 @@
 <script lang="ts">
+  import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import Button from '$lib/components/forms/Button.svelte';
-  import type { PageData } from './$types';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -23,7 +24,7 @@
     <div class="grid grid-cols-2 gap-y-2">
       <p class="col-span-2 w-full text-sm">Ajouter un instrument</p>
       <Text
-        id="name"
+        name="name"
         label="nom"
         bind:value={$form['name']}
         errors={$errors['name'] || []}

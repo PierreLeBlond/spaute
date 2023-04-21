@@ -1,33 +1,38 @@
 import { redirect } from "@sveltejs/kit";
-import prisma from '$lib/prisma'
 import type { Actions, PageServerLoad } from './$types';
+import { z } from "zod";
+import { superValidate } from "sveltekit-superforms/server";
+import { router } from "$lib/trpc/router";
+import { createContext } from "$lib/trpc/context";
 
-export const load: PageServerLoad = async () => {
-  const players = await prisma.player.findMany({
-    orderBy: {
-      name: 'asc'
-    }
-  });
+const schema = z.object({
+  playerId: z.number()
+});
+
+export const load: PageServerLoad = async (event) => {
+  const form = () => superValidate(schema);
+  const players = async () => router.createCaller(await createContext(event)).players.list({});
   return {
-    players,
+    form: form(),
+    players: players(),
     index: 1
   }
 }
 
 export const actions: Actions = {
-  default: async ({ cookies, request, locals }) => {
-    const data = await request.formData();
-    const playerId = data.get("playerId") as string;
-    cookies.set('playerId', playerId);
-    locals.playerId = playerId;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const fromPathname = cookies.get('fromPathname');
+    event.cookies.set('playerId', form.data.playerId.toString());
+
+    const fromPathname = event.cookies.get('fromPathname');
 
     if (fromPathname) {
-      cookies.delete('fromPathname');
+      event.cookies.delete('fromPathname');
       throw redirect(302, fromPathname);
     }
 
-    return { success: true, message: 'Connexion réussi :)' }
+    return { success: true, message: 'A toi de jouer :)' }
   }
 }
