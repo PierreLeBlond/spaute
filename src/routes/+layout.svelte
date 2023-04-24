@@ -1,9 +1,10 @@
 <script lang="ts">
-  import '../app.css';
+  import { page } from '$app/stores';
   import Header from '$lib/components/Header.svelte';
   import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+
+  import '../app.css';
   import type { LayoutData } from './$types';
-  import { page } from '$app/stores';
 
   export let data: LayoutData;
 

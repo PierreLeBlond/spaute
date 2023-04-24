@@ -1,14 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, url }) => {
-  const { playerId } = locals;
-
-  if (!playerId) {
-    return {};
-  }
-
+export const load: LayoutServerLoad = ({ url }) => {
   return {
-    playerId,
     href: url.href
   }
 }

@@ -88,7 +88,7 @@
       {/if}
     </div>
     <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
-      {#if $page.data['playerId']}
+      {#if $page.data['currentPlayer']}
         <a
           href="/logout"
           class="flex items-center justify-center text-blue-300"
