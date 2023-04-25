@@ -7,9 +7,12 @@
 
   const { message } = superForm($page.data['form']);
 
-  $: if ($message) {
-    sendToast($message as string, $page.status != 200);
-  }
+  message.subscribe((value: string) => {
+    if (!value || value == '') {
+      return;
+    }
+    sendToast(value, $page.status != 200);
+  });
 </script>
 
 <header class="relative flex h-full w-full justify-center bg-neutral-900">

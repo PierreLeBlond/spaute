@@ -4,4 +4,4 @@ export const load: LayoutServerLoad = ({ url }) => {
   return {
     href: url.href
   }
-}
+};
