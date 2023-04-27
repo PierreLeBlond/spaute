@@ -8,7 +8,7 @@ import { LuciaError } from "lucia-auth";
 
 export const users = t.router({
   create: publicProcedure.input(
-    AuthUserSchema.omit({ id: true }).extend({ password: z.string() })
+    AuthUserSchema.omit({ id: true }).extend({ password: z.string() }).strict()
   ).mutation(async ({ input: { email, password, playerId }, ctx }) => {
     try {
       const user = await auth.createUser({

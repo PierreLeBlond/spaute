@@ -23,7 +23,7 @@ export const voices = t.router({
     }
   })),
   create: adminProcedure.input(
-    VoiceSchema.omit({ id: true })
+    VoiceSchema.omit({ id: true }).strict()
   ).mutation(({ input: { bandId, instrumentId } }) => prisma.voice.create({
     data: {
       band: {

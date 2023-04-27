@@ -25,7 +25,7 @@ export const roles = t.router({
     }
   })),
   create: ownerProcedure.input(
-    RoleSchema.omit({ id: true })
+    RoleSchema.omit({ id: true }).strict()
   ).mutation(({ input: { playerId, instrumentId, ...data } }) => prisma.role.create({
     data: {
       ...data,
@@ -57,7 +57,7 @@ export const roles = t.router({
   })
   ),
   update: ownerProcedure.input(
-    RoleSchema.omit({ instrumentId: true })
+    RoleSchema.omit({ instrumentId: true }).strict()
   ).mutation(({ input: { playerId, id, ...data } }) => prisma.role.update({
     where: {
       id

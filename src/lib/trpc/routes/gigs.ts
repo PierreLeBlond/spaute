@@ -63,7 +63,7 @@ export const gigs = t.router({
     }
   })),
   create: privateProcedure.input(
-    GigSchema.omit({ id: true, playable: true })
+    GigSchema.omit({ id: true, playable: true }).strict()
   ).mutation(async ({ ctx, input: { bandId, ...data } }) => prisma.gig.create({
     data: {
       ...data,
@@ -82,7 +82,7 @@ export const gigs = t.router({
     }
   })),
   update: organizerProcedure.input(
-    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.number() })
+    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.number() }).strict()
   ).mutation(async ({ input: { gigId, ...data } }) => prisma.gig.update({
     where: {
       id: gigId

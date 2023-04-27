@@ -47,7 +47,7 @@ export const presences = t.router({
     });
     return presence;
   }),
-  update: ownerProcedure.input(PresenceSchema.omit({ id: true, isOrganizer: true })).mutation(async ({ input }) => {
+  update: ownerProcedure.input(PresenceSchema.omit({ id: true, isOrganizer: true }).strict()).mutation(async ({ input }) => {
     const { playerId, gigId, ...data } = input;
 
     const presence = await prisma.presence.update({
