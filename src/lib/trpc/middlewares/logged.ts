@@ -1,15 +1,15 @@
 import { TRPCError } from "@trpc/server";
 import { t } from "../t";
 
-export const auth = t.middleware(async ({ next, ctx }) => {
-  const { playerId } = ctx;
-  if (!playerId) {
+export const logged = t.middleware(async ({ next, ctx }) => {
+  const { user } = ctx;
+  if (!user?.userId) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
 
   return next({
     ctx: {
-      playerId
+      user
     }
   });
 });

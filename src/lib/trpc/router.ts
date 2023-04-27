@@ -7,6 +7,7 @@ import { players } from "./routes/players";
 import { memberships } from "./routes/memberships";
 import { voices } from "./routes/voices";
 import { roles } from "./routes/roles";
+import { users } from "./routes/users";
 
 export const router = t.router({
   memberships,
@@ -16,7 +17,8 @@ export const router = t.router({
   players,
   presences,
   voices,
-  roles
+  roles,
+  users
 });
 
 // Export type router type signature,

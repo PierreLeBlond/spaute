@@ -34,6 +34,11 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
+
+      if (error.code != 'BAD_REQUEST') {
+        throw error;
+      }
+
       setError(
         form,
         null,

@@ -2,27 +2,28 @@ import { createContext } from '$lib/trpc/context';
 import { router } from '$lib/trpc/router';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import * as cookie from 'cookie';
 import { createTRPCHandle } from 'trpc-sveltekit';
 import { dev } from '$app/environment';
+import { auth } from "$lib/lucia";
 
 const authHandle: Handle = async ({ event, resolve }) => {
-  const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-  const playerId = cookies['playerId'];
+  event.locals.auth = auth.handleRequest(event);
 
-  if (playerId) {
-    event.locals.playerId = playerId;
-  }
+  const { user } = await event.locals.auth.validateUser();
 
-  const fromPathname = event.url.pathname;
-  if (fromPathname != '/logout' && fromPathname != '/login') {
+  event.locals.user = user;
+
+  const isPrivatePage = event.route.id?.startsWith('/(app)');
+
+  if (isPrivatePage) {
+    const fromPathname = event.url.pathname;
     event.cookies.set('fromPathname', fromPathname, { path: '/' });
   }
 
-  const redirectToLogin = !playerId && !fromPathname.startsWith('/login');
+  const redirectToLogin = !user && isPrivatePage;
 
   if (redirectToLogin) {
-    throw redirect(302, '/login');
+    throw redirect(302, '/users/login');
   }
 
   return resolve(event);

@@ -9,10 +9,10 @@ const schema = z.object({
   bandId: z.number()
 });
 
-export const load: PageServerLoad = (event) => {
-  const { playerId } = event.locals;
+export const load: PageServerLoad = async (event) => {
+  const { currentPlayer } = await event.parent();
   const form = () => superValidate(schema);
-  const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: Number(playerId) });
+  const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
   return {
     form: form(),
     memberships: memberships(),

@@ -7,11 +7,11 @@ import { TRPCError } from "@trpc/server";
 
 export const load: PageServerLoad = async (event) => {
   const { gigId } = event.params;
-  const { playerId } = event.locals;
+  const { currentPlayer } = await event.parent();
   const caller = router.createCaller(await createContext(event));
   const gig = await caller.gigs.read({ id: Number(gigId) });
   const band = await caller.bands.read({ id: gig.band.id });
-  const currentPresence = await caller.presences.read({ gigId: Number(gigId), playerId: Number(playerId) });
+  const currentPresence = await caller.presences.read({ gigId: Number(gigId), playerId: currentPlayer.id });
 
   const form = () => superValidate({
     value: currentPresence?.value

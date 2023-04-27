@@ -17,9 +17,9 @@ const deleteSchema = z.object({
 })
 
 export const load: PageServerLoad = async (event) => {
-  const { playerId } = event.locals;
+  const { currentPlayer } = await event.parent();
   const caller = router.createCaller(await createContext(event));
-  const roles = await caller.roles.list({ playerId: Number(playerId) });
+  const roles = await caller.roles.list({ playerId: currentPlayer.id });
   const updateForm = () => superValidate({
     playables: roles.map(role => role.playable)
   }, updateSchema, { id: 'updateForm' })

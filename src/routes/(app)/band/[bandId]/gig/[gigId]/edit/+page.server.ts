@@ -16,9 +16,16 @@ export const load: PageServerLoad = async ({ parent }) => {
 
   const date = DateTime.fromJSDate(gig.date);
 
+  const ISODate = date.toISODate();
+
+  // https://github.com/moment/luxon/issues/1419
+  if (!ISODate) {
+    throw new Error('ISO Date is null');
+  }
+
   const updateForm = () => superValidate({
     ...gig,
-    date: date.toISODate(),
+    date: ISODate,
     time: date.toLocaleString(DateTime.TIME_24_SIMPLE)
   }, updateSchema, { id: 'updateForm' });
   const deleteForm = () => superValidate(deleteSchema, { id: 'deleteForm' });

@@ -1,19 +1,19 @@
 import { TRPCError } from "@trpc/server";
 import prisma from "$lib/prisma";
 import { z } from "zod";
-import { auth } from "./auth";
+import { logged } from "./logged";
 
 const schema = z.object({
   gigId: z.number()
 });
 
-export const organizer = auth.unstable_pipe(async ({ next, ctx, rawInput }) => {
+export const organizer = logged.unstable_pipe(async ({ next, ctx, rawInput }) => {
   const result = schema.safeParse(rawInput);
   if (!result.success) {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Gig context id is null or undefined.' });
   }
 
-  const { playerId } = ctx;
+  const { playerId } = ctx.user;
   const { gigId } = result.data;
 
   const presence = await prisma.presence.findUnique({

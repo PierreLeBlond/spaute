@@ -23,7 +23,7 @@
     >
       <input
         type="hidden"
-        name="bandId"
+        name="gigId"
         value={data.gig.id}
       />
       <input

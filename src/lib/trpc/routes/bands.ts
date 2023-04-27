@@ -47,7 +47,7 @@ export const bands = t.router({
           ...input,
           memberships: {
             create: [{
-              playerId: ctx.playerId,
+              playerId: ctx.user.playerId,
               isAdmin: true
             }]
           },
@@ -65,7 +65,7 @@ export const bands = t.router({
 
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'Unexpected prisma error occured.',
+        message: `Unexpected error occured : ${error}`,
         cause: error
       });
     }

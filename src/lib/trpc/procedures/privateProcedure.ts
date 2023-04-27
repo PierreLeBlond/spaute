@@ -1,4 +1,4 @@
-import { auth } from "../middlewares/auth";
+import { logged } from "../middlewares/logged";
 import { publicProcedure } from "./publicProcedure";
 
-export const privateProcedure = publicProcedure.use(auth);
+export const privateProcedure = publicProcedure.use(logged);
