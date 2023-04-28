@@ -5,10 +5,12 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
 
   export let data: PageData;
 
-  const { errors, enhance } = superForm(data.form);
+  const { errors, enhance, message } = superForm(data.form);
+  message.subscribe(sendToast);
 </script>
 
 <ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />

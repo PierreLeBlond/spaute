@@ -3,6 +3,7 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
@@ -10,7 +11,8 @@
   export let data: PageData;
   $: instruments = data.instruments;
 
-  const { enhance } = superForm(data.form);
+  const { enhance, message } = superForm(data.form);
+  message.subscribe(sendToast);
 </script>
 
 <div class="p-2">

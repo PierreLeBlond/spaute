@@ -3,13 +3,15 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { enhance, errors } = superForm(data.form);
+  const { enhance, errors, message } = superForm(data.form);
+  message.subscribe(sendToast);
 </script>
 
 <ReturnLink href="/band/{data.band.id}/voices" />

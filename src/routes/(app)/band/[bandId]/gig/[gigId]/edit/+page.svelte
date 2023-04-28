@@ -10,6 +10,7 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
 
   export let data: PageData;
 
@@ -19,10 +20,12 @@
     constraints: updateConstraints,
     enhance: updateEnhance,
     tainted: updateTainted,
-    submitting: updateSubmitting
+    submitting: updateSubmitting,
+    message: updateMessage
   } = superForm(data.updateForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
+  updateMessage.subscribe(sendToast);
 
   const {
     form: deleteForm,
@@ -30,10 +33,12 @@
     constraints: deleteConstraints,
     enhance: deleteEnhance,
     tainted: deleteTainted,
-    submitting: deleteSubmitting
+    submitting: deleteSubmitting,
+    message: deleteMessage
   } = superForm(data.deleteForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
+  deleteMessage.subscribe(sendToast);
 </script>
 
 <ReturnLink href="/band/{data.band.id}/gig/{data.gig.id}" />

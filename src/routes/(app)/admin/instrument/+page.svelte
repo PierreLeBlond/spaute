@@ -6,12 +6,14 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
 
   export let data: PageData;
 
-  const { form, errors, constraints, enhance, tainted, submitting } = superForm(data.form, {
+  const { form, errors, constraints, enhance, tainted, submitting, message } = superForm(data.form, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
+  message.subscribe(sendToast);
 </script>
 
 <ReturnLink href="/admin/instruments" />

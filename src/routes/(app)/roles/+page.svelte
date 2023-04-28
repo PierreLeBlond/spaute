@@ -6,15 +6,29 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { form, errors, enhance, tainted, submitting } = superForm(data.updateForm, {
+  const {
+    form,
+    errors,
+    enhance: updateEnhance,
+    tainted,
+    submitting,
+    message: updateMessage
+  } = superForm(data.updateForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
+
+  updateMessage.subscribe(sendToast);
+
+  const { enhance: deleteEnhance, message: deleteMessage } = superForm(data.deleteForm);
+
+  deleteMessage.subscribe(sendToast);
 </script>
 
 <div class="flex h-full flex-col">
@@ -41,6 +55,7 @@
               <form
                 method="POST"
                 action="?/delete"
+                use:deleteEnhance
               >
                 <input
                   type="hidden"
@@ -78,7 +93,7 @@
     id="updateForm"
     action="?/update"
     errors={$errors._errors || []}
-    {enhance}
+    enhance={updateEnhance}
   >
     <input
       type="hidden"

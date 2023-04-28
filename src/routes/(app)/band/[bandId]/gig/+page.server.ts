@@ -10,10 +10,10 @@ import { z } from 'zod';
 const schema = gigSchema.extend({ bandId: z.number() });
 
 export const load: PageServerLoad = async () => {
-  const form = await superValidate(schema);
+  const form = () => superValidate(schema);
 
   return {
-    form,
+    form: form(),
     index: 201
   }
 }

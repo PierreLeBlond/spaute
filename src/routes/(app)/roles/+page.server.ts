@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
   const updateForm = () => superValidate({
     playables: roles.map(role => role.playable)
   }, updateSchema, { id: 'updateForm' })
-  const deleteForm = () => superValidate(deleteSchema);
+  const deleteForm = () => superValidate(deleteSchema, { id: 'deleteForm' });
 
   return {
     updateForm: updateForm(),

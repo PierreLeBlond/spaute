@@ -9,6 +9,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 const updateSchema = gigSchema.extend({ gigId: z.number() });
+
 const deleteSchema = z.object({ gigId: z.number(), name: z.string(), nameCopy: z.string() })
 
 export const load: PageServerLoad = async ({ parent }) => {

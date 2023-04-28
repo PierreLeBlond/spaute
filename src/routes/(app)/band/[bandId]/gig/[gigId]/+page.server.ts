@@ -3,11 +3,12 @@ import { router } from '$lib/trpc/router';
 import type { Actions, PageServerLoad } from './$types';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
-import { presenceSchema } from '$lib/components/gigs/presence/presenceSchema';
+import { presenceSchema, type PresenceSchema } from '$lib/components/gigs/presence/presenceSchema';
+import type { Message } from '$lib/components/superforms/Message';
 
 export const load: PageServerLoad = async ({ parent }) => {
   const { currentPresence } = await parent();
-  const form = await superValidate({
+  const form = await superValidate<PresenceSchema, Message>({
     value: currentPresence?.value
   }, presenceSchema);
 
