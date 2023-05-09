@@ -43,7 +43,7 @@
       <Section style={section}>
         <Button
           style={button}
-          href="http://localhost:5173/email-verification/{token}">Vérifier mon email</Button
+          href="https://www.spaute.app/email-verification/{token}">Vérifier mon email</Button
         >
       </Section>
     </Container>
