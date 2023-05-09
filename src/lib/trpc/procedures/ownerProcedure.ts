@@ -1,4 +1,4 @@
 import { owner } from "../middlewares/owner";
-import { privateProcedure } from "./privateProcedure";
+import { verifiedProcedure } from "./verifiedProcedure";
 
-export const ownerProcedure = privateProcedure.use(owner);
+export const ownerProcedure = verifiedProcedure.use(owner);

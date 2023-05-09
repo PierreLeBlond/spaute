@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server";
-import { t } from "../t";
+import { authenticated } from "./authenticated";
 
-export const logged = t.middleware(async ({ next, ctx }) => {
+export const verified = authenticated.unstable_pipe(async ({ next, ctx }) => {
   const { user } = ctx;
-  if (!user?.userId) {
+  if (!user.emailVerified) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
 

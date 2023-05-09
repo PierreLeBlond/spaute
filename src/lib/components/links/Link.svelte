@@ -4,5 +4,6 @@
 
 <a
   {href}
-  class="block h-8 w-full rounded bg-blue-300 text-sm text-neutral-900"><slot /></a
+  class="flex h-8 w-full items-center justify-center rounded bg-blue-300 text-center text-sm text-neutral-900"
+  ><slot /></a
 >

@@ -3,12 +3,12 @@ import prisma from "$lib/prisma";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { adminProcedure } from "../procedures/adminProcedure";
 import { z } from "zod";
 
 export const bands = t.router({
-  list: privateProcedure.input(BandWhereInputSchema).query(({ input }) =>
+  list: verifiedProcedure.input(BandWhereInputSchema).query(({ input }) =>
     prisma.band.findMany({
       where: input,
       orderBy: {
@@ -18,7 +18,7 @@ export const bands = t.router({
         memberships: true
       }
     })),
-  read: privateProcedure.input(BandWhereUniqueInputSchema).query(({ input }) =>
+  read: verifiedProcedure.input(BandWhereUniqueInputSchema).query(({ input }) =>
     prisma.band.findUniqueOrThrow({
       where: input,
       include: {
@@ -38,7 +38,7 @@ export const bands = t.router({
 
     return response;
   }),
-  create: privateProcedure.input(
+  create: verifiedProcedure.input(
     BandCreateInputSchema
   ).mutation(async ({ ctx, input }) => {
     try {

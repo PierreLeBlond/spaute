@@ -1,14 +1,14 @@
 import { RoleSchema, RoleWhereInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { ownerProcedure } from "../procedures/ownerProcedure";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export const roles = t.router({
-  list: privateProcedure.input(RoleWhereInputSchema).query(({ input }) => prisma.role.findMany({
+  list: verifiedProcedure.input(RoleWhereInputSchema).query(({ input }) => prisma.role.findMany({
     where: input,
     orderBy: {
       instrument: {

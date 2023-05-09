@@ -11,7 +11,9 @@ declare global {
 			auth: import("lucia-auth").AuthRequest;
 			user: {
 				userId: string;
-				playerId: number
+				playerId: number;
+				email: string;
+				emailVerified: boolean;
 			} | null;
 		}
 		// interface PageData {}
@@ -24,7 +26,8 @@ declare global {
 		type Auth = import("$lib/lucia").Auth;
 		type UserAttributes = {
 			email: string,
-			playerId: number
+			email_verified: boolean,
+			playerId: number,
 		};
 	}
 }

@@ -13,11 +13,17 @@ const authHandle: Handle = async ({ event, resolve }) => {
 
   event.locals.user = user;
 
-  const isPrivatePage = event.route.id?.startsWith('/(app)');
+  const isPrivatePage = event.route.id?.startsWith('/(authenticated)/(verified)');
 
   if (isPrivatePage) {
     const fromPathname = event.url.pathname;
     event.cookies.set('fromPathname', fromPathname, { path: '/' });
+  }
+
+  const redirectToEmailVerification = user && !user.emailVerified && isPrivatePage;
+
+  if (redirectToEmailVerification) {
+    throw redirect(302, '/email-verification');
   }
 
   const redirectToLogin = !user && isPrivatePage;

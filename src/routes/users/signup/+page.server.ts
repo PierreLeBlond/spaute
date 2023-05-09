@@ -4,6 +4,7 @@ import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { createContext } from "$lib/trpc/context";
 import { router } from "$lib/trpc/router";
 import { TRPCError } from "@trpc/server";
+import { redirect } from "@sveltejs/kit";
 
 const schema = z.object({
   email: z.string().email({ message: 'Email incorrect' }),
@@ -39,12 +40,19 @@ export const actions: Actions = {
     try {
       const player = await router.createCaller(await createContext(event)).players.create({ name });
       await router.createCaller(await createContext(event)).users.create({ email, password, playerId: player.id });
+
+      const fromPathname = event.cookies.get('fromPathname');
+
+      if (fromPathname) {
+        event.cookies.delete('fromPathname');
+        throw redirect(302, fromPathname);
+      }
+
       return message(form, 'Fanfaronx crééx :)');
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      console.log(error.cause);
       setError(
         form,
         null,

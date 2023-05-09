@@ -37,10 +37,11 @@ model AuthSession {
 }
 
 model AuthUser {
-  id           String        @id @unique
-  auth_session AuthSession[]
-  auth_key     AuthKey[]
-  email        String        @unique
+  id             String        @id @unique
+  auth_session   AuthSession[]
+  auth_key       AuthKey[]
+  email          String        @unique
+  email_verified Boolean       @default(false)
 
   player   Player @relation(fields: [playerId], references: [id])
   playerId Int    @unique

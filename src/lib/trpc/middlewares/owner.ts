@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { logged } from "./logged";
+import { verified } from "./verified";
 
 const schema = z.object({
   playerId: z.number()
 });
 
-export const owner = logged.unstable_pipe(async ({ next, ctx, rawInput }) => {
+export const owner = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
   const result = schema.safeParse(rawInput);
   if (!result.success) {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Player id is null or undefined.' });

@@ -15,23 +15,6 @@ export const load: LayoutServerLoad = async (event) => {
 
   return {
     currentPlayer,
-    title: currentPlayer.name,
-    tabs: [
-      {
-        href: '/bands',
-        key: '/band',
-        label: 'mes fanfares'
-      },
-      {
-        href: '/gigs',
-        key: '/gig',
-        label: 'mes prestas'
-      },
-      {
-        href: '/roles',
-        key: '/role',
-        label: 'mes pupitres'
-      }
-    ]
+    title: currentPlayer.name
   }
 };

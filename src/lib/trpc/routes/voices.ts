@@ -1,12 +1,12 @@
 import { VoiceSchema, VoiceWhereInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { adminProcedure } from "../procedures/adminProcedure";
 import { z } from "zod";
 
 export const voices = t.router({
-  list: privateProcedure.input(VoiceWhereInputSchema).query(({ input }) => prisma.voice.findMany({
+  list: verifiedProcedure.input(VoiceWhereInputSchema).query(({ input }) => prisma.voice.findMany({
     where: input,
     orderBy: {
       instrument: {

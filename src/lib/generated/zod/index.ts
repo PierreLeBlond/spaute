@@ -14,7 +14,7 @@ export const AuthKeyScalarFieldEnumSchema = z.enum(['id','hashed_password','user
 
 export const AuthSessionScalarFieldEnumSchema = z.enum(['id','user_id','active_expires','idle_expires']);
 
-export const AuthUserScalarFieldEnumSchema = z.enum(['id','email','playerId']);
+export const AuthUserScalarFieldEnumSchema = z.enum(['id','email','email_verified','playerId']);
 
 export const BandScalarFieldEnumSchema = z.enum(['id','name']);
 
@@ -75,6 +75,7 @@ export type AuthSession = z.infer<typeof AuthSessionSchema>
 export const AuthUserSchema = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean(),
   playerId: z.number().int(),
 })
 
@@ -253,6 +254,7 @@ export const AuthUserCountOutputTypeSelectSchema: z.ZodType<Prisma.AuthUserCount
 export const AuthUserSelectSchema: z.ZodType<Prisma.AuthUserSelect> = z.object({
   id: z.boolean().optional(),
   email: z.boolean().optional(),
+  email_verified: z.boolean().optional(),
   playerId: z.boolean().optional(),
   auth_session: z.union([z.boolean(),z.lazy(() => AuthSessionFindManyArgsSchema)]).optional(),
   auth_key: z.union([z.boolean(),z.lazy(() => AuthKeyFindManyArgsSchema)]).optional(),
@@ -589,6 +591,7 @@ export const AuthUserWhereInputSchema: z.ZodType<Prisma.AuthUserWhereInput> = z.
   NOT: z.union([ z.lazy(() => AuthUserWhereInputSchema),z.lazy(() => AuthUserWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  email_verified: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   auth_session: z.lazy(() => AuthSessionListRelationFilterSchema).optional(),
   auth_key: z.lazy(() => AuthKeyListRelationFilterSchema).optional(),
@@ -598,6 +601,7 @@ export const AuthUserWhereInputSchema: z.ZodType<Prisma.AuthUserWhereInput> = z.
 export const AuthUserOrderByWithRelationInputSchema: z.ZodType<Prisma.AuthUserOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
+  email_verified: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
   auth_session: z.lazy(() => AuthSessionOrderByRelationAggregateInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyOrderByRelationAggregateInputSchema).optional(),
@@ -613,6 +617,7 @@ export const AuthUserWhereUniqueInputSchema: z.ZodType<Prisma.AuthUserWhereUniqu
 export const AuthUserOrderByWithAggregationInputSchema: z.ZodType<Prisma.AuthUserOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
+  email_verified: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => AuthUserCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => AuthUserAvgOrderByAggregateInputSchema).optional(),
@@ -627,6 +632,7 @@ export const AuthUserScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Auth
   NOT: z.union([ z.lazy(() => AuthUserScalarWhereWithAggregatesInputSchema),z.lazy(() => AuthUserScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   email: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  email_verified: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
 }).strict();
 
@@ -1112,6 +1118,7 @@ export const AuthSessionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AuthSes
 export const AuthUserCreateInputSchema: z.ZodType<Prisma.AuthUserCreateInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   auth_session: z.lazy(() => AuthSessionCreateNestedManyWithoutAuth_userInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyCreateNestedManyWithoutAuth_userInputSchema).optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutUserInputSchema)
@@ -1120,6 +1127,7 @@ export const AuthUserCreateInputSchema: z.ZodType<Prisma.AuthUserCreateInput> = 
 export const AuthUserUncheckedCreateInputSchema: z.ZodType<Prisma.AuthUserUncheckedCreateInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   playerId: z.number().int(),
   auth_session: z.lazy(() => AuthSessionUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional()
@@ -1128,6 +1136,7 @@ export const AuthUserUncheckedCreateInputSchema: z.ZodType<Prisma.AuthUserUnchec
 export const AuthUserUpdateInputSchema: z.ZodType<Prisma.AuthUserUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutUserNestedInputSchema).optional()
@@ -1136,6 +1145,7 @@ export const AuthUserUpdateInputSchema: z.ZodType<Prisma.AuthUserUpdateInput> = 
 export const AuthUserUncheckedUpdateInputSchema: z.ZodType<Prisma.AuthUserUncheckedUpdateInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional()
@@ -1144,17 +1154,20 @@ export const AuthUserUncheckedUpdateInputSchema: z.ZodType<Prisma.AuthUserUnchec
 export const AuthUserCreateManyInputSchema: z.ZodType<Prisma.AuthUserCreateManyInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   playerId: z.number().int()
 }).strict();
 
 export const AuthUserUpdateManyMutationInputSchema: z.ZodType<Prisma.AuthUserUpdateManyMutationInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const AuthUserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AuthUserUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
@@ -1538,8 +1551,8 @@ export const VoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.VoiceUnchecke
 
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   equals: z.string().optional(),
-  in: z.string().array().optional(),
-  notIn: z.string().array().optional(),
+  in: z.union([ z.string().array(),z.string() ]).optional(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -1553,8 +1566,8 @@ export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
 
 export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> = z.object({
   equals: z.string().optional().nullable(),
-  in: z.string().array().optional().nullable(),
-  notIn: z.string().array().optional().nullable(),
+  in: z.union([ z.string().array(),z.string() ]).optional().nullable(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional().nullable(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -1573,8 +1586,8 @@ export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
 
 export const BigIntNullableFilterSchema: z.ZodType<Prisma.BigIntNullableFilter> = z.object({
   equals: z.bigint().optional().nullable(),
-  in: z.bigint().array().optional().nullable(),
-  notIn: z.bigint().array().optional().nullable(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -1621,8 +1634,8 @@ export const AuthKeySumOrderByAggregateInputSchema: z.ZodType<Prisma.AuthKeySumO
 
 export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggregatesFilter> = z.object({
   equals: z.string().optional(),
-  in: z.string().array().optional(),
-  notIn: z.string().array().optional(),
+  in: z.union([ z.string().array(),z.string() ]).optional(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -1639,8 +1652,8 @@ export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggreg
 
 export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNullableWithAggregatesFilter> = z.object({
   equals: z.string().optional().nullable(),
-  in: z.string().array().optional().nullable(),
-  notIn: z.string().array().optional().nullable(),
+  in: z.union([ z.string().array(),z.string() ]).optional().nullable(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional().nullable(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -1665,8 +1678,8 @@ export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregates
 
 export const BigIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BigIntNullableWithAggregatesFilter> = z.object({
   equals: z.bigint().optional().nullable(),
-  in: z.bigint().array().optional().nullable(),
-  notIn: z.bigint().array().optional().nullable(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -1681,8 +1694,8 @@ export const BigIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BigIntNu
 
 export const BigIntFilterSchema: z.ZodType<Prisma.BigIntFilter> = z.object({
   equals: z.bigint().optional(),
-  in: z.bigint().array().optional(),
-  notIn: z.bigint().array().optional(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -1723,8 +1736,8 @@ export const AuthSessionSumOrderByAggregateInputSchema: z.ZodType<Prisma.AuthSes
 
 export const BigIntWithAggregatesFilterSchema: z.ZodType<Prisma.BigIntWithAggregatesFilter> = z.object({
   equals: z.bigint().optional(),
-  in: z.bigint().array().optional(),
-  notIn: z.bigint().array().optional(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -1739,8 +1752,8 @@ export const BigIntWithAggregatesFilterSchema: z.ZodType<Prisma.BigIntWithAggreg
 
 export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
   equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
+  in: z.union([ z.number().array(),z.number() ]).optional(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -1776,6 +1789,7 @@ export const AuthKeyOrderByRelationAggregateInputSchema: z.ZodType<Prisma.AuthKe
 export const AuthUserCountOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
+  email_verified: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1786,12 +1800,14 @@ export const AuthUserAvgOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserAv
 export const AuthUserMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
+  email_verified: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AuthUserMinOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
+  email_verified: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -1801,8 +1817,8 @@ export const AuthUserSumOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserSu
 
 export const IntWithAggregatesFilterSchema: z.ZodType<Prisma.IntWithAggregatesFilter> = z.object({
   equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
+  in: z.union([ z.number().array(),z.number() ]).optional(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -1956,8 +1972,8 @@ export const MembershipSumOrderByAggregateInputSchema: z.ZodType<Prisma.Membersh
 
 export const DateTimeFilterSchema: z.ZodType<Prisma.DateTimeFilter> = z.object({
   equals: z.coerce.date().optional(),
-  in: z.coerce.date().array().optional(),
-  notIn: z.coerce.date().array().optional(),
+  in: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
+  notIn: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
   lt: z.coerce.date().optional(),
   lte: z.coerce.date().optional(),
   gt: z.coerce.date().optional(),
@@ -2007,8 +2023,8 @@ export const GigSumOrderByAggregateInputSchema: z.ZodType<Prisma.GigSumOrderByAg
 
 export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAggregatesFilter> = z.object({
   equals: z.coerce.date().optional(),
-  in: z.coerce.date().array().optional(),
-  notIn: z.coerce.date().array().optional(),
+  in: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
+  notIn: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
   lt: z.coerce.date().optional(),
   lte: z.coerce.date().optional(),
   gt: z.coerce.date().optional(),
@@ -2865,8 +2881,8 @@ export const BandUpdateOneRequiredWithoutVoicesNestedInputSchema: z.ZodType<Pris
 
 export const NestedStringFilterSchema: z.ZodType<Prisma.NestedStringFilter> = z.object({
   equals: z.string().optional(),
-  in: z.string().array().optional(),
-  notIn: z.string().array().optional(),
+  in: z.union([ z.string().array(),z.string() ]).optional(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -2879,8 +2895,8 @@ export const NestedStringFilterSchema: z.ZodType<Prisma.NestedStringFilter> = z.
 
 export const NestedStringNullableFilterSchema: z.ZodType<Prisma.NestedStringNullableFilter> = z.object({
   equals: z.string().optional().nullable(),
-  in: z.string().array().optional().nullable(),
-  notIn: z.string().array().optional().nullable(),
+  in: z.union([ z.string().array(),z.string() ]).optional().nullable(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional().nullable(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -2898,8 +2914,8 @@ export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.obje
 
 export const NestedBigIntNullableFilterSchema: z.ZodType<Prisma.NestedBigIntNullableFilter> = z.object({
   equals: z.bigint().optional().nullable(),
-  in: z.bigint().array().optional().nullable(),
-  notIn: z.bigint().array().optional().nullable(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -2909,8 +2925,8 @@ export const NestedBigIntNullableFilterSchema: z.ZodType<Prisma.NestedBigIntNull
 
 export const NestedStringWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringWithAggregatesFilter> = z.object({
   equals: z.string().optional(),
-  in: z.string().array().optional(),
-  notIn: z.string().array().optional(),
+  in: z.union([ z.string().array(),z.string() ]).optional(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -2926,8 +2942,8 @@ export const NestedStringWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStri
 
 export const NestedIntFilterSchema: z.ZodType<Prisma.NestedIntFilter> = z.object({
   equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
+  in: z.union([ z.number().array(),z.number() ]).optional(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -2937,8 +2953,8 @@ export const NestedIntFilterSchema: z.ZodType<Prisma.NestedIntFilter> = z.object
 
 export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = z.object({
   equals: z.string().optional().nullable(),
-  in: z.string().array().optional().nullable(),
-  notIn: z.string().array().optional().nullable(),
+  in: z.union([ z.string().array(),z.string() ]).optional().nullable(),
+  notIn: z.union([ z.string().array(),z.string() ]).optional().nullable(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -2954,8 +2970,8 @@ export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
 
 export const NestedIntNullableFilterSchema: z.ZodType<Prisma.NestedIntNullableFilter> = z.object({
   equals: z.number().optional().nullable(),
-  in: z.number().array().optional().nullable(),
-  notIn: z.number().array().optional().nullable(),
+  in: z.union([ z.number().array(),z.number() ]).optional().nullable(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional().nullable(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -2973,8 +2989,8 @@ export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWi
 
 export const NestedBigIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBigIntNullableWithAggregatesFilter> = z.object({
   equals: z.bigint().optional().nullable(),
-  in: z.bigint().array().optional().nullable(),
-  notIn: z.bigint().array().optional().nullable(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional().nullable(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -2989,8 +3005,8 @@ export const NestedBigIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
 
 export const NestedFloatNullableFilterSchema: z.ZodType<Prisma.NestedFloatNullableFilter> = z.object({
   equals: z.number().optional().nullable(),
-  in: z.number().array().optional().nullable(),
-  notIn: z.number().array().optional().nullable(),
+  in: z.union([ z.number().array(),z.number() ]).optional().nullable(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional().nullable(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -3000,8 +3016,8 @@ export const NestedFloatNullableFilterSchema: z.ZodType<Prisma.NestedFloatNullab
 
 export const NestedBigIntFilterSchema: z.ZodType<Prisma.NestedBigIntFilter> = z.object({
   equals: z.bigint().optional(),
-  in: z.bigint().array().optional(),
-  notIn: z.bigint().array().optional(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -3011,8 +3027,8 @@ export const NestedBigIntFilterSchema: z.ZodType<Prisma.NestedBigIntFilter> = z.
 
 export const NestedBigIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBigIntWithAggregatesFilter> = z.object({
   equals: z.bigint().optional(),
-  in: z.bigint().array().optional(),
-  notIn: z.bigint().array().optional(),
+  in: z.union([ z.bigint().array(),z.bigint() ]).optional(),
+  notIn: z.union([ z.bigint().array(),z.bigint() ]).optional(),
   lt: z.bigint().optional(),
   lte: z.bigint().optional(),
   gt: z.bigint().optional(),
@@ -3027,8 +3043,8 @@ export const NestedBigIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBigI
 
 export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.object({
   equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
+  in: z.union([ z.number().array(),z.number() ]).optional(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -3038,8 +3054,8 @@ export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.ob
 
 export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWithAggregatesFilter> = z.object({
   equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
+  in: z.union([ z.number().array(),z.number() ]).optional(),
+  notIn: z.union([ z.number().array(),z.number() ]).optional(),
   lt: z.number().optional(),
   lte: z.number().optional(),
   gt: z.number().optional(),
@@ -3054,8 +3070,8 @@ export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWith
 
 export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> = z.object({
   equals: z.coerce.date().optional(),
-  in: z.coerce.date().array().optional(),
-  notIn: z.coerce.date().array().optional(),
+  in: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
+  notIn: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
   lt: z.coerce.date().optional(),
   lte: z.coerce.date().optional(),
   gt: z.coerce.date().optional(),
@@ -3065,8 +3081,8 @@ export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> 
 
 export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeWithAggregatesFilter> = z.object({
   equals: z.coerce.date().optional(),
-  in: z.coerce.date().array().optional(),
-  notIn: z.coerce.date().array().optional(),
+  in: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
+  notIn: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
   lt: z.coerce.date().optional(),
   lte: z.coerce.date().optional(),
   gt: z.coerce.date().optional(),
@@ -3080,6 +3096,7 @@ export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDa
 export const AuthUserCreateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUserCreateWithoutAuth_keyInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   auth_session: z.lazy(() => AuthSessionCreateNestedManyWithoutAuth_userInputSchema).optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutUserInputSchema)
 }).strict();
@@ -3087,7 +3104,8 @@ export const AuthUserCreateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUser
 export const AuthUserUncheckedCreateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUserUncheckedCreateWithoutAuth_keyInput> = z.object({
   id: z.string(),
   email: z.string(),
-  playerId: z.number(),
+  email_verified: z.boolean().optional(),
+  playerId: z.number().int(),
   auth_session: z.lazy(() => AuthSessionUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional()
 }).strict();
 
@@ -3104,6 +3122,7 @@ export const AuthUserUpsertWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUser
 export const AuthUserUpdateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUserUpdateWithoutAuth_keyInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutUserNestedInputSchema).optional()
 }).strict();
@@ -3111,13 +3130,15 @@ export const AuthUserUpdateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUser
 export const AuthUserUncheckedUpdateWithoutAuth_keyInputSchema: z.ZodType<Prisma.AuthUserUncheckedUpdateWithoutAuth_keyInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional()
 }).strict();
 
 export const AuthUserCreateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.AuthUserCreateWithoutAuth_sessionInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   auth_key: z.lazy(() => AuthKeyCreateNestedManyWithoutAuth_userInputSchema).optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutUserInputSchema)
 }).strict();
@@ -3125,7 +3146,8 @@ export const AuthUserCreateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.Auth
 export const AuthUserUncheckedCreateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.AuthUserUncheckedCreateWithoutAuth_sessionInput> = z.object({
   id: z.string(),
   email: z.string(),
-  playerId: z.number(),
+  email_verified: z.boolean().optional(),
+  playerId: z.number().int(),
   auth_key: z.lazy(() => AuthKeyUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional()
 }).strict();
 
@@ -3142,6 +3164,7 @@ export const AuthUserUpsertWithoutAuth_sessionInputSchema: z.ZodType<Prisma.Auth
 export const AuthUserUpdateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.AuthUserUpdateWithoutAuth_sessionInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   auth_key: z.lazy(() => AuthKeyUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutUserNestedInputSchema).optional()
 }).strict();
@@ -3149,7 +3172,8 @@ export const AuthUserUpdateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.Auth
 export const AuthUserUncheckedUpdateWithoutAuth_sessionInputSchema: z.ZodType<Prisma.AuthUserUncheckedUpdateWithoutAuth_sessionInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   auth_key: z.lazy(() => AuthKeyUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional()
 }).strict();
 
@@ -3207,7 +3231,7 @@ export const PlayerCreateWithoutUserInputSchema: z.ZodType<Prisma.PlayerCreateWi
 }).strict();
 
 export const PlayerUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutUserInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -3285,7 +3309,7 @@ export const PlayerUpdateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUpdateWi
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutUserInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -3302,7 +3326,7 @@ export const GigCreateWithoutBandInputSchema: z.ZodType<Prisma.GigCreateWithoutB
 }).strict();
 
 export const GigUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -3326,8 +3350,8 @@ export const VoiceCreateWithoutBandInputSchema: z.ZodType<Prisma.VoiceCreateWith
 }).strict();
 
 export const VoiceUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.VoiceUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().optional(),
-  instrumentId: z.number()
+  id: z.number().int().optional(),
+  instrumentId: z.number().int()
 }).strict();
 
 export const VoiceCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.VoiceCreateOrConnectWithoutBandInput> = z.object({
@@ -3346,9 +3370,9 @@ export const MembershipCreateWithoutBandInputSchema: z.ZodType<Prisma.Membership
 }).strict();
 
 export const MembershipUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.MembershipUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   isAdmin: z.boolean().optional(),
-  playerId: z.number()
+  playerId: z.number().int()
 }).strict();
 
 export const MembershipCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.MembershipCreateOrConnectWithoutBandInput> = z.object({
@@ -3444,6 +3468,7 @@ export const MembershipScalarWhereInputSchema: z.ZodType<Prisma.MembershipScalar
 export const AuthUserCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserCreateWithoutPlayerInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   auth_session: z.lazy(() => AuthSessionCreateNestedManyWithoutAuth_userInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyCreateNestedManyWithoutAuth_userInputSchema).optional()
 }).strict();
@@ -3451,6 +3476,7 @@ export const AuthUserCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserCr
 export const AuthUserUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserUncheckedCreateWithoutPlayerInput> = z.object({
   id: z.string(),
   email: z.string(),
+  email_verified: z.boolean().optional(),
   auth_session: z.lazy(() => AuthSessionUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUncheckedCreateNestedManyWithoutAuth_userInputSchema).optional()
 }).strict();
@@ -3467,10 +3493,10 @@ export const PresenceCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCr
 }).strict();
 
 export const PresenceUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number()
+  gigId: z.number().int()
 }).strict();
 
 export const PresenceCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCreateOrConnectWithoutPlayerInput> = z.object({
@@ -3489,9 +3515,9 @@ export const RoleCreateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleCreateWith
 }).strict();
 
 export const RoleUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   playable: z.boolean().optional(),
-  instrumentId: z.number()
+  instrumentId: z.number().int()
 }).strict();
 
 export const RoleCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.RoleCreateOrConnectWithoutPlayerInput> = z.object({
@@ -3510,9 +3536,9 @@ export const MembershipCreateWithoutPlayerInputSchema: z.ZodType<Prisma.Membersh
 }).strict();
 
 export const MembershipUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   isAdmin: z.boolean().optional(),
-  bandId: z.number()
+  bandId: z.number().int()
 }).strict();
 
 export const MembershipCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipCreateOrConnectWithoutPlayerInput> = z.object({
@@ -3533,6 +3559,7 @@ export const AuthUserUpsertWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserUp
 export const AuthUserUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserUpdateWithoutPlayerInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUpdateManyWithoutAuth_userNestedInputSchema).optional()
 }).strict();
@@ -3540,6 +3567,7 @@ export const AuthUserUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserUp
 export const AuthUserUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserUncheckedUpdateWithoutPlayerInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_verified: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   auth_session: z.lazy(() => AuthSessionUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyUncheckedUpdateManyWithoutAuth_userNestedInputSchema).optional()
 }).strict();
@@ -3620,7 +3648,7 @@ export const BandCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandCreat
 }).strict();
 
 export const BandUncheckedCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutMembershipsInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -3639,7 +3667,7 @@ export const PlayerCreateWithoutMemberShipsInputSchema: z.ZodType<Prisma.PlayerC
 }).strict();
 
 export const PlayerUncheckedCreateWithoutMemberShipsInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutMemberShipsInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserUncheckedCreateNestedOneWithoutPlayerInputSchema).optional(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -3663,7 +3691,7 @@ export const BandUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUpdat
 }).strict();
 
 export const BandUncheckedUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutMembershipsInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -3682,7 +3710,7 @@ export const PlayerUpdateWithoutMemberShipsInputSchema: z.ZodType<Prisma.PlayerU
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutMemberShipsInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutMemberShipsInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUncheckedUpdateOneWithoutPlayerNestedInputSchema).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -3696,10 +3724,10 @@ export const PresenceCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreat
 }).strict();
 
 export const PresenceUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutGigInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  playerId: z.number()
+  playerId: z.number().int()
 }).strict();
 
 export const PresenceCreateOrConnectWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreateOrConnectWithoutGigInput> = z.object({
@@ -3719,7 +3747,7 @@ export const BandCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandCreateWithou
 }).strict();
 
 export const BandUncheckedCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutGigsInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -3758,7 +3786,7 @@ export const BandUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUpdateWithou
 }).strict();
 
 export const BandUncheckedUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutGigsInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -3774,9 +3802,9 @@ export const GigCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateWit
 }).strict();
 
 export const GigUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutPresencesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
-  bandId: z.number(),
+  bandId: z.number().int(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -3796,7 +3824,7 @@ export const PlayerCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerCre
 }).strict();
 
 export const PlayerUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutPresencesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserUncheckedCreateNestedOneWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -3823,9 +3851,9 @@ export const GigUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpdateWit
 }).strict();
 
 export const GigUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutPresencesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3845,7 +3873,7 @@ export const PlayerUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUpd
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutPresencesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUncheckedUpdateOneWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -3858,7 +3886,7 @@ export const InstrumentCreateWithoutRolesInputSchema: z.ZodType<Prisma.Instrumen
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutRolesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   voices: z.lazy(() => VoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional()
 }).strict();
@@ -3876,7 +3904,7 @@ export const PlayerCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerCreateW
 }).strict();
 
 export const PlayerUncheckedCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutRolesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserUncheckedCreateNestedOneWithoutPlayerInputSchema).optional(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -3899,7 +3927,7 @@ export const InstrumentUpdateWithoutRolesInputSchema: z.ZodType<Prisma.Instrumen
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutRolesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   voices: z.lazy(() => VoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional()
 }).strict();
@@ -3917,7 +3945,7 @@ export const PlayerUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpdateW
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutRolesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUncheckedUpdateOneWithoutPlayerNestedInputSchema).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -3930,9 +3958,9 @@ export const RoleCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleCreate
 }).strict();
 
 export const RoleUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   playable: z.boolean().optional(),
-  playerId: z.number()
+  playerId: z.number().int()
 }).strict();
 
 export const RoleCreateOrConnectWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleCreateOrConnectWithoutInstrumentInput> = z.object({
@@ -3950,8 +3978,8 @@ export const VoiceCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceCrea
 }).strict();
 
 export const VoiceUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().optional(),
-  bandId: z.number()
+  id: z.number().int().optional(),
+  bandId: z.number().int()
 }).strict();
 
 export const VoiceCreateOrConnectWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceCreateOrConnectWithoutInstrumentInput> = z.object({
@@ -4002,7 +4030,7 @@ export const InstrumentCreateWithoutVoicesInputSchema: z.ZodType<Prisma.Instrume
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutVoicesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional()
 }).strict();
@@ -4019,7 +4047,7 @@ export const BandCreateWithoutVoicesInputSchema: z.ZodType<Prisma.BandCreateWith
 }).strict();
 
 export const BandUncheckedCreateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutVoicesInput> = z.object({
-  id: z.number().optional(),
+  id: z.number().int().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -4041,7 +4069,7 @@ export const InstrumentUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.Instrume
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutVoicesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional()
 }).strict();
@@ -4058,7 +4086,7 @@ export const BandUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUpdateWith
 }).strict();
 
 export const BandUncheckedUpdateWithoutVoicesInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutVoicesInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -4146,7 +4174,7 @@ export const GigUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUpdateWithoutB
 }).strict();
 
 export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4169,8 +4197,8 @@ export const VoiceUpdateWithoutBandInputSchema: z.ZodType<Prisma.VoiceUpdateWith
 }).strict();
 
 export const VoiceUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.VoiceUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const VoiceUncheckedUpdateManyWithoutVoicesInputSchema: z.ZodType<Prisma.VoiceUncheckedUpdateManyWithoutVoicesInput> = z.object({
@@ -4184,9 +4212,9 @@ export const MembershipUpdateWithoutBandInputSchema: z.ZodType<Prisma.Membership
 }).strict();
 
 export const MembershipUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUncheckedUpdateManyWithoutMembershipsInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateManyWithoutMembershipsInput> = z.object({
@@ -4221,10 +4249,10 @@ export const PresenceUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUp
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PresenceUncheckedUpdateManyWithoutPresencesInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyWithoutPresencesInput> = z.object({
@@ -4240,9 +4268,9 @@ export const RoleUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUpdateWith
 }).strict();
 
 export const RoleUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleUncheckedUpdateManyWithoutRolesInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateManyWithoutRolesInput> = z.object({
@@ -4257,9 +4285,9 @@ export const MembershipUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.Membersh
 }).strict();
 
 export const MembershipUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUncheckedUpdateManyWithoutMemberShipsInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateManyWithoutMemberShipsInput> = z.object({
@@ -4282,10 +4310,10 @@ export const PresenceUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUpdat
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutGigInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleCreateManyInstrumentInputSchema: z.ZodType<Prisma.RoleCreateManyInstrumentInput> = z.object({
@@ -4305,9 +4333,9 @@ export const RoleUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUpdate
 }).strict();
 
 export const RoleUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const VoiceUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceUpdateWithoutInstrumentInput> = z.object({
@@ -4315,8 +4343,8 @@ export const VoiceUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceUpda
 }).strict();
 
 export const VoiceUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.VoiceUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 /////////////////////////////////////////
