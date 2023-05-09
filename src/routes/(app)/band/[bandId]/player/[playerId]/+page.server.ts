@@ -1,69 +1,52 @@
-import { AdminRoleCreateInputSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { router } from '$lib/trpc/router';
+import { createContext } from '$lib/trpc/context';
+import { z } from 'zod';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async ({ params }) => {
-  const { bandId, playerId } = params;
+const schema = z.object({
+  bandId: z.number(),
+  playerId: z.number()
+});
 
-  const player = async () => await prisma.player.findUniqueOrThrow({
-    where: {
-      id: Number(playerId)
-    }
-  });
+export const load: PageServerLoad = async (event) => {
+  const { bandId, playerId } = event.params;
 
-  const adminRole = async () => await prisma.adminRole.findUnique({
-    where: {
-      bandId_playerId: {
-        bandId: Number(bandId),
-        playerId: Number(playerId)
-      }
-    }
-  });
+  const caller = router.createCaller(await createContext(event));
+
+  const player = () => caller.players.read({ id: Number(playerId) });
+  const membership = () => caller.memberships.read({ bandId: Number(bandId), playerId: Number(playerId) });
+
+  const form = () => superValidate(schema);
 
   return {
+    form: form(),
     player: player(),
-    adminRole: adminRole(),
+    membership: membership(),
     index: 101
   }
 }
 
 export const actions: Actions = {
-  default: async ({ params }) => {
-    const { bandId, playerId } = params;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const data: Prisma.AdminRoleCreateInput = {
-      band: {
-        connect: {
-          id: Number(bandId)
-        }
-      },
-      player: {
-        connect: {
-          id: Number(playerId)
-        }
+    try {
+      await router.createCaller(await createContext(event)).memberships.makeAdmin(form.data);
+      return message(form, 'Nouveleau admin :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Echec :(');
     }
-
-    const result = AdminRoleCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = formated._errors;
-
-      return {
-        success: false,
-        message: 'Echec de l\'opération :(',
-        data,
-        errors
-      }
-    }
-
-    const response = await prisma.adminRole.create({
-      data
-    });
-
-    return { success: true, message: 'Nouvelleau admin :)', response };
   }
 }
 

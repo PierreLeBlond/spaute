@@ -1,12 +1,10 @@
 <script lang="ts">
-  import type { PageData } from './$types';
   import GigsPage from '$lib/components/gigs/GigsPage.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
 
-  export let data: PageData;
+  import type { PageData } from './$types';
 
-  $: presences = data.presences;
-  $: newGigs = data.newGigs;
+  export let data: PageData;
 </script>
 
 <div class="p-2">
@@ -17,6 +15,6 @@
 </div>
 
 <GigsPage
-  {presences}
-  {newGigs}
+  player={data.currentPlayer}
+  gigs={data.gigs}
 />

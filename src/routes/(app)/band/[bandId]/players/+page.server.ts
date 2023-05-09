@@ -1,82 +1,43 @@
-import { PlayerUpdateArgsSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { router } from '$lib/trpc/router';
+import { createContext } from '$lib/trpc/context';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async ({ locals, params }) => {
-  const { playerId } = locals;
-  const { bandId } = params;
-  const players = await prisma.player.findMany({
-    where: {
-      id: Number(playerId),
-      bands: {
-        some: {
-          id: Number(bandId)
-        }
-      }
-    }
-  });
-  const band = await prisma.band.findUniqueOrThrow({
-    where: {
-      id: Number(bandId)
-    },
-    include: {
-      players: {
-        orderBy: {
-          name: 'asc'
-        },
-        include: {
-          adminRoles: {
-            where: {
-              bandId: Number(bandId)
-            }
-          }
-        }
-      }
-    }
-  });
+const schema = z.object({
+  bandId: z.number(),
+  playerId: z.number()
+});
+
+export const load: PageServerLoad = async () => {
+  const form = () => superValidate(schema);
+
   return {
-    band,
-    players,
+    form: form(),
     index: 100
   }
 }
 
 export const actions: Actions = {
-  default: async ({ params, locals }) => {
-    const { bandId } = params;
-    const { playerId } = locals;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const args: Prisma.PlayerUpdateArgs = {
-      where: {
-        id: Number(playerId)
-      },
-      data: {
-        bands: {
-          connect: {
-            id: Number(bandId)
-          }
-        }
+    try {
+      await router.createCaller(await createContext(event)).memberships.create(form.data);
+      return message(form, 'Bienvenue :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Echec :(');
     }
-
-    const result = PlayerUpdateArgsSchema.safeParse(args);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = formated._errors;
-
-      return {
-        success: false,
-        message: 'Impossible de rejoindre :(',
-        data: args.data,
-        errors
-      }
-    }
-
-    const response = await prisma.player.update(args);
-
-    return { success: true, message: 'Fanfare rejointe :)', response };
   }
 }
 

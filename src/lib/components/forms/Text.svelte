@@ -1,34 +1,33 @@
 <script lang="ts">
-  export let id: string;
-  export let label: string;
-  export let value: string = '';
-  export let maxlength: number = 32;
+  import type { Constraints } from './Constraints';
+  import Errors from './Errors.svelte';
 
-  export let info: string = ' ';
-  export let error: string = '';
+  export let name: string;
+  export let label: string;
+  export let value: string | null = '';
+  export let constraints: Constraints = {};
+
+  export let errors: string[];
 </script>
 
 <div class="flex flex-col">
   <div class="flex justify-between text-xs">
     <label
-      for="{id}-input"
+      for="{name}-input"
       class="text-xs">{label}</label
     >
-    <p>{value.length}/{maxlength}</p>
+    {#if !!constraints.maxlength}
+      <p>{value?.length || 0}/{constraints.maxlength}</p>
+    {/if}
   </div>
   <input
-    id="{id}-input"
-    name={id}
+    id="{name}-input"
+    {name}
     class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
-    class:border={!!error}
+    class:border={errors.length != 0}
     type="text"
     bind:value
-    {maxlength}
+    {...constraints}
   />
-  <p
-    class="h-4 text-xs"
-    class:text-red-300={error}
-  >
-    {error || info}
-  </p>
+  <Errors {errors} />
 </div>

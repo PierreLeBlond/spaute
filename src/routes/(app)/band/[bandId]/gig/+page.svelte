@@ -1,64 +1,77 @@
 <script lang="ts">
+  import Button from '$lib/components/forms/Button.svelte';
+  import DateInput from '$lib/components/forms/DateInput.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import DateInput from '$lib/components/forms/DateInput.svelte';
-  import Button from '$lib/components/forms/Button.svelte';
-  import type { ActionData, PageData } from './$types';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
-  import { DateTime } from 'luxon';
+  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { superForm } from 'sveltekit-superforms/client';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
-  export let form: ActionData;
 
-  const date = form?.data?.date ? DateTime.fromISO(form.data.date) : DateTime.now();
+  const { form, errors, constraints, enhance, tainted, submitting } = superForm(data.form, {
+    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
+  });
 </script>
 
 <ReturnLink href="/band/{data.band.id}/gigs" />
 
 <div class="w-full grow p-2">
-  <Form>
+  <Form
+    errors={$errors._errors || []}
+    {enhance}
+  >
     <div
-      class="grid h-full grid-cols-2 gap-y-2 gap-x-2"
+      class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
       style:grid-template-rows="auto auto auto 1fr auto"
     >
       <p class="col-span-2 text-xs">Ajouter une presta</p>
       <Text
-        id="name"
+        name="name"
         label="titre"
-        value={form?.data?.name ?? ''}
-        error={form?.errors?.name}
-        maxlength={32}
+        bind:value={$form['name']}
+        errors={$errors['name'] || []}
+        constraints={$constraints['name'] || {}}
       />
       <Text
-        id="location"
+        name="location"
         label="lieu"
-        value={form?.data?.location ?? ''}
-        error={form?.errors?.location}
-        maxlength={60}
+        bind:value={$form['location']}
+        errors={$errors['location'] || []}
+        constraints={$constraints['location'] || {}}
       />
       <DateInput
-        id="date"
+        name="date"
         label="date"
-        {date}
-        error={form?.errors?.date}
+        bind:value={$form['date']}
+        errors={$errors['date'] || []}
       />
       <TimeInput
-        id="time"
+        name="time"
         label="heure"
-        {date}
-        error={form?.errors?.date}
+        bind:value={$form['time']}
+        errors={$errors['time'] || []}
       />
       <div class="col-span-2">
         <TextArea
-          id="description"
+          name="description"
           label="description"
-          value={form?.data?.description ?? ''}
+          bind:value={$form['description']}
         />
       </div>
+      <input
+        type="hidden"
+        name="bandId"
+        value={data.band.id}
+      />
       <div class="col-span-2">
-        <Button label={'Créer'} />
+        <Button
+          label={'Créer'}
+          disabled={$submitting || !$tainted}
+        />
       </div>
     </div>
   </Form>

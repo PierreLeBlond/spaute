@@ -1,54 +1,46 @@
-import { VoiceCreateInputSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma'
-import type { Prisma } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { z } from 'zod';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async () => {
-  const instruments = await prisma.instrument.findMany();
+const schema = z.object({
+  bandId: z.number(),
+  instrumentId: z.number()
+})
+
+export const load: PageServerLoad = async (event) => {
+  const caller = router.createCaller(await createContext(event));
+  const instruments = () => caller.instruments.list();
+
+  const form = () => superValidate(schema);
 
   return {
-    instruments,
+    form: form(),
+    instruments: instruments(),
     index: 301
   }
 }
 
 export const actions: Actions = {
-  default: async ({ params, request }) => {
-    const { bandId } = params;
-
-    const formData = Object.fromEntries(await request.formData());
-
-    const data: Prisma.VoiceCreateInput = {
-      band: {
-        connect: {
-          id: Number(bandId)
-        }
-      },
-      instrument: {
-        connect: {
-          id: Number(formData['instrumentId'])
-        }
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
+    try {
+      await router.createCaller(await createContext(event)).voices.create(form.data);
+      return message(form, 'Et un pupitre de plus :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Echec :(');
     }
-
-    const result = VoiceCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = formated._errors;
-
-      return {
-        success: false,
-        message: 'Pupitre non valide :(',
-        data,
-        errors
-      }
-    }
-
-    const response = await prisma.voice.create({
-      data
-    });
-    return { success: true, message: 'Pupitre créé :)', response };
   }
 }
 

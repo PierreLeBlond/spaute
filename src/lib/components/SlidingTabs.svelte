@@ -1,8 +1,9 @@
 <script lang="ts">
-  import Menu from '$lib/components/Menu.svelte';
-  import type { EasingFunction } from 'svelte/transition';
-  import { cubicOut } from 'svelte/easing';
   import { page } from '$app/stores';
+  import Menu from '$lib/components/Menu.svelte';
+  import { cubicOut } from 'svelte/easing';
+  import type { EasingFunction } from 'svelte/transition';
+
   import type { Tab } from './Tab';
 
   export let href: string | undefined;

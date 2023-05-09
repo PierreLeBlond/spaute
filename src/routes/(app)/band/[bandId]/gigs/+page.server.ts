@@ -1,57 +1,13 @@
-import prisma from '$lib/prisma'
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
-  const playerId = Number(locals.playerId);
-  const { bandId } = params;
-
-  const presences = await prisma.presence.findMany({
-    where: {
-      AND: {
-        playerId: playerId,
-        gig: {
-          bandId: Number(bandId)
-        }
-      }
-    },
-    include: {
-      gig: {
-        include: {
-          band: true
-        }
-      }
-    },
-    orderBy: {
-      gig: {
-        date: 'asc'
-      }
-    }
-  });
-
-  const newGigs = await prisma.gig.findMany({
-    where: {
-      AND: {
-        bandId: Number(bandId),
-        NOT: {
-          presences: {
-            some: {
-              playerId: playerId
-            }
-          }
-        }
-      }
-    },
-    include: {
-      band: true
-    },
-    orderBy: {
-      date: 'asc'
-    }
-  });
+export const load: PageServerLoad = async (event) => {
+  const { bandId } = event.params;
+  const gigs = async () => router.createCaller(await createContext(event)).gigs.list({ bandId: Number(bandId) });
 
   return {
-    presences,
-    newGigs,
+    gigs: gigs(),
     index: 200
   }
 }

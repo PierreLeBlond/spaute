@@ -1,14 +1,20 @@
 <script lang="ts">
-  import type { Band, Gig, Presence } from '@prisma/client';
-  import JoinGigForm from '$lib/components/forms/JoinGigForm.svelte';
-  import UpdatePresenceForm from '$lib/components/forms/UpdatePresenceForm.svelte';
+  import JoinGigForm from '$lib/components/gigs/presence/CreatePresenceForm.svelte';
+  import UpdatePresenceForm from '$lib/components/gigs/presence/UpdatePresenceForm.svelte';
+  import type { Band, Gig, Player, Presence } from '@prisma/client';
+  import type { Validation } from 'sveltekit-superforms/index';
+
+  import type { PresenceSchema } from '../presence/presenceSchema';
   import GigView from './GigView.svelte';
 
+  export let player: Player;
   export let gig: Gig & { band: Band };
   export let presence: Presence | null;
 
-  export let joinAction: string;
+  export let createAction: string;
   export let updateAction: string;
+
+  export let data: Validation<PresenceSchema>;
 </script>
 
 <div class="flex w-full p-2">
@@ -21,11 +27,18 @@
 
 <div class="flex w-full flex-col p-2">
   {#if !presence}
-    <JoinGigForm action={joinAction} />
+    <JoinGigForm
+      action={createAction}
+      {gig}
+      {player}
+      {data}
+    />
   {:else}
     <UpdatePresenceForm
-      {presence}
+      {gig}
+      {player}
       action={updateAction}
+      {data}
     />
   {/if}
   <p class="text-sm">

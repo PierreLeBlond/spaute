@@ -1,54 +1,46 @@
-import { InstrumentCreateInputSchema } from "$lib/generated/zod";
-import prisma from "$lib/prisma";
-import { Prisma } from "@prisma/client";
+import { createContext } from "$lib/trpc/context";
+import { router } from "$lib/trpc/router";
+import { TRPCError } from "@trpc/server";
 import type { Actions, PageServerLoad } from "./$types";
+import { message, setError, superValidate } from "sveltekit-superforms/server";
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().min(1, { message: 'Ce truc a bien un nom ?' }).max(32)
+});
 
 export const load: PageServerLoad = async () => {
+
+  const form = await superValidate(schema);
+
   return {
-    index: 11
+    index: 11,
+    form
   }
 }
 
 export const actions: Actions = {
-  default: async ({ request }) => {
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const formData = Object.fromEntries(await request.formData());
-
-    const data: Prisma.InstrumentCreateInput = {
-      name: formData["name"] as string
-    }
-
-    const result = InstrumentCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = {
-        name: formated.name?._errors.pop()
-      }
-
-      return {
-        success: false,
-        message: 'Instrument non valide :(',
-        data,
-        errors
-      }
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
     }
 
     try {
-      const response = await prisma.instrument.create({ data });
-      return { success: true, message: 'Instrument créé !', response };
+      await router.createCaller(await createContext(event)).instruments.create(form.data);
+      return message(form, 'Instrument créé :)');
     } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+      if (!(error instanceof TRPCError)) {
         throw error;
       }
-      if (error.code !== 'P2002') {
-        throw error;
-      }
-      return {
-        success: false, message: 'Instrument non valide :(', errors: {
-          name: 'Nom déjà utilisé...'
-        }
-      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Instrument non valide :(');
     }
   }
 }

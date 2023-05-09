@@ -1,24 +1,18 @@
-import prisma from "$lib/prisma";
 import type { LayoutServerLoad } from "./$types";
+import { createContext } from "$lib/trpc/context";
+import { router } from "$lib/trpc/router";
 
-export const load: LayoutServerLoad = async ({ locals, params }) => {
-  const { playerId } = locals;
-  const { bandId } = params;
-  const band = await prisma.band.findUniqueOrThrow({
-    where: {
-      id: Number(bandId)
-    },
-    include: {
-      adminRoles: {
-        where: {
-          playerId: Number(playerId)
-        }
-      }
-    }
-  });
+export const load: LayoutServerLoad = async (event) => {
+  const { playerId } = event.locals;
+  const { bandId } = event.params;
+
+  const caller = router.createCaller(await createContext(event));
+  const band = await caller.bands.read({ id: Number(bandId) });
+  const currentMembership = () => caller.memberships.read({ bandId: Number(bandId), playerId: Number(playerId) });
+
   return {
     band,
-    isAdmin: band.adminRoles.length != 0,
+    currentMembership: currentMembership(),
     title: band.name,
     backPathname: '/bands',
     backName: 'fanfares',
@@ -26,7 +20,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
       {
         href: `/band/${bandId}/players`,
         key: `/band/${bandId}/player`,
-        label: 'ses musiciens'
+        label: 'ses fanfaronx'
       },
       {
         href: `/band/${bandId}/gigs`,

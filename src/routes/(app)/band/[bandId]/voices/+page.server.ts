@@ -1,56 +1,45 @@
-import prisma from '$lib/prisma'
-import { error } from '@sveltejs/kit';
+import { router } from '$lib/trpc/router';
+import { createContext } from '$lib/trpc/context';
 import type { Actions, PageServerLoad } from './$types';
+import { z } from 'zod';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { TRPCError } from '@trpc/server';
 
-export const load: PageServerLoad = async ({ params }) => {
-  const { bandId } = params;
-  const voices = await prisma.voice.findMany({
-    where: {
-      bandId: Number(bandId)
-    },
-    include: {
-      instrument: true
-    }
-  });
+const schema = z.object({
+  bandId: z.number(),
+  id: z.number()
+});
+
+export const load: PageServerLoad = async (event) => {
+  const { bandId } = event.params;
+  const caller = router.createCaller(await createContext(event));
+  const voices = () => caller.voices.list({ bandId: Number(bandId) });
+  const form = () => superValidate(schema);
   return {
-    voices,
+    form: form(),
+    voices: voices(),
     index: 300
   }
 }
 
-
 export const actions: Actions = {
-  delete: async ({ url, locals }) => {
-    const { playerId } = locals;
-    const voiceId = url.searchParams.get('voiceId');
-    const voice = await prisma.voice.findUnique({
-      where: {
-        id: Number(voiceId)
-      },
-      include: {
-        band: {
-          include: {
-            adminRoles: {
-              include: {
-                player: true
-              }
-            }
-          }
-        }
+  delete: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
+
+    try {
+      await router.createCaller(await createContext(event)).voices.delete(form.data);
+      return message(form, 'Bye bye le pupitre :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
-    });
-
-    const isAdmin = voice && voice.band.adminRoles.some(adminRole => adminRole.player.id == Number(playerId));
-
-    if (!isAdmin) {
-      throw error(401);
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Echec :(');
     }
-
-    const response = await prisma.voice.delete({
-      where: { id: Number(voiceId) }
-    });
-
-    return { success: true, message: 'Pupitre supprimé :)', response };
   }
-
 }

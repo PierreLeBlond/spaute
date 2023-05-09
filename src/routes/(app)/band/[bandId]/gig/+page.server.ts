@@ -1,73 +1,52 @@
-import { GigCreateInputSchema } from '$lib/generated/zod';
-import prisma from '$lib/prisma';
-import type { Prisma } from '@prisma/client';
-import { DateTime } from 'luxon';
 import type { Actions, PageServerLoad } from './$types';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { createContext } from '$lib/trpc/context';
+import { TRPCError } from '@trpc/server';
+import { router } from '$lib/trpc/router';
+import { DateTime } from 'luxon';
+import { gigSchema } from '$lib/components/gigs/gig/gigSchema';
+import { z } from 'zod';
+
+const schema = gigSchema.extend({ bandId: z.number() });
 
 export const load: PageServerLoad = async () => {
+  const form = await superValidate(schema);
+
   return {
+    form,
     index: 201
   }
 }
 
 export const actions: Actions = {
-  default: async ({ params, request, locals }) => {
-    const { playerId } = locals;
-    const { bandId } = params;
+  default: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, schema);
 
-    const formData = Object.fromEntries(await request.formData());
-
-    const date = DateTime.fromISO(`${formData["date"]}T${formData["time"]}`).toISO();
-
-    console.log(date);
-
-    const createData = {
-      name: formData["name"] as string,
-      location: formData["location"] as string,
-      description: formData["description"] as string,
-      date
+    if (!form.valid) {
+      return message(form, 'Champs non valide :(');
     }
 
-    const data: Prisma.GigCreateInput = {
-      band: {
-        connect: {
-          id: Number(bandId),
-        }
-      },
-      presences: {
-        create: {
-          playerId: Number(playerId),
-          value: true
-        }
-      },
-      organizerRoles: {
-        create: {
-          playerId: Number(playerId)
-        }
-      },
-      ...createData
+    const { date, time, ...rest } = form.data;
+
+    const data = {
+      date: DateTime.fromISO(`${date}T${time}`).toJSDate(),
+      ...rest
     }
 
-    const result = GigCreateInputSchema.safeParse(data);
-
-    if (!result.success) {
-      const formated = result.error.format();
-      const errors = {
-        name: formated.name?._errors.pop(),
-        location: formated.location?._errors.pop(),
-        date: formated.date?._errors.pop(),
-        description: formated.description?._errors.pop()
+    try {
+      await router.createCaller(await createContext(event)).gigs.create(data);
+      return message(form, 'Presta créée :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
       }
-
-      return {
-        success: false,
-        message: 'Presta non valide :(',
-        data: createData,
-        errors
-      }
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Presta non valide :(');
     }
-
-    const response = await prisma.gig.create({ data });
-    return { success: true, message: 'Presta créée :)', response };
   }
 }
