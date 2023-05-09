@@ -1,12 +1,12 @@
 import { PresenceGigIdPlayerIdCompoundUniqueInputSchema, PresenceSchema, PresenceWhereInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { organizerProcedure } from "../procedures/organizerProcedure";
 import { ownerProcedure } from "../procedures/ownerProcedure";
 
 export const presences = t.router({
-  list: privateProcedure.input(PresenceWhereInputSchema).query(async ({ input }) => prisma.presence.findMany({
+  list: verifiedProcedure.input(PresenceWhereInputSchema).query(async ({ input }) => prisma.presence.findMany({
     where: input,
     include: {
       gig: true,
@@ -18,7 +18,7 @@ export const presences = t.router({
       }
     }
   })),
-  read: privateProcedure.input(PresenceGigIdPlayerIdCompoundUniqueInputSchema).query(async ({ input }) => {
+  read: verifiedProcedure.input(PresenceGigIdPlayerIdCompoundUniqueInputSchema).query(async ({ input }) => {
     const presence = await prisma.presence.findUnique({
       where: {
         gigId_playerId: input
@@ -26,7 +26,7 @@ export const presences = t.router({
     });
     return presence;
   }),
-  create: privateProcedure.input(
+  create: verifiedProcedure.input(
     PresenceSchema.omit({ id: true, isOrganizer: true })
   ).mutation(async ({ input }) => {
     const { playerId, gigId, ...rest } = input;
@@ -47,7 +47,7 @@ export const presences = t.router({
     });
     return presence;
   }),
-  update: ownerProcedure.input(PresenceSchema.omit({ id: true, isOrganizer: true })).mutation(async ({ input }) => {
+  update: ownerProcedure.input(PresenceSchema.omit({ id: true, isOrganizer: true }).strict()).mutation(async ({ input }) => {
     const { playerId, gigId, ...data } = input;
 
     const presence = await prisma.presence.update({

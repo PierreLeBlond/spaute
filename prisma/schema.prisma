@@ -13,6 +13,42 @@ generator zod {
   output   = "../src/lib/generated/zod"
 }
 
+model AuthKey {
+  id              String   @id @unique
+  hashed_password String?
+  user_id         String
+  primary_key     Boolean
+  expires         BigInt?
+  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_key")
+}
+
+model AuthSession {
+  id             String   @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_session")
+}
+
+model AuthUser {
+  id             String        @id @unique
+  auth_session   AuthSession[]
+  auth_key       AuthKey[]
+  email          String        @unique
+  email_verified Boolean       @default(false)
+
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId Int    @unique
+
+  @@map("auth_user")
+}
+
 model Band {
   id          Int          @id @default(autoincrement())
   name        String       @unique
@@ -23,6 +59,7 @@ model Band {
 
 model Player {
   id          Int          @id @default(autoincrement())
+  user        AuthUser?
   name        String       @unique
   presences   Presence[]
   roles       Role[]

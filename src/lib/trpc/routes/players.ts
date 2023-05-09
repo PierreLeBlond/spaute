@@ -1,7 +1,7 @@
 import { PlayerCreateInputSchema, PlayerWhereInputSchema, PlayerWhereUniqueInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { authenticatedProcedure } from "../procedures/authenticatedProcedure";
 import { publicProcedure } from "../procedures/publicProcedure";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -13,7 +13,7 @@ export const players = t.router({
       name: 'asc'
     }
   })),
-  read: privateProcedure.input(PlayerWhereUniqueInputSchema).query(async ({ input }) => {
+  read: authenticatedProcedure.input(PlayerWhereUniqueInputSchema).query(async ({ input }) => {
     const player = await prisma.player.findUniqueOrThrow({
       where: input
     });

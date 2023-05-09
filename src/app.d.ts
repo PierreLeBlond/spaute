@@ -2,13 +2,33 @@
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
+		interface Error {
+			code: string;
+		}
 		interface Locals {
 			playerId?: string;
 			redirectAfterLogin?: string;
+			auth: import("lucia-auth").AuthRequest;
+			user: {
+				userId: string;
+				playerId: number;
+				email: string;
+				emailVerified: boolean;
+			} | null;
 		}
 		// interface PageData {}
 		// interface Platform {}
+	}
+}
+
+declare global {
+	namespace Lucia {
+		type Auth = import("$lib/lucia").Auth;
+		type UserAttributes = {
+			email: string,
+			email_verified: boolean,
+			playerId: number,
+		};
 	}
 }
 

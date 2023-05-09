@@ -1,13 +1,13 @@
 import { GigSchema, GigWhereInputSchema, GigWhereUniqueInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { t } from "../t";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { organizerProcedure } from "../procedures/organizerProcedure";
 import { z } from "zod";
 import { ownerProcedure } from "../procedures/ownerProcedure";
 
 export const gigs = t.router({
-  list: privateProcedure.input(GigWhereInputSchema).query(({ input }) => prisma.gig.findMany({
+  list: verifiedProcedure.input(GigWhereInputSchema).query(({ input }) => prisma.gig.findMany({
     where: input,
     orderBy: {
       date: 'desc'
@@ -46,7 +46,7 @@ export const gigs = t.router({
       presences: true
     }
   })),
-  read: privateProcedure.input(GigWhereUniqueInputSchema).query(async ({ input }) => prisma.gig.findUniqueOrThrow({
+  read: verifiedProcedure.input(GigWhereUniqueInputSchema).query(async ({ input }) => prisma.gig.findUniqueOrThrow({
     where: input,
     include: {
       band: true,
@@ -62,8 +62,8 @@ export const gigs = t.router({
       id: input.gigId
     }
   })),
-  create: privateProcedure.input(
-    GigSchema.omit({ id: true, playable: true })
+  create: verifiedProcedure.input(
+    GigSchema.omit({ id: true, playable: true }).strict()
   ).mutation(async ({ ctx, input: { bandId, ...data } }) => prisma.gig.create({
     data: {
       ...data,
@@ -74,7 +74,7 @@ export const gigs = t.router({
       },
       presences: {
         create: {
-          playerId: ctx.playerId,
+          playerId: ctx.user.playerId,
           value: true,
           isOrganizer: true
         }
@@ -82,7 +82,7 @@ export const gigs = t.router({
     }
   })),
   update: organizerProcedure.input(
-    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.number() })
+    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.number() }).strict()
   ).mutation(async ({ input: { gigId, ...data } }) => prisma.gig.update({
     where: {
       id: gigId

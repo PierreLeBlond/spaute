@@ -1,0 +1,1 @@
+export type Message = { status: 'error' | 'success', description: string }

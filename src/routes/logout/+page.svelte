@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { goto, invalidateAll } from "$app/navigation";
-	import { onMount } from "svelte";
+  import { goto, invalidateAll } from '$app/navigation';
+  import { onMount } from 'svelte';
 
-	onMount(async () => {
-		await fetch("/logout", {
-			method: "POST",
-		});
+  onMount(async () => {
+    await fetch('/logout', {
+      method: 'POST'
+    });
 
-		await invalidateAll();
-		goto("/login");
-	});
+    await invalidateAll();
+    goto('/users/login');
+  });
 </script>
 
-<div class="w-full h-full flex items-center justify-center">Logging out...</div>
+<div class="flex h-full w-full items-center justify-center">Logging out...</div>

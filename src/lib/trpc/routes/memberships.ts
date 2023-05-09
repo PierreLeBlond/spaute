@@ -1,11 +1,11 @@
 import prisma from "$lib/prisma";
 import { t } from "../t";
 import { MembershipBandIdPlayerIdCompoundUniqueInputSchema, MembershipWhereInputSchema } from "$lib/generated/zod";
-import { privateProcedure } from "../procedures/privateProcedure";
+import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { adminProcedure } from "../procedures/adminProcedure";
 
 export const memberships = t.router({
-  list: privateProcedure.input(MembershipWhereInputSchema).query(async ({ input }) => prisma.membership.findMany({
+  list: verifiedProcedure.input(MembershipWhereInputSchema).query(async ({ input }) => prisma.membership.findMany({
     where: input,
     include: {
       band: true,
@@ -17,7 +17,7 @@ export const memberships = t.router({
       }
     }
   })),
-  read: privateProcedure.input(MembershipBandIdPlayerIdCompoundUniqueInputSchema).query(async ({ input }) => {
+  read: verifiedProcedure.input(MembershipBandIdPlayerIdCompoundUniqueInputSchema).query(async ({ input }) => {
     const membership = await prisma.membership.findUnique({
       where: {
         bandId_playerId: input
@@ -29,7 +29,7 @@ export const memberships = t.router({
     });
     return membership;
   }),
-  create: privateProcedure.input(
+  create: verifiedProcedure.input(
     MembershipBandIdPlayerIdCompoundUniqueInputSchema
   ).mutation(async ({ input }) => {
     const membership = await prisma.membership.create({

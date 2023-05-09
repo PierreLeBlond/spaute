@@ -1,18 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { Toaster } from 'svelte-french-toast';
-  import { superForm } from 'sveltekit-superforms/client';
 
-  import { sendToast } from './sendToast';
-
-  const { message } = superForm($page.data['form']);
-
-  message.subscribe((value: string) => {
-    if (!value || value == '') {
-      return;
-    }
-    sendToast(value, $page.status != 200);
-  });
+  import Toaster from './toast/Toaster.svelte';
 </script>
 
 <header class="relative flex h-full w-full justify-center bg-neutral-900">
@@ -117,8 +106,6 @@
         {$page.data['title']}
       </h1>
     </div>
-    <div class="relative col-span-2 row-start-2">
-      <Toaster />
-    </div>
+    <Toaster />
   </div>
 </header>

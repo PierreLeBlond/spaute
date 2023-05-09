@@ -2,9 +2,10 @@ import type { RequestEvent } from "@sveltejs/kit";
 import type { inferAsyncReturnType } from "@trpc/server";
 
 export async function createContext(event: RequestEvent) {
-  const { playerId } = event.locals;
+  const { auth, user } = event.locals;
   return {
-    playerId: playerId ? Number(playerId) : null
+    user,
+    auth
   };
 }
 

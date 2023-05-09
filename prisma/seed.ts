@@ -16,7 +16,7 @@ const instrumentData: Prisma.InstrumentCreateInput[] = [
     name: 'Trombone',
   },
   {
-    name: 'Trumpette',
+    name: 'Trumpet',
   },
   {
     name: 'Euphonium',
@@ -28,7 +28,7 @@ const instrumentData: Prisma.InstrumentCreateInput[] = [
     name: 'Tenor Saxophone',
   },
   {
-    name: 'Clarinettes',
+    name: 'Clarinet',
   },
   {
     name: 'Sousaphone',

@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { auth } from "./auth";
+import { verified } from "./verified";
 import { z } from "zod";
 import prisma from "$lib/prisma";
 
@@ -7,13 +7,13 @@ const schema = z.object({
   bandId: z.number()
 });
 
-export const admin = auth.unstable_pipe(async ({ next, ctx, rawInput }) => {
+export const admin = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
   const result = schema.safeParse(rawInput);
   if (!result.success) {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Band id is null or undefined.' });
   }
 
-  const { playerId } = ctx;
+  const { playerId } = ctx.user;
   const { bandId } = result.data;
 
   const membership = await prisma.membership.findUnique({

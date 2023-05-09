@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import type { Gig, Player } from '@prisma/client';
   import type { Validation } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client';
@@ -14,9 +15,10 @@
 
   export let data: Validation<PresenceSchema>;
 
-  const { form, errors, enhance, tainted, submitting } = superForm(data, {
+  const { form, errors, enhance, tainted, submitting, message } = superForm(data, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
+  message.subscribe(sendToast);
 </script>
 
 <Form
