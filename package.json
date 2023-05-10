@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "dotenv -e .env.local vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prestart": "npx prisma migrate deploy",

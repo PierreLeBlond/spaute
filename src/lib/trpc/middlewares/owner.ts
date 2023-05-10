@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { verified } from "./verified";
+import prisma from "$lib/prisma";
 
 const schema = z.object({
   playerId: z.number()
@@ -12,8 +13,13 @@ export const owner = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Player id is null or undefined.' });
   }
 
-  const { playerId } = ctx.user;
-  if (playerId != result.data.playerId) {
+  const player = await prisma.player.findUniqueOrThrow({
+    where: {
+      userId: ctx.user.userId
+    }
+  })
+
+  if (player.id != result.data.playerId) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'The player does not own this resource.' });
   }
   return next();

@@ -43,8 +43,7 @@ model AuthUser {
   email          String        @unique
   email_verified Boolean       @default(false)
 
-  player   Player @relation(fields: [playerId], references: [id])
-  playerId Int    @unique
+  player Player?
 
   @@map("auth_user")
 }
@@ -58,8 +57,10 @@ model Band {
 }
 
 model Player {
-  id          Int          @id @default(autoincrement())
-  user        AuthUser?
+  id     Int      @id @default(autoincrement())
+  user   AuthUser @relation(fields: [userId], references: [id])
+  userId String   @unique
+
   name        String       @unique
   presences   Presence[]
   roles       Role[]

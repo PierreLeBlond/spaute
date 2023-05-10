@@ -74,7 +74,11 @@ export const gigs = t.router({
       },
       presences: {
         create: {
-          playerId: ctx.user.playerId,
+          player: {
+            connect: {
+              userId: ctx.user.userId
+            }
+          },
           value: true,
           isOrganizer: true
         }

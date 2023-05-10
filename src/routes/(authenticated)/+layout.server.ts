@@ -11,7 +11,7 @@ export const load: LayoutServerLoad = async (event) => {
   }
 
   const caller = router.createCaller(await createContext(event));
-  const currentPlayer = await caller.players.read({ id: Number(user.playerId) });
+  const currentPlayer = await caller.players.read({ userId: user.userId });
 
   return {
     currentPlayer,

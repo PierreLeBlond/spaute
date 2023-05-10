@@ -47,7 +47,11 @@ export const bands = t.router({
           ...input,
           memberships: {
             create: [{
-              playerId: ctx.user.playerId,
+              player: {
+                connect: {
+                  userId: ctx.user.userId
+                }
+              },
               isAdmin: true
             }]
           },
