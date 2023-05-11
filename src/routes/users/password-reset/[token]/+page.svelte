@@ -3,6 +3,7 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Password from '$lib/components/forms/Password.svelte';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
+  import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
@@ -10,7 +11,10 @@
   export let data: PageData;
 
   const { form, errors, constraints, enhance, submitting, message, tainted } = superForm(data.form, {
-    taintedMessage: null
+    taintedMessage: null,
+    flashMessage: {
+      module: flashModule
+    }
   });
   message.subscribe(sendToast);
 </script>

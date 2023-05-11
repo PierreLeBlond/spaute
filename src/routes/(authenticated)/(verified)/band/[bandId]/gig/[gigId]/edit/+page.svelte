@@ -8,6 +8,7 @@
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
+  import * as flashModule from 'sveltekit-flash-message/client';
 
   import type { PageData } from './$types';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
@@ -36,7 +37,10 @@
     submitting: deleteSubmitting,
     message: deleteMessage
   } = superForm(data.deleteForm, {
-    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
+    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.',
+    flashMessage: {
+      module: flashModule
+    }
   });
   deleteMessage.subscribe(sendToast);
 </script>

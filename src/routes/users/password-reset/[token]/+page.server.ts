@@ -4,7 +4,7 @@ import { createContext } from '$lib/trpc/context';
 import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
-import { redirect } from '@sveltejs/kit';
+import { redirect } from 'sveltekit-flash-message/server'
 
 const schema = z.object({
   password: z.string().min(8, { message: 'Au moins 8 caractères' }).max(32),
@@ -39,7 +39,7 @@ export const actions: Actions = {
 
     try {
       await router.createCaller(await createContext(event)).users.resetPassword({ token, password });
-      throw redirect(302, '/users/login');
+      throw redirect(302, '/users/login', 'Mot de passe mis à jour !', event);
     } catch (error) {
       if (error instanceof TRPCError && error.cause?.message === "EXPIRED_TOKEN") {
         throw redirect(302, '/users/password-reset?expired=true');

@@ -2,11 +2,21 @@
   import { page } from '$app/stores';
   import Header from '$lib/components/Header.svelte';
   import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
+  import { initFlash } from 'sveltekit-flash-message/client';
 
   import '../app.css';
   import type { LayoutData } from './$types';
 
   export let data: LayoutData;
+
+  const flash = initFlash(page);
+  flash.subscribe((message) => {
+    if (!message) {
+      return;
+    }
+    sendToast(message);
+  });
 
   $: tabs = $page.data['tabs'];
 </script>
