@@ -12,9 +12,10 @@ const schema = z.object({
 });
 
 export const load: PageServerLoad = async () => {
-  const form = () => superValidate(schema);
+  const form = await superValidate(schema);
+
   return {
-    form: form(),
+    form,
     index: 1
   }
 }
