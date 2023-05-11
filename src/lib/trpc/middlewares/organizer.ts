@@ -13,14 +13,18 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Gig context id is null or undefined.' });
   }
 
-  const { playerId } = ctx.user;
+  const player = await prisma.player.findUniqueOrThrow({
+    where: {
+      userId: ctx.user.userId
+    }
+  })
   const { gigId } = result.data;
 
   const presence = await prisma.presence.findUnique({
     where: {
       gigId_playerId: {
         gigId,
-        playerId
+        playerId: player.id
       }
     }
   });
@@ -36,7 +40,7 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
       where: {
         bandId_playerId: {
           bandId: bandId,
-          playerId
+          playerId: player.id
         }
       }
     });

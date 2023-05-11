@@ -38,8 +38,7 @@ export const actions: Actions = {
     }
 
     try {
-      const player = await router.createCaller(await createContext(event)).players.create({ name });
-      await router.createCaller(await createContext(event)).users.create({ email, password, playerId: player.id });
+      await router.createCaller(await createContext(event)).users.create({ email, password, name });
 
       const fromPathname = event.cookies.get('fromPathname');
 

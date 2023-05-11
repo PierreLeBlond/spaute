@@ -13,14 +13,19 @@ export const admin = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Band id is null or undefined.' });
   }
 
-  const { playerId } = ctx.user;
+  const player = await prisma.player.findUniqueOrThrow({
+    where: {
+      userId: ctx.user.userId
+    }
+  })
+
   const { bandId } = result.data;
 
   const membership = await prisma.membership.findUnique({
     where: {
       bandId_playerId: {
         bandId,
-        playerId
+        playerId: player.id
       }
     }
   });

@@ -11,7 +11,6 @@ declare global {
 			auth: import("lucia-auth").AuthRequest;
 			user: {
 				userId: string;
-				playerId: number;
 				email: string;
 				emailVerified: boolean;
 			} | null;
@@ -27,7 +26,7 @@ declare global {
 		type UserAttributes = {
 			email: string,
 			email_verified: boolean,
-			playerId: number,
+			player: PlayerCreateNestedOneWithoutUserInput
 		};
 	}
 }

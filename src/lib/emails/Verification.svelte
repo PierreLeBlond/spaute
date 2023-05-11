@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_BASE_URL } from '$env/static/public';
   import { Button, Container, Head, Html, Preview, Section, Text } from 'svelte-email';
 
   export let name: string;
@@ -43,7 +44,7 @@
       <Section style={section}>
         <Button
           style={button}
-          href="https://www.spaute.app/email-verification/{token}">Vérifier mon email</Button
+          href="{PUBLIC_BASE_URL}/email-verification/{token}">Vérifier mon email</Button
         >
       </Section>
     </Container>

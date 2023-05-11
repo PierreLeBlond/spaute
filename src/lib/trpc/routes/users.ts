@@ -1,4 +1,3 @@
-import { AuthUserSchema } from "$lib/generated/zod";
 import { t } from "../t";
 import { publicProcedure } from "../procedures/publicProcedure";
 import { TRPCError } from "@trpc/server";
@@ -15,8 +14,8 @@ import { LuciaTokenError } from "@lucia-auth/tokens";
 
 export const users = t.router({
   create: publicProcedure.input(
-    AuthUserSchema.omit({ id: true, email_verified: true }).extend({ password: z.string() }).strict()
-  ).mutation(async ({ input: { email, password, playerId }, ctx }) => {
+    z.object({ email: z.string(), password: z.string(), name: z.string() }).strict()
+  ).mutation(async ({ input: { email, password, name }, ctx }) => {
     try {
       const user = await auth.createUser({
         primaryKey: {
@@ -27,7 +26,11 @@ export const users = t.router({
         attributes: {
           email,
           email_verified: false,
-          playerId
+          player: {
+            create: {
+              name
+            }
+          }
         }
       });
       const session = await auth.createSession(user.userId);
@@ -121,7 +124,7 @@ export const users = t.router({
 
     const currentPlayer = await prisma.player.findUniqueOrThrow({
       where: {
-        id: user.playerId
+        userId: user.userId
       }
     });
 
