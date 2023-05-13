@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
 import type { Actions, PageServerLoad } from './$types';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
@@ -7,6 +6,7 @@ import { createContext } from '$lib/trpc/context';
 import { router } from '$lib/trpc/router';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { redirect } from 'sveltekit-flash-message/server'
 
 const updateSchema = gigSchema.extend({ gigId: z.number() });
 
@@ -86,8 +86,7 @@ export const actions: Actions = {
       await router.createCaller(await createContext(event)).gigs.delete({
         gigId: form.data.gigId
       });
-      message(form, 'Hasta la vista, presta :)');
-      throw redirect(303, `/band/${bandId}/gigs`);
+      throw redirect(302, `/band/${bandId}/gigs`, 'Hasta la vista, presta :)', event);
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;

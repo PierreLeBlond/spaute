@@ -43,5 +43,9 @@
         />
       </div>
     </div>
+    <a
+      class="text-sm text-blue-300"
+      href="/users/password-reset">Mot de passe oublié ?</a
+    >
   </Form>
 </div>

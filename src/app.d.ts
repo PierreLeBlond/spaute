@@ -15,7 +15,9 @@ declare global {
 				emailVerified: boolean;
 			} | null;
 		}
-		// interface PageData {}
+		interface PageData {
+			flash?: string;
+		}
 		// interface Platform {}
 	}
 }

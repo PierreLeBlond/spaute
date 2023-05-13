@@ -10,7 +10,8 @@
     }
 
     let className = 'h-8 text-sm';
-    className += status != 200 ? ' !bg-red-300' : ' !bg-green-300';
+    console.log(status);
+    className += !status || status == 200 || status == 302 ? ' !bg-green-300' : ' !bg-red-300';
     toast(message, {
       className
     });

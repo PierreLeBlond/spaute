@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
@@ -6,15 +5,9 @@ import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 
-const schema = z.object({});
+const schema = z.object({ email: z.string().email() });
 
-export const load: PageServerLoad = async ({ locals, cookies, url }) => {
-  const { user } = await locals.auth.validateUser();
-
-  if (!user) {
-    throw redirect(302, "/users/login");
-  }
-
+export const load: PageServerLoad = async ({ url }) => {
   const form = await superValidate(schema);
   const expired = url.searchParams.get('expired');
   const invalid = url.searchParams.get('invalid');
@@ -25,25 +18,20 @@ export const load: PageServerLoad = async ({ locals, cookies, url }) => {
   }
 
   if (invalid) {
-    const error = 'Le lien de validation n\'est pas valide !';
+    const error = 'Le lien de récupération n\'est pas valide !';
     setError(form, null, error);
   }
 
-  const fromPathname = cookies.get('fromPathname');
-
   return {
     form,
-    fromPathname: fromPathname ?? '/gigs',
-    email: user.email,
-    emailVerified: user.emailVerified,
     tabs: [
       {
-        href: '/email-verification',
-        key: '/email-verification',
-        label: 'vérification'
+        href: '/password-reset',
+        key: '/password-reset',
+        label: 'récupération'
       }
     ],
-    index: 10000
+    index: 100000
   }
 };
 
@@ -53,14 +41,21 @@ export const actions: Actions = {
     const { request } = event;
     const form = await superValidate(request, schema);
 
+    const { email } = form.data;
+
     try {
-      await router.createCaller(await createContext(event)).users.sendVerificationEmail();
+      await router.createCaller(await createContext(event)).users.sendRecoveryEmail({ email });
       return message(form, 'Email envoyé !');
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      return message(form, error.message);
+      setError(
+        form,
+        null,
+        error.message
+      );
+      return message(form, 'Outch !');
     }
 
   }

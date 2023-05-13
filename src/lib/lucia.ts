@@ -25,3 +25,8 @@ export type Auth = typeof auth;
 export const emailVerificationToken = idToken(auth, 'email_verification', {
   expiresIn: 60 * 60
 });
+
+// @ts-ignore
+export const passwordResetToken = idToken(auth, "password-reset", {
+  expiresIn: 60 * 60 // 1 hour
+});
