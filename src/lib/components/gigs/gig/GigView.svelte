@@ -4,11 +4,11 @@
   import { DateTime } from 'luxon';
 
   export let gig: Gig;
-  export let band: Band;
+  export let band: Band | null;
   export let presence: Presence | null;
   export let showLink = true;
 
-  $: link = `${$page.url.origin}/band/${band.id}/gig/${gig.id}`;
+  $: link = `${$page.url.origin}/gig/${gig.id}`;
 </script>
 
 <div class="grid grid-cols-6 items-center justify-center text-sm">
@@ -28,7 +28,14 @@
     />
   </svg>
   <p class="col-span-5">
-    {band.name}
+    {#if band}
+      <a
+        class="col-span-5 text-sm text-blue-300"
+        href="/band/{band.id}">{band.name}</a
+      >
+    {:else}
+      Presta indépendante !
+    {/if}
   </p>
   <svg
     xmlns="http://www.w3.org/2000/svg"

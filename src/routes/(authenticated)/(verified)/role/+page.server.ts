@@ -20,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
   return {
     form: form(),
     instruments: instruments(),
-    index: 31
+    index: 1001
   }
 }
 

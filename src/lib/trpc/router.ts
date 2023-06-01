@@ -5,7 +5,9 @@ import { gigs } from "./routes/gigs";
 import { presences } from "./routes/presences";
 import { players } from "./routes/players";
 import { memberships } from "./routes/memberships";
-import { voices } from "./routes/voices";
+import { gigVoices } from "./routes/gigVoices";
+import { disabledVoices } from "./routes/disabledVoices";
+import { bandVoices } from "./routes/bandVoices";
 import { roles } from "./routes/roles";
 import { users } from "./routes/users";
 
@@ -16,7 +18,9 @@ export const router = t.router({
   gigs,
   players,
   presences,
-  voices,
+  gigVoices,
+  disabledVoices,
+  bandVoices,
   roles,
   users
 });

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Gig" ALTER COLUMN "bandId" DROP NOT NULL;

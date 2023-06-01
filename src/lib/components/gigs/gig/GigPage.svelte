@@ -8,7 +8,7 @@
   import GigView from './GigView.svelte';
 
   export let player: Player;
-  export let gig: Gig & { band: Band };
+  export let gig: Gig & { band: Band | null };
   export let presence: Presence | null;
 
   export let createAction: string;

@@ -9,12 +9,16 @@ import { z } from 'zod';
 
 const schema = gigSchema.extend({ bandId: z.number() });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+  const { currentPlayer } = await event.parent();
+
+  const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
   const form = () => superValidate(schema);
 
   return {
     form: form(),
-    index: 201
+    memberships: memberships(),
+    index: 101
   }
 }
 
@@ -27,11 +31,12 @@ export const actions: Actions = {
       return message(form, 'Champs non valide :(');
     }
 
-    const { date, time, ...rest } = form.data;
+    const { date, time, bandId, ...rest } = form.data;
 
     const data = {
+      bandId: bandId > 0 ? bandId : null,
       date: DateTime.fromISO(`${date}T${time}`).toJSDate(),
-      ...rest
+      ...rest,
     }
 
     try {

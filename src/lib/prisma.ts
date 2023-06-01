@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, type Band, type Gig, type Player, type Presence, type Role, type Voice } from '@prisma/client';
+import { Prisma, PrismaClient, type Band, type Gig, type Player, type Presence, type Role, type GigVoice, type DisabledVoice, type BandVoice } from '@prisma/client';
 import { computePlayabilities } from './hook/computePlayability';
 
 const prisma = new PrismaClient();
@@ -15,12 +15,14 @@ const gigInclude = {
   },
   band: {
     include: {
-      voices: true
+      bandVoices: true
     }
-  }
+  },
+  gigVoices: true,
+  disabledVoices: true
 }
 
-type GigPayload = Gig & { band: Band & { voices: Voice[] }, presences: (Presence & { player: Player & { roles: Role[] } })[] };
+type GigPayload = Gig & { disabledVoices: DisabledVoice[], gigVoices: GigVoice[], band: Band & { bandVoices: BandVoice[] } | null, presences: (Presence & { player: Player & { roles: Role[] } })[] };
 
 const includeMap = new Map<Prisma.ModelName, any>([
   ['Gig', {
@@ -35,7 +37,23 @@ const includeMap = new Map<Prisma.ModelName, any>([
       }
     }
   }],
-  ['Voice', {
+  ['GigVoice', {
+    getGigs: (data: { gig: GigPayload }) => [data.gig],
+    include: {
+      gig: {
+        include: gigInclude
+      }
+    }
+  }],
+  ['DisabledVoice', {
+    getGigs: (data: { gig: GigPayload }) => [data.gig],
+    include: {
+      gig: {
+        include: gigInclude
+      }
+    }
+  }],
+  ['BandVoice', {
     getGigs: (data: { band: { gigs: GigPayload[] } }) => data.band.gigs,
     include: {
       band: {

@@ -52,7 +52,7 @@ model Band {
   id          Int          @id @default(autoincrement())
   name        String       @unique
   gigs        Gig[]
-  voices      Voice[]
+  bandVoices  BandVoice[]
   memberships Membership[]
 }
 
@@ -79,15 +79,17 @@ model Membership {
 }
 
 model Gig {
-  id          Int        @id @default(autoincrement())
-  name        String
-  presences   Presence[]
-  band        Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId      Int
-  date        DateTime
-  location    String
-  description String?
-  playable    Boolean    @default(false)
+  id             Int             @id @default(autoincrement())
+  name           String
+  presences      Presence[]
+  band           Band?           @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId         Int?
+  gigVoices      GigVoice[]
+  disabledVoices DisabledVoice[]
+  date           DateTime
+  location       String
+  description    String?
+  playable       Boolean         @default(false)
 }
 
 model Presence {
@@ -114,16 +116,40 @@ model Role {
 }
 
 model Instrument {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique
-  roles  Role[]
-  voices Voice[]
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  roles      Role[]
+  bandVoices BandVoice[]
+  gigVoices  GigVoice[]
 }
 
-model Voice {
+model GigVoice {
   id           Int        @id @default(autoincrement())
   instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
   instrumentId Int
-  band         Band       @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId       Int
+  gig          Gig        @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  gigId        Int
+
+  @@unique([id, gigId])
+}
+
+model BandVoice {
+  id             Int             @id @default(autoincrement())
+  instrument     Instrument      @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
+  instrumentId   Int
+  band           Band            @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId         Int
+  disabledVoices DisabledVoice[]
+
+  @@unique([id, bandId])
+}
+
+model DisabledVoice {
+  id          Int       @id @default(autoincrement())
+  gig         Gig       @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  gigId       Int
+  bandVoice   BandVoice @relation(fields: [bandVoiceId], references: [id], onDelete: Cascade)
+  bandVoiceId Int
+
+  @@unique([gigId, bandVoiceId])
 }

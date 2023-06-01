@@ -8,6 +8,6 @@ export const load: PageServerLoad = async (event) => {
 
   return {
     gigs: gigs(),
-    index: 20
+    index: 100
   }
 }

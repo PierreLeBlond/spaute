@@ -6,12 +6,7 @@ import { presenceSchema } from "$lib/components/gigs/presence/presenceSchema";
 import { TRPCError } from "@trpc/server";
 
 export const load: PageServerLoad = async (event) => {
-  const { gigId } = event.params;
-  const { currentPlayer } = await event.parent();
-  const caller = router.createCaller(await createContext(event));
-  const gig = await caller.gigs.read({ id: Number(gigId) });
-  const band = await caller.bands.read({ id: gig.band.id });
-  const currentPresence = await caller.presences.read({ gigId: Number(gigId), playerId: currentPlayer.id });
+  const { currentPresence } = await event.parent();
 
   const form = () => superValidate({
     value: currentPresence?.value
@@ -19,10 +14,7 @@ export const load: PageServerLoad = async (event) => {
 
   return {
     form: form(),
-    band,
-    gig,
-    currentPresence,
-    index: 21
+    index: 102
   };
 }
 

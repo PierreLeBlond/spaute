@@ -23,20 +23,23 @@ export const gigs = t.router({
   })),
   listForPlayer: ownerProcedure.input(z.object({ playerId: z.number() })).query(({ input: { playerId } }) => prisma.gig.findMany({
     where: {
-      OR: {
-        presences: {
-          some: {
-            playerId
-          }
-        },
-        band: {
-          memberships: {
+      OR: [
+        {
+          presences: {
             some: {
               playerId
             }
+          },
+        }, {
+          band: {
+            memberships: {
+              some: {
+                playerId
+              }
+            }
           }
         }
-      },
+      ],
     },
     orderBy: {
       date: 'desc'
@@ -67,11 +70,11 @@ export const gigs = t.router({
   ).mutation(async ({ ctx, input: { bandId, ...data } }) => prisma.gig.create({
     data: {
       ...data,
-      band: {
+      band: bandId ? {
         connect: {
           id: bandId
         }
-      },
+      } : undefined,
       presences: {
         create: {
           player: {
