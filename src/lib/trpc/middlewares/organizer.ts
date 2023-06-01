@@ -29,13 +29,18 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
     }
   });
 
-  if (!presence?.isOrganizer) {
-    const gig = await prisma.gig.findUniqueOrThrow({
-      where: {
-        id: gigId
-      }
-    });
-    const { bandId } = gig;
+  if (presence?.isOrganizer) {
+    return next();
+  }
+
+  const gig = await prisma.gig.findUniqueOrThrow({
+    where: {
+      id: gigId
+    }
+  });
+
+  const { bandId } = gig;
+  if (bandId) {
     const membership = await prisma.membership.findUnique({
       where: {
         bandId_playerId: {
@@ -45,9 +50,10 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
       }
     });
 
-    if (!membership?.isAdmin) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'The player does not have organizer role on this gig.' });
+    if (membership?.isAdmin) {
+      return next();
     }
   }
-  return next();
+
+  throw new TRPCError({ code: 'UNAUTHORIZED', message: 'The player does not have organizer role on this gig.' });
 })

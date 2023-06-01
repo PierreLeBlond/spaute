@@ -29,7 +29,7 @@ export const load: PageServerLoad = async (event) => {
     updateForm: updateForm(),
     deleteForm: deleteForm(),
     roles,
-    index: 30
+    index: 1000
   }
 }
 

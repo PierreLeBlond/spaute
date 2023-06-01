@@ -1,23 +1,23 @@
 import prisma from "$lib/prisma"
-import type { Voice, Player, Role, Presence, Gig, Band } from "@prisma/client";
+import type { BandVoice, Player, Role, Presence, Gig, Band, DisabledVoice, GigVoice } from "@prisma/client";
 
-type GigPayload = Gig & { band: Band & { voices: Voice[] }, presences: (Presence & { player: Player & { roles: Role[] } })[] };
+type GigPayload = Gig & { band: Band & { bandVoices: BandVoice[] } | null, gigVoices: GigVoice[], disabledVoices: DisabledVoice[], presences: (Presence & { player: Player & { roles: Role[] } })[] };
 
 export const computePlayability = async (gig: GigPayload) => {
 
-  const findConfiguration = (voices: Voice[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Role[]) => {
+  const findConfiguration = (instrumentIds: number[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Role[]) => {
 
-    const voicesCopy = voices.slice(0);
-    const voice = voicesCopy.pop();
+    const instrumentIdsCopy = instrumentIds.slice(0);
+    const instrumentId = instrumentIdsCopy.pop();
 
-    if (!voice) {
+    if (!instrumentId) {
       return configuration;
     }
 
     const players = presences.map(presence => presence.player);
 
-    const roles = players.filter(player => player.roles.some((role: Role) => role.instrumentId == voice.instrumentId && role.playable))
-      .map(player => player.roles.find((role: Role) => role.instrumentId == voice.instrumentId))
+    const roles = players.filter(player => player.roles.some((role: Role) => role.instrumentId == instrumentId && role.playable))
+      .map(player => player.roles.find((role: Role) => role.instrumentId == instrumentId))
       .filter(Boolean);
 
     let config;
@@ -25,7 +25,7 @@ export const computePlayability = async (gig: GigPayload) => {
       const playerId = role.playerId;
       const remainingPresences = presences.filter(presence => presence.playerId != playerId);
 
-      config = findConfiguration(voicesCopy, remainingPresences, [...configuration, role]);
+      config = findConfiguration(instrumentIdsCopy, remainingPresences, [...configuration, role]);
       return !!config;
     });
 
@@ -38,7 +38,12 @@ export const computePlayability = async (gig: GigPayload) => {
 
   const presences = gig.presences.filter(presence => presence.value);
 
-  const configuration = findConfiguration(gig.band.voices, presences, []);
+  const instrumentIds = gig.gigVoices.map(gigVoice => gigVoice.instrumentId);
+  if (gig.band) {
+    instrumentIds.push(...gig.band.bandVoices.filter(bandVoice => gig.disabledVoices.every(disabledVoice => disabledVoice.bandVoiceId != bandVoice.id)).map(bandVoice => bandVoice.instrumentId));
+  }
+
+  const configuration = findConfiguration(instrumentIds, presences, []);
 
   await prisma.gig.update({
     where: {

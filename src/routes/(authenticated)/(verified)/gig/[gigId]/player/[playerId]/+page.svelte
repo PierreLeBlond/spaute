@@ -2,10 +2,10 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
 
   export let data: PageData;
 
@@ -13,7 +13,7 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/band/{data['band'].id}/gig/{data['gig'].id}" />
+<ReturnLink href="/gig/{data['gig'].id}" />
 
 <p class="w-full p-2 pl-4 text-sm">{data.player.name}</p>
 

@@ -2,14 +2,15 @@
   import Button from '$lib/components/forms/Button.svelte';
   import DateInput from '$lib/components/forms/DateInput.svelte';
   import Form from '$lib/components/forms/Form.svelte';
+  import Select from '$lib/components/forms/Select.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
 
   export let data: PageData;
 
@@ -19,7 +20,7 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/band/{data.band.id}/gigs" />
+<ReturnLink href="/gigs" />
 
 <div class="w-full grow p-2">
   <Form
@@ -31,6 +32,18 @@
       style:grid-template-rows="auto auto auto 1fr auto"
     >
       <p class="col-span-2 text-xs">Ajouter une presta</p>
+      <Select
+        id={'bandId'}
+        label={'fanfare'}
+      >
+        <option value={-1}> Presta indépendante ! </option>
+        {#each data.memberships as membership}
+          <option value={membership.band.id}>
+            {membership.band.name}
+          </option>
+        {/each}
+      </Select>
+      <div class="col-span-1" />
       <Text
         name="name"
         label="titre"
@@ -64,11 +77,6 @@
           bind:value={$form['description']}
         />
       </div>
-      <input
-        type="hidden"
-        name="bandId"
-        value={data.band.id}
-      />
       <div class="col-span-2">
         <Button
           label={'Créer'}

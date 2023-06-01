@@ -13,7 +13,7 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/band/{data['band'].id}/players" />
+<ReturnLink href="/band/{data['band'].id}" />
 
 <p class="w-full p-2 pl-4 text-sm">{data.player.name}</p>
 

@@ -13,25 +13,6 @@ export const load: LayoutServerLoad = async (event) => {
   return {
     band,
     currentMembership: currentMembership(),
-    title: band.name,
-    backPathname: '/bands',
-    backName: 'fanfares',
-    tabs: [
-      {
-        href: `/band/${bandId}/players`,
-        key: `/band/${bandId}/player`,
-        label: 'ses fanfaronx'
-      },
-      {
-        href: `/band/${bandId}/gigs`,
-        key: `/band/${bandId}/gig`,
-        label: 'ses prestas'
-      },
-      {
-        href: `/band/${bandId}/voices`,
-        key: `/band/${bandId}/voice`,
-        label: 'ses pupitres'
-      }
-    ]
+    title: band.name
   };
 }

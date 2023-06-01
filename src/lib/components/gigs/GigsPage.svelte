@@ -6,7 +6,7 @@
   import GigView from './gig/GigView.svelte';
 
   export let player: Player;
-  export let gigs: (Gig & { band: Band; presences: Presence[] })[];
+  export let gigs: (Gig & { band: Band | null; presences: Presence[] })[];
 
   const presences = new Map<Gig, Presence | null>(
     gigs.map((gig) => [gig, gig.presences.find((presence) => presence.playerId == player.id) || null])

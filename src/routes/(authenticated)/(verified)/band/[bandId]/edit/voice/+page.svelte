@@ -14,7 +14,7 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/band/{data.band.id}/voices" />
+<ReturnLink href="/band/{data.band.id}/edit" />
 
 <div class="w-full p-2">
   <Form
