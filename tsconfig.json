@@ -29,7 +29,7 @@
 		"sourceMap": true,
 		"allowJs": false,
 		"checkJs": false,
-		"allowSyntheticDefaultImports": false,
+		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,

@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
     deleteBandVoiceForm: deleteBandVoiceForm(),
     deleteForm: deleteForm(),
     bandVoices: bandVoices(),
-    index: 14
+    index: 15
   }
 }
 

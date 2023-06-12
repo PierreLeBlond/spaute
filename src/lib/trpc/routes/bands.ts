@@ -1,4 +1,4 @@
-import { BandCreateInputSchema, BandWhereInputSchema, BandWhereUniqueInputSchema } from "$lib/generated/zod";
+import { BandCreateInputSchema, BandWhereUniqueInputSchema } from "$lib/generated/zod";
 import prisma from "$lib/prisma";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -8,9 +8,14 @@ import { adminProcedure } from "../procedures/adminProcedure";
 import { z } from "zod";
 
 export const bands = t.router({
-  list: verifiedProcedure.input(BandWhereInputSchema).query(({ input }) =>
+  list: verifiedProcedure.input(z.object({ search: z.string().nullable() })).query(({ input }) =>
     prisma.band.findMany({
-      where: input,
+      where: {
+        name: {
+          startsWith: input.search ?? undefined,
+          mode: 'insensitive'
+        }
+      },
       orderBy: {
         name: 'asc'
       },

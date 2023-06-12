@@ -15,7 +15,7 @@ export const load: PageServerLoad = async () => {
 
   return {
     form: form(),
-    index: 12
+    index: 13
   }
 }
 
