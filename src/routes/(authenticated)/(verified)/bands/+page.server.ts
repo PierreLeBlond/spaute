@@ -4,7 +4,9 @@ import type { PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async (event) => {
   const { currentPlayer } = await event.parent();
-  const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
+  const caller = router.createCaller(await createContext(event));
+  const memberships = async () => caller.memberships.list({ playerId: currentPlayer.id });
+
   return {
     memberships: memberships(),
     index: 10

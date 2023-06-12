@@ -24,7 +24,7 @@ export const load: PageServerLoad = async (event) => {
     form: form(),
     player: player(),
     membership: membership(),
-    index: 13
+    index: 14
   }
 }
 

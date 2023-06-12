@@ -22,7 +22,7 @@
       <ListLinkItem>
         <div class="flex w-full items-center justify-between">
           <a
-            href="./band/{membership.band.id}"
+            href="/band/{membership.band.id}"
             class="grow rounded p-2 text-sm">{membership.band.name}</a
           >
         </div>
@@ -30,3 +30,9 @@
     {/each}
   {/if}
 </List>
+<div class="p-2">
+  <RightLink
+    href="/bands/search"
+    label="Rechercher une fanfare"
+  />
+</div>

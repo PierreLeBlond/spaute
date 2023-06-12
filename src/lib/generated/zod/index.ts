@@ -10,11 +10,19 @@ import type { Prisma } from '@prisma/client';
 // ENUMS
 /////////////////////////////////////////
 
+export const AuthKeyOrderByRelevanceFieldEnumSchema = z.enum(['id','hashed_password','user_id']);
+
 export const AuthKeyScalarFieldEnumSchema = z.enum(['id','hashed_password','user_id','primary_key','expires']);
+
+export const AuthSessionOrderByRelevanceFieldEnumSchema = z.enum(['id','user_id']);
 
 export const AuthSessionScalarFieldEnumSchema = z.enum(['id','user_id','active_expires','idle_expires']);
 
+export const AuthUserOrderByRelevanceFieldEnumSchema = z.enum(['id','email']);
+
 export const AuthUserScalarFieldEnumSchema = z.enum(['id','email','email_verified']);
+
+export const BandOrderByRelevanceFieldEnumSchema = z.enum(['name']);
 
 export const BandScalarFieldEnumSchema = z.enum(['id','name']);
 
@@ -22,13 +30,19 @@ export const BandVoiceScalarFieldEnumSchema = z.enum(['id','instrumentId','bandI
 
 export const DisabledVoiceScalarFieldEnumSchema = z.enum(['id','gigId','bandVoiceId']);
 
+export const GigOrderByRelevanceFieldEnumSchema = z.enum(['name','location','description']);
+
 export const GigScalarFieldEnumSchema = z.enum(['id','name','bandId','date','location','description','playable']);
 
 export const GigVoiceScalarFieldEnumSchema = z.enum(['id','instrumentId','gigId']);
 
+export const InstrumentOrderByRelevanceFieldEnumSchema = z.enum(['name']);
+
 export const InstrumentScalarFieldEnumSchema = z.enum(['id','name']);
 
 export const MembershipScalarFieldEnumSchema = z.enum(['id','isAdmin','bandId','playerId']);
+
+export const PlayerOrderByRelevanceFieldEnumSchema = z.enum(['userId','name']);
 
 export const PlayerScalarFieldEnumSchema = z.enum(['id','userId','name']);
 
@@ -594,13 +608,14 @@ export const AuthKeyWhereInputSchema: z.ZodType<Prisma.AuthKeyWhereInput> = z.ob
   auth_user: z.union([ z.lazy(() => AuthUserRelationFilterSchema),z.lazy(() => AuthUserWhereInputSchema) ]).optional(),
 }).strict();
 
-export const AuthKeyOrderByWithRelationInputSchema: z.ZodType<Prisma.AuthKeyOrderByWithRelationInput> = z.object({
+export const AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.AuthKeyOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   hashed_password: z.lazy(() => SortOrderSchema).optional(),
   user_id: z.lazy(() => SortOrderSchema).optional(),
   primary_key: z.lazy(() => SortOrderSchema).optional(),
   expires: z.lazy(() => SortOrderSchema).optional(),
-  auth_user: z.lazy(() => AuthUserOrderByWithRelationInputSchema).optional()
+  auth_user: z.lazy(() => AuthUserOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  _relevance: z.lazy(() => AuthKeyOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const AuthKeyWhereUniqueInputSchema: z.ZodType<Prisma.AuthKeyWhereUniqueInput> = z.object({
@@ -642,12 +657,13 @@ export const AuthSessionWhereInputSchema: z.ZodType<Prisma.AuthSessionWhereInput
   auth_user: z.union([ z.lazy(() => AuthUserRelationFilterSchema),z.lazy(() => AuthUserWhereInputSchema) ]).optional(),
 }).strict();
 
-export const AuthSessionOrderByWithRelationInputSchema: z.ZodType<Prisma.AuthSessionOrderByWithRelationInput> = z.object({
+export const AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.AuthSessionOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   user_id: z.lazy(() => SortOrderSchema).optional(),
   active_expires: z.lazy(() => SortOrderSchema).optional(),
   idle_expires: z.lazy(() => SortOrderSchema).optional(),
-  auth_user: z.lazy(() => AuthUserOrderByWithRelationInputSchema).optional()
+  auth_user: z.lazy(() => AuthUserOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  _relevance: z.lazy(() => AuthSessionOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const AuthSessionWhereUniqueInputSchema: z.ZodType<Prisma.AuthSessionWhereUniqueInput> = z.object({
@@ -688,13 +704,14 @@ export const AuthUserWhereInputSchema: z.ZodType<Prisma.AuthUserWhereInput> = z.
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const AuthUserOrderByWithRelationInputSchema: z.ZodType<Prisma.AuthUserOrderByWithRelationInput> = z.object({
+export const AuthUserOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.AuthUserOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
   email_verified: z.lazy(() => SortOrderSchema).optional(),
   auth_session: z.lazy(() => AuthSessionOrderByRelationAggregateInputSchema).optional(),
   auth_key: z.lazy(() => AuthKeyOrderByRelationAggregateInputSchema).optional(),
-  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+  player: z.lazy(() => PlayerOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  _relevance: z.lazy(() => AuthUserOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const AuthUserWhereUniqueInputSchema: z.ZodType<Prisma.AuthUserWhereUniqueInput> = z.object({
@@ -731,12 +748,13 @@ export const BandWhereInputSchema: z.ZodType<Prisma.BandWhereInput> = z.object({
   memberships: z.lazy(() => MembershipListRelationFilterSchema).optional()
 }).strict();
 
-export const BandOrderByWithRelationInputSchema: z.ZodType<Prisma.BandOrderByWithRelationInput> = z.object({
+export const BandOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.BandOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   gigs: z.lazy(() => GigOrderByRelationAggregateInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceOrderByRelationAggregateInputSchema).optional(),
-  memberships: z.lazy(() => MembershipOrderByRelationAggregateInputSchema).optional()
+  memberships: z.lazy(() => MembershipOrderByRelationAggregateInputSchema).optional(),
+  _relevance: z.lazy(() => BandOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const BandWhereUniqueInputSchema: z.ZodType<Prisma.BandWhereUniqueInput> = z.object({
@@ -775,14 +793,15 @@ export const PlayerWhereInputSchema: z.ZodType<Prisma.PlayerWhereInput> = z.obje
   memberShips: z.lazy(() => MembershipListRelationFilterSchema).optional()
 }).strict();
 
-export const PlayerOrderByWithRelationInputSchema: z.ZodType<Prisma.PlayerOrderByWithRelationInput> = z.object({
+export const PlayerOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.PlayerOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
-  user: z.lazy(() => AuthUserOrderByWithRelationInputSchema).optional(),
+  user: z.lazy(() => AuthUserOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
   presences: z.lazy(() => PresenceOrderByRelationAggregateInputSchema).optional(),
   roles: z.lazy(() => RoleOrderByRelationAggregateInputSchema).optional(),
-  memberShips: z.lazy(() => MembershipOrderByRelationAggregateInputSchema).optional()
+  memberShips: z.lazy(() => MembershipOrderByRelationAggregateInputSchema).optional(),
+  _relevance: z.lazy(() => PlayerOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const PlayerWhereUniqueInputSchema: z.ZodType<Prisma.PlayerWhereUniqueInput> = z.object({
@@ -823,13 +842,13 @@ export const MembershipWhereInputSchema: z.ZodType<Prisma.MembershipWhereInput> 
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
 }).strict();
 
-export const MembershipOrderByWithRelationInputSchema: z.ZodType<Prisma.MembershipOrderByWithRelationInput> = z.object({
+export const MembershipOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.MembershipOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   isAdmin: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
-  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
-  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+  band: z.lazy(() => BandOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  player: z.lazy(() => PlayerOrderByWithRelationAndSearchRelevanceInputSchema).optional()
 }).strict();
 
 export const MembershipWhereUniqueInputSchema: z.ZodType<Prisma.MembershipWhereUniqueInput> = z.object({
@@ -876,7 +895,7 @@ export const GigWhereInputSchema: z.ZodType<Prisma.GigWhereInput> = z.object({
   disabledVoices: z.lazy(() => DisabledVoiceListRelationFilterSchema).optional()
 }).strict();
 
-export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithRelationInput> = z.object({
+export const GigOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.GigOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
@@ -885,9 +904,10 @@ export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithR
   description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   presences: z.lazy(() => PresenceOrderByRelationAggregateInputSchema).optional(),
-  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
+  band: z.lazy(() => BandOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceOrderByRelationAggregateInputSchema).optional(),
-  disabledVoices: z.lazy(() => DisabledVoiceOrderByRelationAggregateInputSchema).optional()
+  disabledVoices: z.lazy(() => DisabledVoiceOrderByRelationAggregateInputSchema).optional(),
+  _relevance: z.lazy(() => GigOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const GigWhereUniqueInputSchema: z.ZodType<Prisma.GigWhereUniqueInput> = z.object({
@@ -935,14 +955,14 @@ export const PresenceWhereInputSchema: z.ZodType<Prisma.PresenceWhereInput> = z.
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
 }).strict();
 
-export const PresenceOrderByWithRelationInputSchema: z.ZodType<Prisma.PresenceOrderByWithRelationInput> = z.object({
+export const PresenceOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.PresenceOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   isOrganizer: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
-  gig: z.lazy(() => GigOrderByWithRelationInputSchema).optional(),
-  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+  gig: z.lazy(() => GigOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  player: z.lazy(() => PlayerOrderByWithRelationAndSearchRelevanceInputSchema).optional()
 }).strict();
 
 export const PresenceWhereUniqueInputSchema: z.ZodType<Prisma.PresenceWhereUniqueInput> = z.object({
@@ -986,13 +1006,13 @@ export const RoleWhereInputSchema: z.ZodType<Prisma.RoleWhereInput> = z.object({
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
 }).strict();
 
-export const RoleOrderByWithRelationInputSchema: z.ZodType<Prisma.RoleOrderByWithRelationInput> = z.object({
+export const RoleOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.RoleOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
-  instrument: z.lazy(() => InstrumentOrderByWithRelationInputSchema).optional(),
-  player: z.lazy(() => PlayerOrderByWithRelationInputSchema).optional()
+  instrument: z.lazy(() => InstrumentOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  player: z.lazy(() => PlayerOrderByWithRelationAndSearchRelevanceInputSchema).optional()
 }).strict();
 
 export const RoleWhereUniqueInputSchema: z.ZodType<Prisma.RoleWhereUniqueInput> = z.object({
@@ -1033,12 +1053,13 @@ export const InstrumentWhereInputSchema: z.ZodType<Prisma.InstrumentWhereInput> 
   gigVoices: z.lazy(() => GigVoiceListRelationFilterSchema).optional()
 }).strict();
 
-export const InstrumentOrderByWithRelationInputSchema: z.ZodType<Prisma.InstrumentOrderByWithRelationInput> = z.object({
+export const InstrumentOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.InstrumentOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   roles: z.lazy(() => RoleOrderByRelationAggregateInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceOrderByRelationAggregateInputSchema).optional(),
-  gigVoices: z.lazy(() => GigVoiceOrderByRelationAggregateInputSchema).optional()
+  gigVoices: z.lazy(() => GigVoiceOrderByRelationAggregateInputSchema).optional(),
+  _relevance: z.lazy(() => InstrumentOrderByRelevanceInputSchema).optional()
 }).strict();
 
 export const InstrumentWhereUniqueInputSchema: z.ZodType<Prisma.InstrumentWhereUniqueInput> = z.object({
@@ -1075,12 +1096,12 @@ export const GigVoiceWhereInputSchema: z.ZodType<Prisma.GigVoiceWhereInput> = z.
   gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional(),
 }).strict();
 
-export const GigVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.GigVoiceOrderByWithRelationInput> = z.object({
+export const GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.GigVoiceOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
-  instrument: z.lazy(() => InstrumentOrderByWithRelationInputSchema).optional(),
-  gig: z.lazy(() => GigOrderByWithRelationInputSchema).optional()
+  instrument: z.lazy(() => InstrumentOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  gig: z.lazy(() => GigOrderByWithRelationAndSearchRelevanceInputSchema).optional()
 }).strict();
 
 export const GigVoiceWhereUniqueInputSchema: z.ZodType<Prisma.GigVoiceWhereUniqueInput> = z.object({
@@ -1120,12 +1141,12 @@ export const BandVoiceWhereInputSchema: z.ZodType<Prisma.BandVoiceWhereInput> = 
   disabledVoices: z.lazy(() => DisabledVoiceListRelationFilterSchema).optional()
 }).strict();
 
-export const BandVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.BandVoiceOrderByWithRelationInput> = z.object({
+export const BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.BandVoiceOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
-  instrument: z.lazy(() => InstrumentOrderByWithRelationInputSchema).optional(),
-  band: z.lazy(() => BandOrderByWithRelationInputSchema).optional(),
+  instrument: z.lazy(() => InstrumentOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  band: z.lazy(() => BandOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
@@ -1165,12 +1186,12 @@ export const DisabledVoiceWhereInputSchema: z.ZodType<Prisma.DisabledVoiceWhereI
   bandVoice: z.union([ z.lazy(() => BandVoiceRelationFilterSchema),z.lazy(() => BandVoiceWhereInputSchema) ]).optional(),
 }).strict();
 
-export const DisabledVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.DisabledVoiceOrderByWithRelationInput> = z.object({
+export const DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema: z.ZodType<Prisma.DisabledVoiceOrderByWithRelationAndSearchRelevanceInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   bandVoiceId: z.lazy(() => SortOrderSchema).optional(),
-  gig: z.lazy(() => GigOrderByWithRelationInputSchema).optional(),
-  bandVoice: z.lazy(() => BandVoiceOrderByWithRelationInputSchema).optional()
+  gig: z.lazy(() => GigOrderByWithRelationAndSearchRelevanceInputSchema).optional(),
+  bandVoice: z.lazy(() => BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema).optional()
 }).strict();
 
 export const DisabledVoiceWhereUniqueInputSchema: z.ZodType<Prisma.DisabledVoiceWhereUniqueInput> = z.object({
@@ -1836,6 +1857,7 @@ export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringFilterSchema) ]).optional(),
 }).strict();
@@ -1851,6 +1873,7 @@ export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> 
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
 }).strict();
@@ -1874,6 +1897,12 @@ export const BigIntNullableFilterSchema: z.ZodType<Prisma.BigIntNullableFilter> 
 export const AuthUserRelationFilterSchema: z.ZodType<Prisma.AuthUserRelationFilter> = z.object({
   is: z.lazy(() => AuthUserWhereInputSchema).optional(),
   isNot: z.lazy(() => AuthUserWhereInputSchema).optional()
+}).strict();
+
+export const AuthKeyOrderByRelevanceInputSchema: z.ZodType<Prisma.AuthKeyOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => AuthKeyOrderByRelevanceFieldEnumSchema),z.lazy(() => AuthKeyOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
 }).strict();
 
 export const AuthKeyCountOrderByAggregateInputSchema: z.ZodType<Prisma.AuthKeyCountOrderByAggregateInput> = z.object({
@@ -1919,6 +1948,7 @@ export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggreg
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
@@ -1937,6 +1967,7 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
@@ -1977,6 +2008,12 @@ export const BigIntFilterSchema: z.ZodType<Prisma.BigIntFilter> = z.object({
   gt: z.bigint().optional(),
   gte: z.bigint().optional(),
   not: z.union([ z.bigint(),z.lazy(() => NestedBigIntFilterSchema) ]).optional(),
+}).strict();
+
+export const AuthSessionOrderByRelevanceInputSchema: z.ZodType<Prisma.AuthSessionOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => AuthSessionOrderByRelevanceFieldEnumSchema),z.lazy(() => AuthSessionOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
 }).strict();
 
 export const AuthSessionCountOrderByAggregateInputSchema: z.ZodType<Prisma.AuthSessionCountOrderByAggregateInput> = z.object({
@@ -2051,6 +2088,12 @@ export const AuthKeyOrderByRelationAggregateInputSchema: z.ZodType<Prisma.AuthKe
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
+export const AuthUserOrderByRelevanceInputSchema: z.ZodType<Prisma.AuthUserOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => AuthUserOrderByRelevanceFieldEnumSchema),z.lazy(() => AuthUserOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
+}).strict();
+
 export const AuthUserCountOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -2110,6 +2153,12 @@ export const MembershipOrderByRelationAggregateInputSchema: z.ZodType<Prisma.Mem
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
+export const BandOrderByRelevanceInputSchema: z.ZodType<Prisma.BandOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => BandOrderByRelevanceFieldEnumSchema),z.lazy(() => BandOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
+}).strict();
+
 export const BandCountOrderByAggregateInputSchema: z.ZodType<Prisma.BandCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional()
@@ -2167,6 +2216,12 @@ export const PresenceOrderByRelationAggregateInputSchema: z.ZodType<Prisma.Prese
 
 export const RoleOrderByRelationAggregateInputSchema: z.ZodType<Prisma.RoleOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const PlayerOrderByRelevanceInputSchema: z.ZodType<Prisma.PlayerOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => PlayerOrderByRelevanceFieldEnumSchema),z.lazy(() => PlayerOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
 }).strict();
 
 export const PlayerCountOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerCountOrderByAggregateInput> = z.object({
@@ -2278,6 +2333,12 @@ export const GigVoiceOrderByRelationAggregateInputSchema: z.ZodType<Prisma.GigVo
 
 export const DisabledVoiceOrderByRelationAggregateInputSchema: z.ZodType<Prisma.DisabledVoiceOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const GigOrderByRelevanceInputSchema: z.ZodType<Prisma.GigOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => GigOrderByRelevanceFieldEnumSchema),z.lazy(() => GigOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
 }).strict();
 
 export const GigCountOrderByAggregateInputSchema: z.ZodType<Prisma.GigCountOrderByAggregateInput> = z.object({
@@ -2437,6 +2498,12 @@ export const RoleSumOrderByAggregateInputSchema: z.ZodType<Prisma.RoleSumOrderBy
   id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const InstrumentOrderByRelevanceInputSchema: z.ZodType<Prisma.InstrumentOrderByRelevanceInput> = z.object({
+  fields: z.union([ z.lazy(() => InstrumentOrderByRelevanceFieldEnumSchema),z.lazy(() => InstrumentOrderByRelevanceFieldEnumSchema).array() ]),
+  sort: z.lazy(() => SortOrderSchema),
+  search: z.string()
 }).strict();
 
 export const InstrumentCountOrderByAggregateInputSchema: z.ZodType<Prisma.InstrumentCountOrderByAggregateInput> = z.object({
@@ -3519,6 +3586,7 @@ export const NestedStringFilterSchema: z.ZodType<Prisma.NestedStringFilter> = z.
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringFilterSchema) ]).optional(),
 }).strict();
 
@@ -3533,6 +3601,7 @@ export const NestedStringNullableFilterSchema: z.ZodType<Prisma.NestedStringNull
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
@@ -3563,6 +3632,7 @@ export const NestedStringWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStri
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
@@ -3591,6 +3661,7 @@ export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  search: z.string().optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
@@ -5436,7 +5507,7 @@ export const AuthKeyFindFirstArgsSchema: z.ZodType<Prisma.AuthKeyFindFirstArgs> 
   select: AuthKeySelectSchema.optional(),
   include: AuthKeyIncludeSchema.optional(),
   where: AuthKeyWhereInputSchema.optional(),
-  orderBy: z.union([ AuthKeyOrderByWithRelationInputSchema.array(),AuthKeyOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthKeyWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5447,7 +5518,7 @@ export const AuthKeyFindFirstOrThrowArgsSchema: z.ZodType<Prisma.AuthKeyFindFirs
   select: AuthKeySelectSchema.optional(),
   include: AuthKeyIncludeSchema.optional(),
   where: AuthKeyWhereInputSchema.optional(),
-  orderBy: z.union([ AuthKeyOrderByWithRelationInputSchema.array(),AuthKeyOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthKeyWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5458,7 +5529,7 @@ export const AuthKeyFindManyArgsSchema: z.ZodType<Prisma.AuthKeyFindManyArgs> = 
   select: AuthKeySelectSchema.optional(),
   include: AuthKeyIncludeSchema.optional(),
   where: AuthKeyWhereInputSchema.optional(),
-  orderBy: z.union([ AuthKeyOrderByWithRelationInputSchema.array(),AuthKeyOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthKeyWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5467,7 +5538,7 @@ export const AuthKeyFindManyArgsSchema: z.ZodType<Prisma.AuthKeyFindManyArgs> = 
 
 export const AuthKeyAggregateArgsSchema: z.ZodType<Prisma.AuthKeyAggregateArgs> = z.object({
   where: AuthKeyWhereInputSchema.optional(),
-  orderBy: z.union([ AuthKeyOrderByWithRelationInputSchema.array(),AuthKeyOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthKeyOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthKeyWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5498,7 +5569,7 @@ export const AuthSessionFindFirstArgsSchema: z.ZodType<Prisma.AuthSessionFindFir
   select: AuthSessionSelectSchema.optional(),
   include: AuthSessionIncludeSchema.optional(),
   where: AuthSessionWhereInputSchema.optional(),
-  orderBy: z.union([ AuthSessionOrderByWithRelationInputSchema.array(),AuthSessionOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthSessionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5509,7 +5580,7 @@ export const AuthSessionFindFirstOrThrowArgsSchema: z.ZodType<Prisma.AuthSession
   select: AuthSessionSelectSchema.optional(),
   include: AuthSessionIncludeSchema.optional(),
   where: AuthSessionWhereInputSchema.optional(),
-  orderBy: z.union([ AuthSessionOrderByWithRelationInputSchema.array(),AuthSessionOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthSessionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5520,7 +5591,7 @@ export const AuthSessionFindManyArgsSchema: z.ZodType<Prisma.AuthSessionFindMany
   select: AuthSessionSelectSchema.optional(),
   include: AuthSessionIncludeSchema.optional(),
   where: AuthSessionWhereInputSchema.optional(),
-  orderBy: z.union([ AuthSessionOrderByWithRelationInputSchema.array(),AuthSessionOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthSessionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5529,7 +5600,7 @@ export const AuthSessionFindManyArgsSchema: z.ZodType<Prisma.AuthSessionFindMany
 
 export const AuthSessionAggregateArgsSchema: z.ZodType<Prisma.AuthSessionAggregateArgs> = z.object({
   where: AuthSessionWhereInputSchema.optional(),
-  orderBy: z.union([ AuthSessionOrderByWithRelationInputSchema.array(),AuthSessionOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthSessionOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthSessionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5560,7 +5631,7 @@ export const AuthUserFindFirstArgsSchema: z.ZodType<Prisma.AuthUserFindFirstArgs
   select: AuthUserSelectSchema.optional(),
   include: AuthUserIncludeSchema.optional(),
   where: AuthUserWhereInputSchema.optional(),
-  orderBy: z.union([ AuthUserOrderByWithRelationInputSchema.array(),AuthUserOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthUserOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthUserOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthUserWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5571,7 +5642,7 @@ export const AuthUserFindFirstOrThrowArgsSchema: z.ZodType<Prisma.AuthUserFindFi
   select: AuthUserSelectSchema.optional(),
   include: AuthUserIncludeSchema.optional(),
   where: AuthUserWhereInputSchema.optional(),
-  orderBy: z.union([ AuthUserOrderByWithRelationInputSchema.array(),AuthUserOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthUserOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthUserOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthUserWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5582,7 +5653,7 @@ export const AuthUserFindManyArgsSchema: z.ZodType<Prisma.AuthUserFindManyArgs> 
   select: AuthUserSelectSchema.optional(),
   include: AuthUserIncludeSchema.optional(),
   where: AuthUserWhereInputSchema.optional(),
-  orderBy: z.union([ AuthUserOrderByWithRelationInputSchema.array(),AuthUserOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthUserOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthUserOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthUserWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5591,7 +5662,7 @@ export const AuthUserFindManyArgsSchema: z.ZodType<Prisma.AuthUserFindManyArgs> 
 
 export const AuthUserAggregateArgsSchema: z.ZodType<Prisma.AuthUserAggregateArgs> = z.object({
   where: AuthUserWhereInputSchema.optional(),
-  orderBy: z.union([ AuthUserOrderByWithRelationInputSchema.array(),AuthUserOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ AuthUserOrderByWithRelationAndSearchRelevanceInputSchema.array(),AuthUserOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: AuthUserWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5622,7 +5693,7 @@ export const BandFindFirstArgsSchema: z.ZodType<Prisma.BandFindFirstArgs> = z.ob
   select: BandSelectSchema.optional(),
   include: BandIncludeSchema.optional(),
   where: BandWhereInputSchema.optional(),
-  orderBy: z.union([ BandOrderByWithRelationInputSchema.array(),BandOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5633,7 +5704,7 @@ export const BandFindFirstOrThrowArgsSchema: z.ZodType<Prisma.BandFindFirstOrThr
   select: BandSelectSchema.optional(),
   include: BandIncludeSchema.optional(),
   where: BandWhereInputSchema.optional(),
-  orderBy: z.union([ BandOrderByWithRelationInputSchema.array(),BandOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5644,7 +5715,7 @@ export const BandFindManyArgsSchema: z.ZodType<Prisma.BandFindManyArgs> = z.obje
   select: BandSelectSchema.optional(),
   include: BandIncludeSchema.optional(),
   where: BandWhereInputSchema.optional(),
-  orderBy: z.union([ BandOrderByWithRelationInputSchema.array(),BandOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5653,7 +5724,7 @@ export const BandFindManyArgsSchema: z.ZodType<Prisma.BandFindManyArgs> = z.obje
 
 export const BandAggregateArgsSchema: z.ZodType<Prisma.BandAggregateArgs> = z.object({
   where: BandWhereInputSchema.optional(),
-  orderBy: z.union([ BandOrderByWithRelationInputSchema.array(),BandOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5684,7 +5755,7 @@ export const PlayerFindFirstArgsSchema: z.ZodType<Prisma.PlayerFindFirstArgs> = 
   select: PlayerSelectSchema.optional(),
   include: PlayerIncludeSchema.optional(),
   where: PlayerWhereInputSchema.optional(),
-  orderBy: z.union([ PlayerOrderByWithRelationInputSchema.array(),PlayerOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PlayerOrderByWithRelationAndSearchRelevanceInputSchema.array(),PlayerOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PlayerWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5695,7 +5766,7 @@ export const PlayerFindFirstOrThrowArgsSchema: z.ZodType<Prisma.PlayerFindFirstO
   select: PlayerSelectSchema.optional(),
   include: PlayerIncludeSchema.optional(),
   where: PlayerWhereInputSchema.optional(),
-  orderBy: z.union([ PlayerOrderByWithRelationInputSchema.array(),PlayerOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PlayerOrderByWithRelationAndSearchRelevanceInputSchema.array(),PlayerOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PlayerWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5706,7 +5777,7 @@ export const PlayerFindManyArgsSchema: z.ZodType<Prisma.PlayerFindManyArgs> = z.
   select: PlayerSelectSchema.optional(),
   include: PlayerIncludeSchema.optional(),
   where: PlayerWhereInputSchema.optional(),
-  orderBy: z.union([ PlayerOrderByWithRelationInputSchema.array(),PlayerOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PlayerOrderByWithRelationAndSearchRelevanceInputSchema.array(),PlayerOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PlayerWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5715,7 +5786,7 @@ export const PlayerFindManyArgsSchema: z.ZodType<Prisma.PlayerFindManyArgs> = z.
 
 export const PlayerAggregateArgsSchema: z.ZodType<Prisma.PlayerAggregateArgs> = z.object({
   where: PlayerWhereInputSchema.optional(),
-  orderBy: z.union([ PlayerOrderByWithRelationInputSchema.array(),PlayerOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PlayerOrderByWithRelationAndSearchRelevanceInputSchema.array(),PlayerOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PlayerWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5746,7 +5817,7 @@ export const MembershipFindFirstArgsSchema: z.ZodType<Prisma.MembershipFindFirst
   select: MembershipSelectSchema.optional(),
   include: MembershipIncludeSchema.optional(),
   where: MembershipWhereInputSchema.optional(),
-  orderBy: z.union([ MembershipOrderByWithRelationInputSchema.array(),MembershipOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ MembershipOrderByWithRelationAndSearchRelevanceInputSchema.array(),MembershipOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: MembershipWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5757,7 +5828,7 @@ export const MembershipFindFirstOrThrowArgsSchema: z.ZodType<Prisma.MembershipFi
   select: MembershipSelectSchema.optional(),
   include: MembershipIncludeSchema.optional(),
   where: MembershipWhereInputSchema.optional(),
-  orderBy: z.union([ MembershipOrderByWithRelationInputSchema.array(),MembershipOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ MembershipOrderByWithRelationAndSearchRelevanceInputSchema.array(),MembershipOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: MembershipWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5768,7 +5839,7 @@ export const MembershipFindManyArgsSchema: z.ZodType<Prisma.MembershipFindManyAr
   select: MembershipSelectSchema.optional(),
   include: MembershipIncludeSchema.optional(),
   where: MembershipWhereInputSchema.optional(),
-  orderBy: z.union([ MembershipOrderByWithRelationInputSchema.array(),MembershipOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ MembershipOrderByWithRelationAndSearchRelevanceInputSchema.array(),MembershipOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: MembershipWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5777,7 +5848,7 @@ export const MembershipFindManyArgsSchema: z.ZodType<Prisma.MembershipFindManyAr
 
 export const MembershipAggregateArgsSchema: z.ZodType<Prisma.MembershipAggregateArgs> = z.object({
   where: MembershipWhereInputSchema.optional(),
-  orderBy: z.union([ MembershipOrderByWithRelationInputSchema.array(),MembershipOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ MembershipOrderByWithRelationAndSearchRelevanceInputSchema.array(),MembershipOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: MembershipWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5808,7 +5879,7 @@ export const GigFindFirstArgsSchema: z.ZodType<Prisma.GigFindFirstArgs> = z.obje
   select: GigSelectSchema.optional(),
   include: GigIncludeSchema.optional(),
   where: GigWhereInputSchema.optional(),
-  orderBy: z.union([ GigOrderByWithRelationInputSchema.array(),GigOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5819,7 +5890,7 @@ export const GigFindFirstOrThrowArgsSchema: z.ZodType<Prisma.GigFindFirstOrThrow
   select: GigSelectSchema.optional(),
   include: GigIncludeSchema.optional(),
   where: GigWhereInputSchema.optional(),
-  orderBy: z.union([ GigOrderByWithRelationInputSchema.array(),GigOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5830,7 +5901,7 @@ export const GigFindManyArgsSchema: z.ZodType<Prisma.GigFindManyArgs> = z.object
   select: GigSelectSchema.optional(),
   include: GigIncludeSchema.optional(),
   where: GigWhereInputSchema.optional(),
-  orderBy: z.union([ GigOrderByWithRelationInputSchema.array(),GigOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5839,7 +5910,7 @@ export const GigFindManyArgsSchema: z.ZodType<Prisma.GigFindManyArgs> = z.object
 
 export const GigAggregateArgsSchema: z.ZodType<Prisma.GigAggregateArgs> = z.object({
   where: GigWhereInputSchema.optional(),
-  orderBy: z.union([ GigOrderByWithRelationInputSchema.array(),GigOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5870,7 +5941,7 @@ export const PresenceFindFirstArgsSchema: z.ZodType<Prisma.PresenceFindFirstArgs
   select: PresenceSelectSchema.optional(),
   include: PresenceIncludeSchema.optional(),
   where: PresenceWhereInputSchema.optional(),
-  orderBy: z.union([ PresenceOrderByWithRelationInputSchema.array(),PresenceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PresenceOrderByWithRelationAndSearchRelevanceInputSchema.array(),PresenceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PresenceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5881,7 +5952,7 @@ export const PresenceFindFirstOrThrowArgsSchema: z.ZodType<Prisma.PresenceFindFi
   select: PresenceSelectSchema.optional(),
   include: PresenceIncludeSchema.optional(),
   where: PresenceWhereInputSchema.optional(),
-  orderBy: z.union([ PresenceOrderByWithRelationInputSchema.array(),PresenceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PresenceOrderByWithRelationAndSearchRelevanceInputSchema.array(),PresenceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PresenceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5892,7 +5963,7 @@ export const PresenceFindManyArgsSchema: z.ZodType<Prisma.PresenceFindManyArgs> 
   select: PresenceSelectSchema.optional(),
   include: PresenceIncludeSchema.optional(),
   where: PresenceWhereInputSchema.optional(),
-  orderBy: z.union([ PresenceOrderByWithRelationInputSchema.array(),PresenceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PresenceOrderByWithRelationAndSearchRelevanceInputSchema.array(),PresenceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PresenceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5901,7 +5972,7 @@ export const PresenceFindManyArgsSchema: z.ZodType<Prisma.PresenceFindManyArgs> 
 
 export const PresenceAggregateArgsSchema: z.ZodType<Prisma.PresenceAggregateArgs> = z.object({
   where: PresenceWhereInputSchema.optional(),
-  orderBy: z.union([ PresenceOrderByWithRelationInputSchema.array(),PresenceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ PresenceOrderByWithRelationAndSearchRelevanceInputSchema.array(),PresenceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: PresenceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5932,7 +6003,7 @@ export const RoleFindFirstArgsSchema: z.ZodType<Prisma.RoleFindFirstArgs> = z.ob
   select: RoleSelectSchema.optional(),
   include: RoleIncludeSchema.optional(),
   where: RoleWhereInputSchema.optional(),
-  orderBy: z.union([ RoleOrderByWithRelationInputSchema.array(),RoleOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ RoleOrderByWithRelationAndSearchRelevanceInputSchema.array(),RoleOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: RoleWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5943,7 +6014,7 @@ export const RoleFindFirstOrThrowArgsSchema: z.ZodType<Prisma.RoleFindFirstOrThr
   select: RoleSelectSchema.optional(),
   include: RoleIncludeSchema.optional(),
   where: RoleWhereInputSchema.optional(),
-  orderBy: z.union([ RoleOrderByWithRelationInputSchema.array(),RoleOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ RoleOrderByWithRelationAndSearchRelevanceInputSchema.array(),RoleOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: RoleWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5954,7 +6025,7 @@ export const RoleFindManyArgsSchema: z.ZodType<Prisma.RoleFindManyArgs> = z.obje
   select: RoleSelectSchema.optional(),
   include: RoleIncludeSchema.optional(),
   where: RoleWhereInputSchema.optional(),
-  orderBy: z.union([ RoleOrderByWithRelationInputSchema.array(),RoleOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ RoleOrderByWithRelationAndSearchRelevanceInputSchema.array(),RoleOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: RoleWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5963,7 +6034,7 @@ export const RoleFindManyArgsSchema: z.ZodType<Prisma.RoleFindManyArgs> = z.obje
 
 export const RoleAggregateArgsSchema: z.ZodType<Prisma.RoleAggregateArgs> = z.object({
   where: RoleWhereInputSchema.optional(),
-  orderBy: z.union([ RoleOrderByWithRelationInputSchema.array(),RoleOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ RoleOrderByWithRelationAndSearchRelevanceInputSchema.array(),RoleOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: RoleWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -5994,7 +6065,7 @@ export const InstrumentFindFirstArgsSchema: z.ZodType<Prisma.InstrumentFindFirst
   select: InstrumentSelectSchema.optional(),
   include: InstrumentIncludeSchema.optional(),
   where: InstrumentWhereInputSchema.optional(),
-  orderBy: z.union([ InstrumentOrderByWithRelationInputSchema.array(),InstrumentOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ InstrumentOrderByWithRelationAndSearchRelevanceInputSchema.array(),InstrumentOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: InstrumentWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6005,7 +6076,7 @@ export const InstrumentFindFirstOrThrowArgsSchema: z.ZodType<Prisma.InstrumentFi
   select: InstrumentSelectSchema.optional(),
   include: InstrumentIncludeSchema.optional(),
   where: InstrumentWhereInputSchema.optional(),
-  orderBy: z.union([ InstrumentOrderByWithRelationInputSchema.array(),InstrumentOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ InstrumentOrderByWithRelationAndSearchRelevanceInputSchema.array(),InstrumentOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: InstrumentWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6016,7 +6087,7 @@ export const InstrumentFindManyArgsSchema: z.ZodType<Prisma.InstrumentFindManyAr
   select: InstrumentSelectSchema.optional(),
   include: InstrumentIncludeSchema.optional(),
   where: InstrumentWhereInputSchema.optional(),
-  orderBy: z.union([ InstrumentOrderByWithRelationInputSchema.array(),InstrumentOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ InstrumentOrderByWithRelationAndSearchRelevanceInputSchema.array(),InstrumentOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: InstrumentWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6025,7 +6096,7 @@ export const InstrumentFindManyArgsSchema: z.ZodType<Prisma.InstrumentFindManyAr
 
 export const InstrumentAggregateArgsSchema: z.ZodType<Prisma.InstrumentAggregateArgs> = z.object({
   where: InstrumentWhereInputSchema.optional(),
-  orderBy: z.union([ InstrumentOrderByWithRelationInputSchema.array(),InstrumentOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ InstrumentOrderByWithRelationAndSearchRelevanceInputSchema.array(),InstrumentOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: InstrumentWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6056,7 +6127,7 @@ export const GigVoiceFindFirstArgsSchema: z.ZodType<Prisma.GigVoiceFindFirstArgs
   select: GigVoiceSelectSchema.optional(),
   include: GigVoiceIncludeSchema.optional(),
   where: GigVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ GigVoiceOrderByWithRelationInputSchema.array(),GigVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6067,7 +6138,7 @@ export const GigVoiceFindFirstOrThrowArgsSchema: z.ZodType<Prisma.GigVoiceFindFi
   select: GigVoiceSelectSchema.optional(),
   include: GigVoiceIncludeSchema.optional(),
   where: GigVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ GigVoiceOrderByWithRelationInputSchema.array(),GigVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6078,7 +6149,7 @@ export const GigVoiceFindManyArgsSchema: z.ZodType<Prisma.GigVoiceFindManyArgs> 
   select: GigVoiceSelectSchema.optional(),
   include: GigVoiceIncludeSchema.optional(),
   where: GigVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ GigVoiceOrderByWithRelationInputSchema.array(),GigVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6087,7 +6158,7 @@ export const GigVoiceFindManyArgsSchema: z.ZodType<Prisma.GigVoiceFindManyArgs> 
 
 export const GigVoiceAggregateArgsSchema: z.ZodType<Prisma.GigVoiceAggregateArgs> = z.object({
   where: GigVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ GigVoiceOrderByWithRelationInputSchema.array(),GigVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),GigVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: GigVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6118,7 +6189,7 @@ export const BandVoiceFindFirstArgsSchema: z.ZodType<Prisma.BandVoiceFindFirstAr
   select: BandVoiceSelectSchema.optional(),
   include: BandVoiceIncludeSchema.optional(),
   where: BandVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ BandVoiceOrderByWithRelationInputSchema.array(),BandVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6129,7 +6200,7 @@ export const BandVoiceFindFirstOrThrowArgsSchema: z.ZodType<Prisma.BandVoiceFind
   select: BandVoiceSelectSchema.optional(),
   include: BandVoiceIncludeSchema.optional(),
   where: BandVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ BandVoiceOrderByWithRelationInputSchema.array(),BandVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6140,7 +6211,7 @@ export const BandVoiceFindManyArgsSchema: z.ZodType<Prisma.BandVoiceFindManyArgs
   select: BandVoiceSelectSchema.optional(),
   include: BandVoiceIncludeSchema.optional(),
   where: BandVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ BandVoiceOrderByWithRelationInputSchema.array(),BandVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6149,7 +6220,7 @@ export const BandVoiceFindManyArgsSchema: z.ZodType<Prisma.BandVoiceFindManyArgs
 
 export const BandVoiceAggregateArgsSchema: z.ZodType<Prisma.BandVoiceAggregateArgs> = z.object({
   where: BandVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ BandVoiceOrderByWithRelationInputSchema.array(),BandVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),BandVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: BandVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6180,7 +6251,7 @@ export const DisabledVoiceFindFirstArgsSchema: z.ZodType<Prisma.DisabledVoiceFin
   select: DisabledVoiceSelectSchema.optional(),
   include: DisabledVoiceIncludeSchema.optional(),
   where: DisabledVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ DisabledVoiceOrderByWithRelationInputSchema.array(),DisabledVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: DisabledVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6191,7 +6262,7 @@ export const DisabledVoiceFindFirstOrThrowArgsSchema: z.ZodType<Prisma.DisabledV
   select: DisabledVoiceSelectSchema.optional(),
   include: DisabledVoiceIncludeSchema.optional(),
   where: DisabledVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ DisabledVoiceOrderByWithRelationInputSchema.array(),DisabledVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: DisabledVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6202,7 +6273,7 @@ export const DisabledVoiceFindManyArgsSchema: z.ZodType<Prisma.DisabledVoiceFind
   select: DisabledVoiceSelectSchema.optional(),
   include: DisabledVoiceIncludeSchema.optional(),
   where: DisabledVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ DisabledVoiceOrderByWithRelationInputSchema.array(),DisabledVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: DisabledVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
@@ -6211,7 +6282,7 @@ export const DisabledVoiceFindManyArgsSchema: z.ZodType<Prisma.DisabledVoiceFind
 
 export const DisabledVoiceAggregateArgsSchema: z.ZodType<Prisma.DisabledVoiceAggregateArgs> = z.object({
   where: DisabledVoiceWhereInputSchema.optional(),
-  orderBy: z.union([ DisabledVoiceOrderByWithRelationInputSchema.array(),DisabledVoiceOrderByWithRelationInputSchema ]).optional(),
+  orderBy: z.union([ DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema.array(),DisabledVoiceOrderByWithRelationAndSearchRelevanceInputSchema ]).optional(),
   cursor: DisabledVoiceWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
