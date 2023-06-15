@@ -53,6 +53,11 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
+
+      if (error.code == 'INTERNAL_SERVER_ERROR') {
+        throw error.cause;
+      }
+
       setError(
         form,
         null,

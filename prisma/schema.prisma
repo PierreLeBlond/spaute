@@ -79,17 +79,19 @@ model Membership {
 }
 
 model Gig {
-  id             Int             @id @default(autoincrement())
-  name           String
-  presences      Presence[]
-  band           Band?           @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId         Int?
-  gigVoices      GigVoice[]
-  disabledVoices DisabledVoice[]
-  date           DateTime
-  location       String
-  description    String?
-  playable       Boolean         @default(false)
+  id               Int             @id @default(autoincrement())
+  name             String
+  presences        Presence[]
+  band             Band?           @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId           Int?
+  gigVoices        GigVoice[]
+  disabledVoices   DisabledVoice[]
+  date             DateTime
+  location         String
+  description      String?
+  playable         Boolean         @default(false)
+  formations       Formation[]     @relation("Formations")
+  currentFormation Formation?      @relation("CurrentFormation")
 }
 
 model Presence {
@@ -100,6 +102,9 @@ model Presence {
   gigId       Int
   player      Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId    Int
+
+  formationVoicePresences         FormationVoicePresence[]
+  formationUndefinedVoicePresence FormationUndefinedVoicePresence[]
 
   @@unique([gigId, playerId])
 }
@@ -116,11 +121,12 @@ model Role {
 }
 
 model Instrument {
-  id         Int         @id @default(autoincrement())
-  name       String      @unique
-  roles      Role[]
-  bandVoices BandVoice[]
-  gigVoices  GigVoice[]
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  roles           Role[]
+  bandVoices      BandVoice[]
+  gigVoices       GigVoice[]
+  formationVoices FormationVoice[]
 }
 
 model GigVoice {
@@ -152,4 +158,49 @@ model DisabledVoice {
   bandVoiceId Int
 
   @@unique([gigId, bandVoiceId])
+}
+
+model FormationVoice {
+  id          Int       @id @default(autoincrement())
+  formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  formationId Int
+
+  instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
+  instrumentId Int
+
+  formationVoicePresences FormationVoicePresence[]
+
+  @@unique([formationId, instrumentId])
+}
+
+model FormationUndefinedVoicePresence {
+  id          Int       @id @default(autoincrement())
+  formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  formationId Int
+
+  presence   Presence @relation(fields: [presenceId], references: [id], onDelete: Cascade)
+  presenceId Int
+}
+
+model FormationVoicePresence {
+  id Int @id @default(autoincrement())
+
+  formationVoice   FormationVoice @relation(fields: [formationVoiceId], references: [id], onDelete: Cascade)
+  formationVoiceId Int
+
+  presence   Presence @relation(fields: [presenceId], references: [id], onDelete: Cascade)
+  presenceId Int
+}
+
+model Formation {
+  id Int @id @default(autoincrement())
+
+  formationVoices                  FormationVoice[]
+  formationUndefinedVoicePresences FormationUndefinedVoicePresence[]
+
+  gig   Gig? @relation("Formations", fields: [gigId], references: [id], onDelete: Cascade)
+  gigId Int?
+
+  gigCurrentFrom   Gig? @relation("CurrentFormation", fields: [gigCurrentFromId], references: [id], onDelete: Cascade)
+  gigCurrentFromId Int? @unique
 }

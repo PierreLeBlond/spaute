@@ -57,6 +57,33 @@ export const gigs = t.router({
         include: {
           player: true
         }
+      },
+      currentFormation: {
+        include: {
+          formationVoices: {
+            include: {
+              formationVoicePresences: {
+                include: {
+                  presence: {
+                    include: {
+                      player: true
+                    }
+                  }
+                }
+              },
+              instrument: true,
+            }
+          },
+          formationUndefinedVoicePresences: {
+            include: {
+              presence: {
+                include: {
+                  player: true
+                }
+              }
+            }
+          }
+        }
       }
     }
   })),

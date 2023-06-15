@@ -25,7 +25,7 @@
   />
 </div>
 
-<div class="flex w-full flex-col p-2">
+<div class="flex w-full flex-col bg-neutral-700 p-2">
   {#if !presence}
     <JoinGigForm
       action={createAction}
@@ -41,7 +41,11 @@
       {data}
     />
   {/if}
-  <p class="text-sm">
-    {gig.description || ''}
+</div>
+
+<div class="p-2 text-sm">
+  <p>Description</p>
+  <p class="p-2">
+    {gig.description || '...'}
   </p>
 </div>
