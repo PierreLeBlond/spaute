@@ -21,12 +21,12 @@ export const load: PageServerLoad = async ({ locals, cookies, url }) => {
 
   if (expired) {
     const error = 'Le lien de validation a expiré !';
-    setError(form, null, error);
+    setError(form, "", error);
   }
 
   if (invalid) {
     const error = 'Le lien de validation n\'est pas valide !';
-    setError(form, null, error);
+    setError(form, "", error);
   }
 
   const fromPathname = cookies.get('fromPathname');

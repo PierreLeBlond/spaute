@@ -31,7 +31,7 @@
         label={'email'}
         bind:value={$form['email']}
         errors={$errors['email'] || []}
-        constraints={$constraints['email'] || {}}
+        {...$constraints['email']}
       />
       <div class="w-64 pt-2">
         <h2 class="text-xs">Envoyer un mail de récupération</h2>

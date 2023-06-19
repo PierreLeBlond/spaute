@@ -35,7 +35,7 @@
         label="nom"
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        constraints={$constraints['name'] || {}}
+        {...$constraints['name']}
       />
       <div class="col-span-2">
         <Button

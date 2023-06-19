@@ -32,7 +32,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Impossible de rejoindre :(');
@@ -60,7 +60,7 @@ export const actions: Actions = {
 
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Impossible de mettre à jour :(');

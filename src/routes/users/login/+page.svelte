@@ -27,14 +27,14 @@
         label={'email'}
         bind:value={$form['email']}
         errors={$errors['email'] || []}
-        constraints={$constraints['email'] || {}}
+        {...$constraints['email']}
       />
       <Password
         name={'password'}
         label={'mot de passe'}
         bind:value={$form['password']}
         errors={$errors['password'] || []}
-        constraints={$constraints['password'] || {}}
+        {...$constraints['password']}
       />
       <div class="w-64 pt-2">
         <Button

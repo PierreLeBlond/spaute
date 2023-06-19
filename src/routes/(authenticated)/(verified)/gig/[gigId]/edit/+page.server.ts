@@ -70,7 +70,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Presta non valide :(');
@@ -107,7 +107,7 @@ export const actions: Actions = {
       }
       setError(
         updateDisabledVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(updateDisabledVoiceForm, 'Echec :(');
@@ -126,7 +126,7 @@ export const actions: Actions = {
       }
       setError(
         deleteGigVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(deleteGigVoiceForm, 'Echec :(');
@@ -155,7 +155,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Suppression impossible :(');

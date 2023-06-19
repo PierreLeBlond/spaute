@@ -41,7 +41,7 @@ export const actions: Actions = {
       }
       setError(
         deleteBandVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(deleteBandVoiceForm, 'Echec :(');
@@ -70,7 +70,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Suppression impossible :(');
