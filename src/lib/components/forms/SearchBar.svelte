@@ -16,7 +16,7 @@
     <input
       type="search"
       placeholder="Rechercher par nom..."
-      class="h-full w-full rounded-full border border-blue-300 bg-neutral-800 indent-2 text-sm text-blue-300"
+      class="h-full w-full rounded-full border border-blue-300 bg-neutral-200 indent-2 text-sm text-cyan-600"
       bind:value={searchValue}
       on:input={() => eventDispatcher('input')}
     />
@@ -34,7 +34,7 @@
     >
       <g
         id="glass"
-        class="text-blue-300"
+        class="text-cyan-600"
       >
         <circle
           cx="14"
@@ -45,7 +45,7 @@
       </g>
       <g
         id="cross"
-        class="text-blue-300 hover:cursor-pointer"
+        class="text-cyan-600 hover:cursor-pointer"
         on:click={clear}
         on:keydown={clear}
       >

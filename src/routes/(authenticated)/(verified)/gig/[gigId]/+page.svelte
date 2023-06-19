@@ -2,7 +2,6 @@
   import GigPage from '$lib/components/gigs/gig/GigPage.svelte';
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
   import PlayerView from '$lib/components/gigs/gig/PlayerView.svelte';
-  import ListItem from '$lib/components/layout/ListItem.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
 
@@ -35,13 +34,13 @@
     data={data.form}
   />
 
-  <div class="bg-neutral-700 p-2">
+  <div class="bg-neutral-200 p-2">
     <p class="text-sm">Présences et configuration</p>
     <ul class="p-2">
       {#if data.gig.currentFormation}
         {#each data.gig.currentFormation.formationVoices as formationVoice}
           <p class="text-sm">{formationVoice.instrument.name}</p>
-          <div class="contents text-green-300">
+          <div class="contents text-orange-600">
             {#each formationVoice.formationVoicePresences as formationVoicePresence}
               {@const membership =
                 data.band?.memberships.find(
@@ -58,7 +57,7 @@
           </div>
         {/each}
         <p class="text-sm">Autres</p>
-        <div class="contents text-green-300">
+        <div class="contents text-orange-600">
           {#each data.gig.currentFormation.formationUndefinedVoicePresences as formationUndefinedVoicePresence}
             {@const membership =
               data.band?.memberships.find(
@@ -84,7 +83,7 @@
       {#each absentPresences as presence}
         {@const membership =
           data.band?.memberships.find((membership) => membership.player.id == presence.player.id) || null}
-        <div class="contents text-red-300">
+        <div class="contents text-red-500">
           <PlayerView
             currentPresence={data.currentPresence}
             {presence}
@@ -99,9 +98,7 @@
     <p class="text-sm">N'ont pas encore répondus</p>
     <ul class="p-2">
       {#each remainingMemberships as membership}
-        <ListItem>
-          <PlayerItem player={membership.player} />
-        </ListItem>
+        <PlayerItem player={membership.player} />
       {/each}
     </ul>
   </div>

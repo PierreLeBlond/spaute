@@ -36,16 +36,16 @@
         errors={$errors['password'] || []}
         constraints={$constraints['password'] || {}}
       />
-      <div class="w-full pt-2">
+      <div class="w-64 pt-2">
         <Button
           label="Log in"
           disabled={$submitting}
         />
+        <a
+          class="text-sm text-cyan-600"
+          href="/users/password-reset">Mot de passe oublié ?</a
+        >
       </div>
     </div>
-    <a
-      class="text-sm text-blue-300"
-      href="/users/password-reset">Mot de passe oublié ?</a
-    >
   </Form>
 </div>

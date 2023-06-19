@@ -1,3 +1,3 @@
-<li class="mb-2 w-full truncate rounded border-b-2 border-blue-300 bg-neutral-900">
+<li class="mb-2 w-full truncate rounded bg-neutral-100 shadow shadow-blue-300">
   <slot />
 </li>

@@ -2,6 +2,7 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
+  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
@@ -15,24 +16,30 @@
   message.subscribe(sendToast);
 </script>
 
-<div class="flex-col items-center justify-center p-8">
-  <h1 class="text-center text-lg">Récupération du compte</h1>
+<div class="flex">
+  <ReturnLink href="/users/login" />
+</div>
 
+<div class="flex w-full flex-col items-center justify-center p-8">
   <Form
     errors={$errors._errors || []}
     {enhance}
   >
-    <Text
-      name={'email'}
-      label={'email'}
-      bind:value={$form['email']}
-      errors={$errors['email'] || []}
-      constraints={$constraints['email'] || {}}
-    />
-    <h2 class="text-xs">Envoyer un mail de récupération</h2>
-    <Button
-      label="Envoyer"
-      disabled={$submitting || !$tainted}
-    />
+    <div class="flex flex-col items-center justify-center">
+      <Text
+        name={'email'}
+        label={'email'}
+        bind:value={$form['email']}
+        errors={$errors['email'] || []}
+        constraints={$constraints['email'] || {}}
+      />
+      <div class="w-64 pt-2">
+        <h2 class="text-xs">Envoyer un mail de récupération</h2>
+        <Button
+          label="Envoyer"
+          disabled={$submitting || !$tainted}
+        />
+      </div>
+    </div>
   </Form>
 </div>

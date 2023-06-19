@@ -23,7 +23,7 @@
   <input
     id="{name}-input"
     {name}
-    class="h-8 rounded border-red-300 bg-neutral-800 text-sm"
+    class="h-8 rounded border-red-500 bg-neutral-200 text-sm"
     class:border={errors.length != 0}
     type="text"
     bind:value

@@ -3,8 +3,8 @@
   import Form from '$lib/components/forms/Form.svelte';
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
   import PlayerLinkItem from '$lib/components/gigs/gig/PlayerLinkItem.svelte';
+  import PlayerSelfItem from '$lib/components/gigs/gig/PlayerSelfItem.svelte';
   import List from '$lib/components/layout/List.svelte';
-  import ListItem from '$lib/components/layout/ListItem.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
@@ -52,26 +52,27 @@
     <p class="text-xs">Youhou ? Y'a quelqu'un ?</p>
   {:else}
     {#each data.band.memberships as membership}
-      <ListItem>
-        {#if data.currentMembership?.player.id == membership.player.id}
-          <PlayerItem
-            player={membership.player}
-            isAdmin={membership.isAdmin}
-            highlighted={true}
-          />
-        {:else if data.currentMembership?.isAdmin}
-          <PlayerLinkItem
-            player={membership.player}
-            href="/band/{data.band.id}/player/{membership.player.id}"
-            isAdmin={membership.isAdmin}
-          />
-        {:else}
-          <PlayerItem
-            player={membership.player}
-            isAdmin={membership.isAdmin}
-          />
-        {/if}
-      </ListItem>
+      <div
+        class="contents"
+        class:!shadow-orange-300={data.currentMembership?.player.id == membership.player.id}
+      />
+      {#if data.currentMembership?.player.id == membership.player.id}
+        <PlayerSelfItem
+          player={membership.player}
+          isAdmin={membership.isAdmin}
+        />
+      {:else if data.currentMembership?.isAdmin}
+        <PlayerLinkItem
+          player={membership.player}
+          href="/band/{data.band.id}/player/{membership.player.id}"
+          isAdmin={membership.isAdmin}
+        />
+      {:else}
+        <PlayerItem
+          player={membership.player}
+          isAdmin={membership.isAdmin}
+        />
+      {/if}
     {/each}
   {/if}
 </List>

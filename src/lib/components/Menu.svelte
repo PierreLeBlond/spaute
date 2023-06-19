@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+
   import type { Tab } from './Tab';
 
   export let tabs: Tab[] = [];
@@ -10,15 +11,15 @@
   $: selectedOffset = offsetMap.get(selectedHref);
 </script>
 
-<ul class="relative grid w-full grid-cols-3 items-center justify-center bg-neutral-800 py-2">
+<ul class="relative grid w-full grid-cols-3 items-center justify-center bg-neutral-200 py-2">
   <li
-    class="absolute col-span-1 col-start-1 h-full w-full rounded-t bg-neutral-900 transition-all"
+    class="absolute col-span-1 col-start-1 h-full w-full rounded-t bg-neutral-100 transition-all"
     style:left={selectedOffset}
   />
   {#each tabs as tab}
     <li class="relative">
       <a
-        class="block w-full text-center text-sm text-blue-300"
+        class="block w-full text-center text-sm text-cyan-600"
         href={tab.href}>{tab.label}</a
       >
     </li>

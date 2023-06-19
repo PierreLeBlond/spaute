@@ -48,7 +48,7 @@
         errors={$errors['name'] || []}
         constraints={$constraints['name'] || {}}
       />
-      <div class="w-full pt-2">
+      <div class="w-64 pt-2">
         <Button
           label="Sign up"
           disabled={$submitting || !$tainted}

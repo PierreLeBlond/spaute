@@ -52,7 +52,7 @@ export const actions: Actions = {
     const form = await superValidate(request, deleteSchema, { id: 'deleteForm' });
 
     if (form.data.name != form.data.nameCopy) {
-      setError(form, 'nameCopy', 'name incorrect');
+      setError(form, 'nameCopy', 'le nom de correspond pas');
     }
 
     if (!form.valid) {

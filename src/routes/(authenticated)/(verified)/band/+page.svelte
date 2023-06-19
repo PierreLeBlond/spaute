@@ -19,7 +19,9 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/bands" />
+<div class="flex">
+  <ReturnLink href="/bands" />
+</div>
 
 <div class="w-full p-2">
   <Form

@@ -9,7 +9,7 @@
 </script>
 
 <form
-  class="w-full rounded bg-neutral-900 p-2 text-blue-300"
+  class="w-full"
   method="POST"
   {action}
   {id}
