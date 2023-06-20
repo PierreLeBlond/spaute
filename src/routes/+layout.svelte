@@ -22,13 +22,13 @@
 </script>
 
 <main
-  class="flex h-screen w-screen flex-col items-center justify-center bg-neutral-800 text-xl text-orange-300"
+  class="flex h-screen w-screen flex-col items-center justify-center bg-neutral-200 text-xl text-neutral-600"
   style:height={'100svh'}
 >
   <div class="absolute top-0 h-40 w-full">
     <Header />
   </div>
-  <div class="flex w-full grow flex-col items-center overflow-y-hidden bg-neutral-900 pt-40 sm:w-96">
+  <div class="flex w-full grow flex-col items-center overflow-y-hidden bg-neutral-100 pt-40 sm:w-96">
     <SlidingTabs
       href={data.href}
       {tabs}><slot /></SlidingTabs

@@ -8,7 +8,7 @@
 </script>
 
 <a
-  class="flex w-full justify-between rounded border-b-2 border-blue-300 p-2 text-sm"
+  class="mb-2 flex w-full justify-between rounded bg-neutral-100 p-2 text-sm shadow shadow-blue-300"
   {href}
 >
   <p>

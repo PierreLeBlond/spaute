@@ -42,7 +42,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Echec :(');

@@ -20,7 +20,7 @@
   <textarea
     id="{name}-input"
     {name}
-    class="grow rounded border-red-300 bg-neutral-800 text-sm"
+    class="grow rounded border-red-500 bg-neutral-200 text-sm"
     class:border={errors.length != 0}
     bind:value
     {maxlength}

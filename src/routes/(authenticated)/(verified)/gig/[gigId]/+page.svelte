@@ -1,9 +1,7 @@
 <script lang="ts">
   import GigPage from '$lib/components/gigs/gig/GigPage.svelte';
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
-  import PlayerLinkItem from '$lib/components/gigs/gig/PlayerLinkItem.svelte';
-  import List from '$lib/components/layout/List.svelte';
-  import ListItem from '$lib/components/layout/ListItem.svelte';
+  import PlayerView from '$lib/components/gigs/gig/PlayerView.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
 
@@ -16,6 +14,7 @@
         data.gig.presences.every((presence) => presence.player.id != membership.player.id)
       )
     : [];
+  $: absentPresences = data.gig.presences.filter((presence) => !presence.value);
 </script>
 
 <div class="flex justify-between">
@@ -35,44 +34,72 @@
     data={data.form}
   />
 
-  <List>
-    {#each data.gig.presences as presence}
-      {@const membership = data.band
-        ? data.band.memberships.find((membership) => membership.player.id == presence.player.id)
-        : null}
-      <ListItem>
-        <div
-          class="contents text-red-300"
-          class:!text-green-300={presence.value}
-        >
-          {#if data.currentPresence?.playerId == presence.player.id}
-            <PlayerItem
-              player={presence.player}
-              isAdmin={membership?.isAdmin}
-              isOrganizer={presence.isOrganizer}
-              highlighted={true}
+  <div class="bg-neutral-200 p-2">
+    <p class="text-sm">Présences et configuration</p>
+    <ul class="p-2">
+      {#if data.gig.currentFormation}
+        {#each data.gig.currentFormation.formationVoices as formationVoice}
+          <p class="text-sm">{formationVoice.instrument.name}</p>
+          <div class="contents text-orange-600">
+            {#each formationVoice.formationVoicePresences as formationVoicePresence}
+              {@const membership =
+                data.band?.memberships.find(
+                  (membership) => membership.player.id == formationVoicePresence.presence.player.id
+                ) || null}
+              <PlayerView
+                currentPresence={data.currentPresence}
+                presence={formationVoicePresence.presence}
+                currentMembership={data.currentMembership}
+                {membership}
+                gig={data.gig}
+              />
+            {/each}
+          </div>
+        {/each}
+        <p class="text-sm">Autres</p>
+        <div class="contents text-orange-600">
+          {#each data.gig.currentFormation.formationUndefinedVoicePresences as formationUndefinedVoicePresence}
+            {@const membership =
+              data.band?.memberships.find(
+                (membership) => membership.player.id == formationUndefinedVoicePresence.presence.player.id
+              ) || null}
+            <PlayerView
+              currentPresence={data.currentPresence}
+              presence={formationUndefinedVoicePresence.presence}
+              currentMembership={data.currentMembership}
+              {membership}
+              gig={data.gig}
             />
-          {:else if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
-            <PlayerLinkItem
-              player={presence.player}
-              href="/gig/{data.gig.id}/player/{presence.player.id}"
-              isAdmin={membership?.isAdmin}
-              isOrganizer={presence.isOrganizer}
-            />
-          {:else}
-            <PlayerItem
-              player={presence.player}
-              isAdmin={membership?.isAdmin}
-              isOrganizer={presence.isOrganizer}
-            />
-          {/if}
+          {/each}
         </div>
-      </ListItem>
-    {/each}
-    {#each remainingMemberships as membership}
-      <ListItem>
+      {:else}
+        <p class="text-sm">Pas de configuration possible :(</p>
+      {/if}
+    </ul>
+
+    <p class="text-sm">Absences</p>
+
+    <ul class="p-2">
+      {#each absentPresences as presence}
+        {@const membership =
+          data.band?.memberships.find((membership) => membership.player.id == presence.player.id) || null}
+        <div class="contents text-red-500">
+          <PlayerView
+            currentPresence={data.currentPresence}
+            {presence}
+            currentMembership={data.currentMembership}
+            {membership}
+            gig={data.gig}
+          />
+        </div>
+      {/each}
+    </ul>
+
+    <p class="text-sm">N'ont pas encore répondus</p>
+    <ul class="p-2">
+      {#each remainingMemberships as membership}
         <PlayerItem player={membership.player} />
-      </ListItem>
-    {/each}
-  </List>
+      {/each}
+    </ul>
+  </div>
 </div>

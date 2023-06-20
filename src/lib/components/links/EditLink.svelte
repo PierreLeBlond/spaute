@@ -4,7 +4,7 @@
 
 <a
   {href}
-  class="flex pr-2 pt-2 text-blue-300"
+  class="flex p-2 text-cyan-600"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

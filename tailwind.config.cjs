@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        'DEFAULT': '-4px 4px',
+      }
+    },
   },
   plugins: [],
 }

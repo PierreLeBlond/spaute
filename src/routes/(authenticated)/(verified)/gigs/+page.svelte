@@ -7,7 +7,7 @@
   export let data: PageData;
 </script>
 
-<div class="p-2">
+<div class="p-4">
   <RightLink
     href="/gig"
     label="Créer une presta"

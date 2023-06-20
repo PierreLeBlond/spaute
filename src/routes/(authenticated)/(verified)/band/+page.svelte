@@ -19,7 +19,9 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/bands" />
+<div class="flex">
+  <ReturnLink href="/bands" />
+</div>
 
 <div class="w-full p-2">
   <Form
@@ -33,7 +35,7 @@
         label="nom"
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        constraints={$constraints['name'] || {}}
+        {...$constraints['name']}
       />
       <div class="col-span-2">
         <Button

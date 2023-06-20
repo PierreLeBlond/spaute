@@ -14,20 +14,20 @@ export const load: PageServerLoad = async ({ url }) => {
 
   if (expired) {
     const error = 'Le lien de validation a expiré !';
-    setError(form, null, error);
+    setError(form, "", error);
   }
 
   if (invalid) {
     const error = 'Le lien de récupération n\'est pas valide !';
-    setError(form, null, error);
+    setError(form, "", error);
   }
 
   return {
     form,
     tabs: [
       {
-        href: '/password-reset',
-        key: '/password-reset',
+        href: 'users/password-reset',
+        key: 'users/password-reset',
         label: 'récupération'
       }
     ],
@@ -52,7 +52,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Outch !');

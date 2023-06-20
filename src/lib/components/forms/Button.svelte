@@ -9,5 +9,5 @@
   value={label}
   name={id}
   {disabled}
-  class="h-8 w-full rounded bg-blue-300 text-sm text-neutral-900 transition-colors hover:cursor-pointer disabled:bg-neutral-500 disabled:text-neutral-700"
+  class="h-8 w-full rounded bg-cyan-600 text-sm text-neutral-800 transition-colors hover:cursor-pointer disabled:bg-neutral-300 disabled:text-neutral-400 disabled:hover:cursor-auto"
 />

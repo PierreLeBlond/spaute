@@ -4,7 +4,7 @@
   import Toaster from './toast/Toaster.svelte';
 </script>
 
-<header class="relative flex h-full w-full justify-center bg-neutral-900">
+<header class="relative flex h-full w-full justify-center bg-neutral-100">
   <svg
     width="100%"
     height="110%"
@@ -12,7 +12,7 @@
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 135.46666 30"
     preserveAspectRatio="none"
-    class="absolute z-0 h-full w-full text-neutral-800"
+    class="absolute z-0 h-full w-full text-neutral-200"
   >
     <g transform="scale(0.95037414,1.0522172)">
       <path
@@ -40,7 +40,7 @@
       {#if $page.data['backPathname']}
         <a
           href={$page.data['backPathname']}
-          class="flex items-center justify-center text-blue-300"
+          class="flex items-center justify-center text-cyan-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@
       {#if $page.data['currentPlayer']}
         <a
           href="/logout"
-          class="flex items-center justify-center text-blue-300"
+          class="flex items-center justify-center text-cyan-600"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

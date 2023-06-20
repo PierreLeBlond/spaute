@@ -15,12 +15,7 @@ const updateDisabledVoiceSchema = z.object({ bandVoiceIds: z.array(z.number()), 
 const deleteGigVoiceSchema = z.object({ id: z.number(), gigId: z.number() });
 
 export const load: PageServerLoad = async (event) => {
-  const { gig } = await event.parent();
-  const caller = router.createCaller(await createContext(event));
-  const bandVoices = gig.band ? await caller.bandVoices.list({ bandId: gig.band.id }) : [];
-  const disabledVoices = await caller.disabledVoices.list({ gigId: gig.id });
-  const gigVoices = () => caller.gigVoices.list({ gigId: gig.id });
-
+  const { gig, bandVoices, disabledVoices } = await event.parent();
   const date = DateTime.fromJSDate(gig.date);
 
   const ISODate = date.toISODate();
@@ -46,8 +41,6 @@ export const load: PageServerLoad = async (event) => {
     deleteForm: deleteForm(),
     updateDisabledVoiceForm: updateDisabledVoiceForm(),
     deleteGigVoiceForm: deleteGigVoiceForm(),
-    bandVoices,
-    gigVoices: gigVoices(),
     index: 104
   }
 }
@@ -77,7 +70,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Presta non valide :(');
@@ -114,7 +107,7 @@ export const actions: Actions = {
       }
       setError(
         updateDisabledVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(updateDisabledVoiceForm, 'Echec :(');
@@ -133,7 +126,7 @@ export const actions: Actions = {
       }
       setError(
         deleteGigVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(deleteGigVoiceForm, 'Echec :(');
@@ -162,7 +155,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Suppression impossible :(');

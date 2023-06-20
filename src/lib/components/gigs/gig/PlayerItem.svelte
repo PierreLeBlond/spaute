@@ -4,13 +4,9 @@
   export let player: Player;
   export let isOrganizer: boolean = false;
   export let isAdmin: boolean = false;
-  export let highlighted: boolean = false;
 </script>
 
-<div
-  class="flex w-full justify-between rounded border-orange-300 p-2 text-sm"
-  class:border-b-2={highlighted}
->
+<div class="mb-2 flex w-full justify-between rounded bg-neutral-100 p-2 text-sm shadow shadow-neutral-300">
   <p>
     {player.name}
   </p>

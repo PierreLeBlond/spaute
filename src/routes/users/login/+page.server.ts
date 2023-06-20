@@ -47,7 +47,7 @@ export const actions: Actions = {
       form.data.password = "";
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Vous ne passerez pas :(');

@@ -25,30 +25,30 @@
         label={'email'}
         bind:value={$form['email']}
         errors={$errors['email'] || []}
-        constraints={$constraints['email'] || {}}
+        {...$constraints['email']}
       />
       <Password
         name={'password'}
         label={'mot de passe'}
         bind:value={$form['password']}
         errors={$errors['password'] || []}
-        constraints={$constraints['password'] || {}}
+        {...$constraints['password']}
       />
       <Password
         name={'passwordConfirmation'}
         label={'confirmation du mot de passe'}
         bind:value={$form['passwordConfirmation']}
         errors={$errors['passwordConfirmation'] || []}
-        constraints={$constraints['passwordConfirmation'] || {}}
+        {...$constraints['passwordConfirmation']}
       />
       <Text
         name={'name'}
         label={'nom de fanfaronx'}
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        constraints={$constraints['name'] || {}}
+        {...$constraints['name']}
       />
-      <div class="w-full pt-2">
+      <div class="w-64 pt-2">
         <Button
           label="Sign up"
           disabled={$submitting || !$tainted}

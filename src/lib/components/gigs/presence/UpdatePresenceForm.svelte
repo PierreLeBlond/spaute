@@ -39,7 +39,7 @@
     />
     <Checkbox
       name="value"
-      label="participe"
+      label={$form['value'] ? 'je participe' : 'je ne participe pas'}
       bind:checked={$form['value']}
     />
     <Button

@@ -41,7 +41,7 @@ export const actions: Actions = {
       }
       setError(
         deleteBandVoiceForm,
-        null,
+        "",
         error.message
       );
       return message(deleteBandVoiceForm, 'Echec :(');
@@ -52,7 +52,7 @@ export const actions: Actions = {
     const form = await superValidate(request, deleteSchema, { id: 'deleteForm' });
 
     if (form.data.name != form.data.nameCopy) {
-      setError(form, 'nameCopy', 'name incorrect');
+      setError(form, 'nameCopy', 'le nom de correspond pas');
     }
 
     if (!form.valid) {
@@ -70,7 +70,7 @@ export const actions: Actions = {
       }
       setError(
         form,
-        null,
+        "",
         error.message
       );
       return message(form, 'Suppression impossible :(');

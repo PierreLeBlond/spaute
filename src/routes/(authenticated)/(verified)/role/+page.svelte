@@ -11,6 +11,8 @@
 
   export let data: PageData;
 
+  let checked: boolean;
+
   const { errors, enhance, message } = superForm(data.form);
   message.subscribe(sendToast);
 </script>
@@ -37,7 +39,8 @@
       <div class="col-span-2">
         <Checkbox
           name="playable"
-          label="je gère mon pupitre"
+          label={checked ? 'je gère mon pupitre' : 'je gère pas encore'}
+          bind:checked
         />
       </div>
       <input

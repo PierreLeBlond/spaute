@@ -30,7 +30,7 @@
   <p class="col-span-5">
     {#if band}
       <a
-        class="col-span-5 text-sm text-blue-300"
+        class="col-span-5 text-sm text-cyan-600"
         href="/band/{band.id}">{band.name}</a
       >
     {:else}
@@ -84,20 +84,20 @@
       />
     </svg>
     <a
-      class="col-span-5 text-sm text-blue-300"
+      class="col-span-5 text-sm text-cyan-600"
       href={link}>{link}</a
     >
   {/if}
   {#if !presence}
-    <p class="col-span-6">Je ne sais pas si j'y participe.</p>
+    <p class="col-span-5 col-start-2">Je ne sais pas si j'y participe.</p>
   {:else if presence.value}
-    <p class="col-span-6 text-green-300">Je participe !</p>
+    <p class="col-span-5 col-start-2 text-orange-600">Je participe !</p>
   {:else}
-    <p class="col-span-6 text-red-300">Je n'y participe pas.</p>
+    <p class="col-span-5 col-start-2 text-red-500">Je n'y participe pas.</p>
   {/if}
   {#if gig.playable}
-    <p class="col-span-6 text-green-300">C'est jouable !</p>
+    <p class="col-span-5 col-start-2 text-orange-600">C'est jouable !</p>
   {:else}
-    <p class="col-span-6 text-red-300">C'est pas encore jouable...</p>
+    <p class="col-span-5 col-start-2 text-red-500">C'est pas encore jouable...</p>
   {/if}
 </div>

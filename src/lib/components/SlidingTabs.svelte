@@ -55,7 +55,7 @@
     <div
       in:slide|local={{ sign: 1 }}
       out:slide|local={{ sign: -1 }}
-      class="absolute flex h-full w-full flex-col py-2"
+      class="absolute flex h-full w-full flex-col"
     >
       <slot />
     </div>

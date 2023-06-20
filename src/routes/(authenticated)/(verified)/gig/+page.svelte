@@ -20,9 +20,11 @@
   message.subscribe(sendToast);
 </script>
 
-<ReturnLink href="/gigs" />
+<div class="flex">
+  <ReturnLink href="/gigs" />
+</div>
 
-<div class="w-full grow p-2">
+<div class="w-full grow overflow-auto p-2">
   <Form
     errors={$errors._errors || []}
     {enhance}
@@ -49,14 +51,14 @@
         label="titre"
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        constraints={$constraints['name'] || {}}
+        {...$constraints['name']}
       />
       <Text
         name="location"
         label="lieu"
         bind:value={$form['location']}
         errors={$errors['location'] || []}
-        constraints={$constraints['location'] || {}}
+        {...$constraints['location']}
       />
       <DateInput
         name="date"

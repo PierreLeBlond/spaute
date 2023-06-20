@@ -9,5 +9,5 @@
   value={label}
   name={id}
   {disabled}
-  class="h-8 w-full rounded bg-red-300 text-sm text-neutral-900 hover:cursor-pointer disabled:bg-neutral-500 disabled:text-neutral-600"
+  class="h-8 w-full rounded bg-red-500 text-sm text-neutral-900 hover:cursor-pointer disabled:bg-neutral-500 disabled:text-neutral-600"
 />

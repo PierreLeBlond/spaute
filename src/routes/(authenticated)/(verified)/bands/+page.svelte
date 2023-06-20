@@ -8,7 +8,7 @@
   export let data: PageData;
 </script>
 
-<div class="p-2">
+<div class="p-4">
   <RightLink
     href="/band"
     label="Créer une fanfare"
@@ -30,7 +30,7 @@
     {/each}
   {/if}
 </List>
-<div class="p-2">
+<div class="p-4">
   <RightLink
     href="/bands/search"
     label="Rechercher une fanfare"

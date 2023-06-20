@@ -31,64 +31,65 @@
   deleteMessage.subscribe(sendToast);
 </script>
 
-<div class="flex h-full flex-col">
-  <div class="p-2">
-    <RightLink
-      href="/role"
-      label="Ajouter un pupitre"
-    />
-  </div>
+<div class="p-4">
+  <RightLink
+    href="/role"
+    label="Ajouter un pupitre"
+  />
+</div>
 
-  <List>
-    {#if data.roles.length == 0}
-      <p class="text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
-    {:else}
-      {#each data.roles as role, index}
-        <ListItem>
-          <div class="grid grid-cols-6 gap-y-2 p-2">
-            <div class="col-span-4 col-start-2 flex items-center justify-center">
-              <p class="text-center text-xs">
-                {role.instrument.name}
-              </p>
-            </div>
-            <div class="flex items-center justify-center">
-              <form
-                method="POST"
-                action="?/delete"
-                use:deleteEnhance
-              >
-                <input
-                  type="hidden"
-                  value={data.currentPlayer.id}
-                  name="playerId"
-                />
-                <input
-                  type="hidden"
-                  value={role.id}
-                  name="id"
-                />
-                <DeleteButtonIcon />
-              </form>
-            </div>
-            <input
-              form="updateForm"
-              type="hidden"
-              name="ids"
-              value={role.id}
-            />
-            <div class="col-span-6">
-              <Checkbox
-                form="updateForm"
-                name="playables"
-                label="je gère mon pupitre"
-                bind:checked={$form['playables'][index]}
-              />
-            </div>
+<List>
+  {#if data.roles.length == 0}
+    <p class="text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
+  {:else}
+    {#each data.roles as role, index}
+      <ListItem>
+        <div class="grid grid-cols-6 gap-y-2 p-2">
+          <div class="col-span-4 col-start-2 flex items-center justify-center">
+            <p class="text-center text-xs">
+              {role.instrument.name}
+            </p>
           </div>
-        </ListItem>
-      {/each}
-    {/if}
-  </List>
+          <div class="flex items-center justify-center">
+            <form
+              method="POST"
+              action="?/delete"
+              use:deleteEnhance
+            >
+              <input
+                type="hidden"
+                value={data.currentPlayer.id}
+                name="playerId"
+              />
+              <input
+                type="hidden"
+                value={role.id}
+                name="id"
+              />
+              <DeleteButtonIcon />
+            </form>
+          </div>
+          <input
+            form="updateForm"
+            type="hidden"
+            name="ids"
+            value={role.id}
+          />
+          <div class="col-span-6">
+            <Checkbox
+              form="updateForm"
+              name="playables"
+              label={$form['playables'][index] ? 'je gère mon pupitre' : 'je gère pas encore'}
+              bind:checked={$form['playables'][index]}
+            />
+          </div>
+        </div>
+      </ListItem>
+    {/each}
+  {/if}
+</List>
+
+<div class="p-4">
   <Form
     id="updateForm"
     action="?/update"

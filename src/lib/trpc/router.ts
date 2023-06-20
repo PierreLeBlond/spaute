@@ -4,6 +4,7 @@ import { bands } from "./routes/bands";
 import { gigs } from "./routes/gigs";
 import { presences } from "./routes/presences";
 import { players } from "./routes/players";
+import { formations } from "./routes/formations";
 import { memberships } from "./routes/memberships";
 import { gigVoices } from "./routes/gigVoices";
 import { disabledVoices } from "./routes/disabledVoices";
@@ -17,6 +18,7 @@ export const router = t.router({
   bands,
   gigs,
   players,
+  formations,
   presences,
   gigVoices,
   disabledVoices,

@@ -20,29 +20,31 @@
 </script>
 
 <div class="flex-col items-center justify-center p-8">
-  <h1 class="text-center text-lg">Création du nouveau mot de passe</h1>
-
   <Form
     errors={$errors._errors || []}
     {enhance}
   >
-    <Password
-      name={'password'}
-      label={'mot de passe'}
-      bind:value={$form['password']}
-      errors={$errors['password'] || []}
-      constraints={$constraints['password'] || {}}
-    />
-    <Password
-      name={'passwordConfirmation'}
-      label={'confirmation du mot de passe'}
-      bind:value={$form['passwordConfirmation']}
-      errors={$errors['passwordConfirmation'] || []}
-      constraints={$constraints['passwordConfirmation'] || {}}
-    />
-    <Button
-      label="Mettre à jour"
-      disabled={$submitting || !$tainted}
-    />
+    <div class="flex flex-col items-center justify-center">
+      <Password
+        name={'password'}
+        label={'nouveau mot de passe'}
+        bind:value={$form['password']}
+        errors={$errors['password'] || []}
+        {...$constraints['password']}
+      />
+      <Password
+        name={'passwordConfirmation'}
+        label={'confirmation du mot de passe'}
+        bind:value={$form['passwordConfirmation']}
+        errors={$errors['passwordConfirmation'] || []}
+        {...$constraints['passwordConfirmation']}
+      />
+      <div class="w-64 pt-2">
+        <Button
+          label="Mettre à jour"
+          disabled={$submitting || !$tainted}
+        />
+      </div>
+    </div>
   </Form>
 </div>

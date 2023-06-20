@@ -16,7 +16,14 @@ export const load: PageServerLoad = async () => {
 
   return {
     form,
-    index: 100001
+    index: 100001,
+    tabs: [
+      {
+        href: 'users/password-reset',
+        key: 'users/password-reset',
+        label: 'reset'
+      }
+    ]
   }
 };
 

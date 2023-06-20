@@ -15,9 +15,11 @@
   };
 </script>
 
-<ReturnLink href="/bands" />
+<div class="flex">
+  <ReturnLink href="/bands" />
+</div>
 
-<div class="px-2">
+<div class="p-2">
   <SearchBar
     bind:searchValue
     on:input={throttle(update, 500)}
