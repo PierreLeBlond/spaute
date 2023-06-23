@@ -4,6 +4,8 @@ import { t } from "../t";
 import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { organizerProcedure } from "../procedures/organizerProcedure";
 import { ownerProcedure } from "../procedures/ownerProcedure";
+import { Novu } from "@novu/node";
+import { NOVU_API_KEY } from "$env/static/private";
 
 export const presences = t.router({
   list: verifiedProcedure.input(PresenceWhereInputSchema).query(async ({ input }) => prisma.presence.findMany({
@@ -28,7 +30,7 @@ export const presences = t.router({
   }),
   create: verifiedProcedure.input(
     PresenceSchema.omit({ id: true, isOrganizer: true })
-  ).mutation(async ({ input }) => {
+  ).mutation(async ({ input, ctx }) => {
     const { playerId, gigId, ...rest } = input;
     const presence = await prisma.presence.create({
       data: {
@@ -45,6 +47,14 @@ export const presences = t.router({
         },
       }
     });
+
+    const novu = new Novu(NOVU_API_KEY);
+    const spamTopicKey = `gig:spam:${gigId}`;
+
+    await novu.topics.removeSubscribers(spamTopicKey, {
+      subscribers: [ctx.user.userId],
+    });
+
     return presence;
   }),
   update: ownerProcedure.input(PresenceSchema.omit({ id: true, isOrganizer: true }).strict()).mutation(async ({ input }) => {

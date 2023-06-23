@@ -6,12 +6,13 @@ import { auth, emailVerificationToken, passwordResetToken } from "$lib/lucia";
 import { LuciaError } from "lucia-auth";
 import { authenticatedProcedure } from "../procedures/authenticatedProcedure";
 import * as nodemailer from 'nodemailer';
-import { SMTP_USER, SMTP_FROM, SMTP_PASS, SMTP_HOST } from '$env/static/private';
+import { SMTP_USER, SMTP_FROM, SMTP_PASS, SMTP_HOST, NOVU_API_KEY } from '$env/static/private';
 import prisma from "$lib/prisma";
 import { render } from "svelte-email";
 import Verification from '$lib/emails/Verification.svelte';
 import Recovering from '$lib/emails/Recovering.svelte';
 import { LuciaTokenError } from "@lucia-auth/tokens";
+import { Novu } from '@novu/node';
 
 export const users = t.router({
   create: publicProcedure.input(
@@ -36,6 +37,8 @@ export const users = t.router({
       });
       const session = await auth.createSession(user.userId);
       ctx.auth.setSession(session);
+
+
     } catch (error) {
       if (!(error instanceof LuciaError)) {
         throw new TRPCError({
@@ -156,6 +159,13 @@ export const users = t.router({
       });
       const session = await auth.createSession(token.userId);
       ctx.auth.setSession(session);
+
+      const novu = new Novu(NOVU_API_KEY);
+
+      await novu.subscribers.identify(ctx.user.userId, {
+        email: ctx.user.email,
+        locale: 'fr'
+      });
 
     } catch (error) {
 

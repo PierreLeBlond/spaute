@@ -64,7 +64,7 @@ model Player {
   name        String       @unique
   presences   Presence[]
   roles       Role[]
-  memberShips Membership[]
+  memberships Membership[]
 }
 
 model Membership {
