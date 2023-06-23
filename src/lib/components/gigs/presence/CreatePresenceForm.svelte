@@ -1,8 +1,8 @@
 <script lang="ts">
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import type { Gig, Player } from '@prisma/client';
+  import type { SuperValidated } from 'sveltekit-superforms';
   import { superForm } from 'sveltekit-superforms/client';
-  import type { Validation } from 'sveltekit-superforms/index';
 
   import Button from '../../forms/Button.svelte';
   import Form from '../../forms/Form.svelte';
@@ -12,7 +12,7 @@
   export let player: Player;
   export let action: string;
 
-  export let data: Validation<PresenceSchema>;
+  export let data: SuperValidated<PresenceSchema>;
 
   const { enhance, submitting, message } = superForm(data);
   message.subscribe(sendToast);

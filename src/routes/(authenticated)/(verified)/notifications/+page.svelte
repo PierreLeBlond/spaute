@@ -5,8 +5,8 @@
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { HeadlessService } from '@novu/headless';
   import type { FetchResult, UpdateResult } from '@novu/headless/dist/lib/types';
-  import type { IMessage, ISession } from '@novu/notification-center';
-  import type { IPaginatedResponse } from '@novu/shared';
+  import type { ISession } from '@novu/headless/dist/utils/types';
+  import type { IPaginatedResponse, IMessage } from '@novu/shared';
   import { Firework } from 'svelte-loading-spinners';
 
   import type { PageData } from './$types';

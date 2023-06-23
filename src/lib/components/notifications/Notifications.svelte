@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HeadlessService } from '@novu/headless';
   import type { FetchResult } from '@novu/headless/dist/lib/types';
-  import type { ISession } from '@novu/notification-center';
+  import type { ISession } from '@novu/headless/dist/utils/types';
 
   export let userId: string;
 
