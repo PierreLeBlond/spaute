@@ -114,7 +114,7 @@
         label="recopie son nom pour valider la suppression"
         bind:value={$deleteForm['nameCopy']}
         errors={$deleteErrors['nameCopy'] || []}
-        {...$deleteConstraints['nameCopy']}
+        constraints={$deleteConstraints['nameCopy']}
       />
     </div>
     <DeleteButton

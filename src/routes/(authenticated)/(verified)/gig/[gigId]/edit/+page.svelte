@@ -86,14 +86,14 @@
           label="titre"
           bind:value={$updateForm['name']}
           errors={$updateErrors['name'] || []}
-          {...$updateConstraints['name']}
+          constraints={$updateConstraints['name']}
         />
         <Text
           name="location"
           label="lieu"
           bind:value={$updateForm['location']}
           errors={$updateErrors['location'] || []}
-          {...$updateConstraints['location']}
+          constraints={$updateConstraints['location']}
         />
         <DateInput
           name="date"
@@ -264,7 +264,7 @@
         label="recopie son titre pour valider la suppression"
         bind:value={$deleteForm['nameCopy']}
         errors={$deleteErrors['nameCopy'] || []}
-        {...$deleteConstraints['nameCopy']}
+        constraints={$deleteConstraints['nameCopy']}
       />
       <DeleteButton
         label={'Supprimer'}

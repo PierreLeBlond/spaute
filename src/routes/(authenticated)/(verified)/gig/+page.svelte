@@ -51,14 +51,14 @@
         label="titre"
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        {...$constraints['name']}
+        constraints={$constraints['name']}
       />
       <Text
         name="location"
         label="lieu"
         bind:value={$form['location']}
         errors={$errors['location'] || []}
-        {...$constraints['location']}
+        constraints={$constraints['location']}
       />
       <DateInput
         name="date"

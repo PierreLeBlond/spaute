@@ -30,14 +30,14 @@
         label={'nouveau mot de passe'}
         bind:value={$form['password']}
         errors={$errors['password'] || []}
-        {...$constraints['password']}
+        constraints={$constraints['password']}
       />
       <Password
         name={'passwordConfirmation'}
         label={'confirmation du mot de passe'}
         bind:value={$form['passwordConfirmation']}
         errors={$errors['passwordConfirmation'] || []}
-        {...$constraints['passwordConfirmation']}
+        constraints={$constraints['passwordConfirmation']}
       />
       <div class="w-64 pt-2">
         <Button
