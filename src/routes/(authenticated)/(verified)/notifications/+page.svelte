@@ -83,7 +83,7 @@
         <div class="flex w-full items-center justify-between">
           <a
             href={message.cta.data.url}
-            class="grow rounded p-2 text-sm">{message.content}</a
+            class="grow rounded p-2 text-xs">{message.content}</a
           >
           <DeleteButton on:click={() => removeNotification(message._id)} />
         </div>
