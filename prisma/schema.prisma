@@ -49,7 +49,7 @@ model AuthUser {
 }
 
 model Band {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String       @unique
   gigs        Gig[]
   bandVoices  BandVoice[]
@@ -57,7 +57,7 @@ model Band {
 }
 
 model Player {
-  id     Int      @id @default(autoincrement())
+  id     String   @id @default(uuid())
   user   AuthUser @relation(fields: [userId], references: [id])
   userId String   @unique
 
@@ -68,22 +68,22 @@ model Player {
 }
 
 model Membership {
-  id       Int     @id @default(autoincrement())
+  id       String  @id @default(uuid())
   isAdmin  Boolean @default(false)
   band     Band    @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId   Int
+  bandId   String
   player   Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId Int
+  playerId String
 
   @@unique([bandId, playerId])
 }
 
 model Gig {
-  id               Int             @id @default(autoincrement())
+  id               String          @id @default(uuid())
   name             String
   presences        Presence[]
   band             Band?           @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId           Int?
+  bandId           String?
   gigVoices        GigVoice[]
   disabledVoices   DisabledVoice[]
   date             DateTime
@@ -95,13 +95,13 @@ model Gig {
 }
 
 model Presence {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(uuid())
   value       Boolean @default(false)
   isOrganizer Boolean @default(false)
   gig         Gig     @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  gigId       Int
+  gigId       String
   player      Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId    Int
+  playerId    String
 
   formationVoicePresences         FormationVoicePresence[]
   formationUndefinedVoicePresence FormationUndefinedVoicePresence[]
@@ -110,18 +110,18 @@ model Presence {
 }
 
 model Role {
-  id           Int        @id @default(autoincrement())
+  id           String     @id @default(uuid())
   playable     Boolean    @default(false)
   instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
-  instrumentId Int
+  instrumentId String
   player       Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId     Int
+  playerId     String
 
   @@unique([instrumentId, playerId])
 }
 
 model Instrument {
-  id              Int              @id @default(autoincrement())
+  id              String           @id @default(uuid())
   name            String           @unique
   roles           Role[]
   bandVoices      BandVoice[]
@@ -130,43 +130,43 @@ model Instrument {
 }
 
 model GigVoice {
-  id           Int        @id @default(autoincrement())
+  id           String     @id @default(uuid())
   instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
-  instrumentId Int
+  instrumentId String
   gig          Gig        @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  gigId        Int
+  gigId        String
 
   @@unique([id, gigId])
 }
 
 model BandVoice {
-  id             Int             @id @default(autoincrement())
+  id             String          @id @default(uuid())
   instrument     Instrument      @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
-  instrumentId   Int
+  instrumentId   String
   band           Band            @relation(fields: [bandId], references: [id], onDelete: Cascade)
-  bandId         Int
+  bandId         String
   disabledVoices DisabledVoice[]
 
   @@unique([id, bandId])
 }
 
 model DisabledVoice {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   gig         Gig       @relation(fields: [gigId], references: [id], onDelete: Cascade)
-  gigId       Int
+  gigId       String
   bandVoice   BandVoice @relation(fields: [bandVoiceId], references: [id], onDelete: Cascade)
-  bandVoiceId Int
+  bandVoiceId String
 
   @@unique([gigId, bandVoiceId])
 }
 
 model FormationVoice {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
-  formationId Int
+  formationId String
 
   instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
-  instrumentId Int
+  instrumentId String
 
   formationVoicePresences FormationVoicePresence[]
 
@@ -174,33 +174,33 @@ model FormationVoice {
 }
 
 model FormationUndefinedVoicePresence {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
-  formationId Int
+  formationId String
 
   presence   Presence @relation(fields: [presenceId], references: [id], onDelete: Cascade)
-  presenceId Int
+  presenceId String
 }
 
 model FormationVoicePresence {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   formationVoice   FormationVoice @relation(fields: [formationVoiceId], references: [id], onDelete: Cascade)
-  formationVoiceId Int
+  formationVoiceId String
 
   presence   Presence @relation(fields: [presenceId], references: [id], onDelete: Cascade)
-  presenceId Int
+  presenceId String
 }
 
 model Formation {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   formationVoices                  FormationVoice[]
   formationUndefinedVoicePresences FormationUndefinedVoicePresence[]
 
-  gig   Gig? @relation("Formations", fields: [gigId], references: [id], onDelete: Cascade)
-  gigId Int?
+  gig   Gig?    @relation("Formations", fields: [gigId], references: [id], onDelete: Cascade)
+  gigId String?
 
-  gigCurrentFrom   Gig? @relation("CurrentFormation", fields: [gigCurrentFromId], references: [id], onDelete: Cascade)
-  gigCurrentFromId Int? @unique
+  gigCurrentFrom   Gig?    @relation("CurrentFormation", fields: [gigCurrentFromId], references: [id], onDelete: Cascade)
+  gigCurrentFromId String? @unique
 }

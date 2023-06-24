@@ -17,7 +17,7 @@ export const gigVoices = t.router({
       instrument: true
     }
   })),
-  delete: organizerProcedure.input(z.object({ id: z.number(), gigId: z.number() })).mutation(({ input }) => prisma.gigVoice.delete({
+  delete: organizerProcedure.input(z.object({ id: z.string(), gigId: z.string() })).mutation(({ input }) => prisma.gigVoice.delete({
     where: {
       id_gigId: {
         id: input.id,

@@ -4,7 +4,7 @@ import { verified } from "./verified";
 import prisma from "$lib/prisma";
 
 const schema = z.object({
-  playerId: z.number()
+  playerId: z.string()
 });
 
 export const owner = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {

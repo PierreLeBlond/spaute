@@ -24,7 +24,7 @@ export const gigs = t.router({
       }
     }
   })),
-  listForPlayer: ownerProcedure.input(z.object({ playerId: z.number() })).query(({ input: { playerId } }) => prisma.gig.findMany({
+  listForPlayer: ownerProcedure.input(z.object({ playerId: z.string() })).query(({ input: { playerId } }) => prisma.gig.findMany({
     where: {
       OR: [
         {
@@ -90,7 +90,7 @@ export const gigs = t.router({
       }
     }
   })),
-  delete: organizerProcedure.input(z.object({ gigId: z.number() })).mutation(async ({ input, ctx }) => {
+  delete: organizerProcedure.input(z.object({ gigId: z.string() })).mutation(async ({ input, ctx }) => {
     const gig = await prisma.gig.delete({
       where: {
         id: input.gigId
@@ -149,7 +149,6 @@ export const gigs = t.router({
     await novu.topics.removeSubscribers(spamTopicKey, {
       subscribers: players.map(player => player.userId),
     });
-
   }),
   create: verifiedProcedure.input(
     GigSchema.omit({ id: true, playable: true }).strict()
@@ -234,7 +233,7 @@ export const gigs = t.router({
     });
   }),
   update: organizerProcedure.input(
-    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.number() }).strict()
+    GigSchema.omit({ playable: true, bandId: true, id: true }).extend({ gigId: z.string() }).strict()
   ).mutation(async ({ input: { gigId, ...data } }) => prisma.gig.update({
     where: {
       id: gigId

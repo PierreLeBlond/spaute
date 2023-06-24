@@ -38,7 +38,7 @@
         id={'bandId'}
         label={'fanfare'}
       >
-        <option value={-1}> Presta indépendante ! </option>
+        <option value={''}> Presta indépendante ! </option>
         {#each data.memberships as membership}
           <option value={membership.band.id}>
             {membership.band.name}

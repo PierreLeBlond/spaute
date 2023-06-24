@@ -19,7 +19,7 @@ export const roles = t.router({
       instrument: true
     }
   })),
-  delete: ownerProcedure.input(z.object({ id: z.number(), playerId: z.number() })).mutation(({ input }) => prisma.role.delete({
+  delete: ownerProcedure.input(z.object({ id: z.string(), playerId: z.string() })).mutation(({ input }) => prisma.role.delete({
     where: {
       id: input.id
     }

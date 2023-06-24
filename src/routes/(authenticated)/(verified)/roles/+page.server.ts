@@ -6,14 +6,14 @@ import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
 
 const updateSchema = z.object({
-  playerId: z.number(),
-  ids: z.array(z.number()),
+  playerId: z.string(),
+  ids: z.array(z.string()),
   playables: z.array(z.boolean())
 });
 
 const deleteSchema = z.object({
-  playerId: z.number(),
-  id: z.number()
+  playerId: z.string(),
+  id: z.string()
 })
 
 export const load: PageServerLoad = async (event) => {
@@ -47,7 +47,7 @@ export const actions: Actions = {
       const caller = router.createCaller(await createContext(event));
       await Promise.all(
         form.data.playables.map((playable, index) => caller.roles.update({
-          id: form.data.ids[index] as number,
+          id: form.data.ids[index] as string,
           playable,
           playerId: form.data.playerId
         }))

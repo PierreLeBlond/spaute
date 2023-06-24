@@ -23,7 +23,7 @@ const findBestConfiguration = (configurations: Configuration[]) => configuration
 
 export const computePlayability = async (gig: GigPayload) => {
 
-  const findConfigurations = (instrumentIds: number[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Configuration): Configuration[] => {
+  const findConfigurations = (instrumentIds: string[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Configuration): Configuration[] => {
 
     const instrumentIdsCopy = instrumentIds.slice(0);
     const instrumentId = instrumentIdsCopy.pop();

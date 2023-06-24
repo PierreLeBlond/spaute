@@ -4,7 +4,7 @@ import { z } from "zod";
 import prisma from "$lib/prisma";
 
 const schema = z.object({
-  bandId: z.number()
+  bandId: z.string()
 });
 
 export const admin = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {

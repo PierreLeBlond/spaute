@@ -99,7 +99,7 @@ export type AuthUser = z.infer<typeof AuthUserSchema>
 /////////////////////////////////////////
 
 export const BandSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   name: z.string(),
 })
 
@@ -110,7 +110,7 @@ export type Band = z.infer<typeof BandSchema>
 /////////////////////////////////////////
 
 export const PlayerSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   userId: z.string(),
   name: z.string(),
 })
@@ -122,10 +122,10 @@ export type Player = z.infer<typeof PlayerSchema>
 /////////////////////////////////////////
 
 export const MembershipSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   isAdmin: z.boolean(),
-  bandId: z.number().int(),
-  playerId: z.number().int(),
+  bandId: z.string(),
+  playerId: z.string(),
 })
 
 export type Membership = z.infer<typeof MembershipSchema>
@@ -135,9 +135,9 @@ export type Membership = z.infer<typeof MembershipSchema>
 /////////////////////////////////////////
 
 export const GigSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   name: z.string(),
-  bandId: z.number().int().nullable(),
+  bandId: z.string().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().nullable(),
@@ -151,11 +151,11 @@ export type Gig = z.infer<typeof GigSchema>
 /////////////////////////////////////////
 
 export const PresenceSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   value: z.boolean(),
   isOrganizer: z.boolean(),
-  gigId: z.number().int(),
-  playerId: z.number().int(),
+  gigId: z.string(),
+  playerId: z.string(),
 })
 
 export type Presence = z.infer<typeof PresenceSchema>
@@ -165,10 +165,10 @@ export type Presence = z.infer<typeof PresenceSchema>
 /////////////////////////////////////////
 
 export const RoleSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   playable: z.boolean(),
-  instrumentId: z.number().int(),
-  playerId: z.number().int(),
+  instrumentId: z.string(),
+  playerId: z.string(),
 })
 
 export type Role = z.infer<typeof RoleSchema>
@@ -178,7 +178,7 @@ export type Role = z.infer<typeof RoleSchema>
 /////////////////////////////////////////
 
 export const InstrumentSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
   name: z.string(),
 })
 
@@ -189,9 +189,9 @@ export type Instrument = z.infer<typeof InstrumentSchema>
 /////////////////////////////////////////
 
 export const GigVoiceSchema = z.object({
-  id: z.number().int(),
-  instrumentId: z.number().int(),
-  gigId: z.number().int(),
+  id: z.string().uuid(),
+  instrumentId: z.string(),
+  gigId: z.string(),
 })
 
 export type GigVoice = z.infer<typeof GigVoiceSchema>
@@ -201,9 +201,9 @@ export type GigVoice = z.infer<typeof GigVoiceSchema>
 /////////////////////////////////////////
 
 export const BandVoiceSchema = z.object({
-  id: z.number().int(),
-  instrumentId: z.number().int(),
-  bandId: z.number().int(),
+  id: z.string().uuid(),
+  instrumentId: z.string(),
+  bandId: z.string(),
 })
 
 export type BandVoice = z.infer<typeof BandVoiceSchema>
@@ -213,9 +213,9 @@ export type BandVoice = z.infer<typeof BandVoiceSchema>
 /////////////////////////////////////////
 
 export const DisabledVoiceSchema = z.object({
-  id: z.number().int(),
-  gigId: z.number().int(),
-  bandVoiceId: z.number().int(),
+  id: z.string().uuid(),
+  gigId: z.string(),
+  bandVoiceId: z.string(),
 })
 
 export type DisabledVoice = z.infer<typeof DisabledVoiceSchema>
@@ -225,9 +225,9 @@ export type DisabledVoice = z.infer<typeof DisabledVoiceSchema>
 /////////////////////////////////////////
 
 export const FormationVoiceSchema = z.object({
-  id: z.number().int(),
-  formationId: z.number().int(),
-  instrumentId: z.number().int(),
+  id: z.string().uuid(),
+  formationId: z.string(),
+  instrumentId: z.string(),
 })
 
 export type FormationVoice = z.infer<typeof FormationVoiceSchema>
@@ -237,9 +237,9 @@ export type FormationVoice = z.infer<typeof FormationVoiceSchema>
 /////////////////////////////////////////
 
 export const FormationUndefinedVoicePresenceSchema = z.object({
-  id: z.number().int(),
-  formationId: z.number().int(),
-  presenceId: z.number().int(),
+  id: z.string().uuid(),
+  formationId: z.string(),
+  presenceId: z.string(),
 })
 
 export type FormationUndefinedVoicePresence = z.infer<typeof FormationUndefinedVoicePresenceSchema>
@@ -249,9 +249,9 @@ export type FormationUndefinedVoicePresence = z.infer<typeof FormationUndefinedV
 /////////////////////////////////////////
 
 export const FormationVoicePresenceSchema = z.object({
-  id: z.number().int(),
-  formationVoiceId: z.number().int(),
-  presenceId: z.number().int(),
+  id: z.string().uuid(),
+  formationVoiceId: z.string(),
+  presenceId: z.string(),
 })
 
 export type FormationVoicePresence = z.infer<typeof FormationVoicePresenceSchema>
@@ -261,9 +261,9 @@ export type FormationVoicePresence = z.infer<typeof FormationVoicePresenceSchema
 /////////////////////////////////////////
 
 export const FormationSchema = z.object({
-  id: z.number().int(),
-  gigId: z.number().int().nullable(),
-  gigCurrentFromId: z.number().int().nullable(),
+  id: z.string().uuid(),
+  gigId: z.string().nullable(),
+  gigCurrentFromId: z.string().nullable(),
 })
 
 export type Formation = z.infer<typeof FormationSchema>
@@ -916,7 +916,7 @@ export const BandWhereInputSchema: z.ZodType<Prisma.BandWhereInput> = z.object({
   AND: z.union([ z.lazy(() => BandWhereInputSchema),z.lazy(() => BandWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => BandWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => BandWhereInputSchema),z.lazy(() => BandWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   gigs: z.lazy(() => GigListRelationFilterSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceListRelationFilterSchema).optional(),
@@ -932,7 +932,7 @@ export const BandOrderByWithRelationInputSchema: z.ZodType<Prisma.BandOrderByWit
 }).strict();
 
 export const BandWhereUniqueInputSchema: z.ZodType<Prisma.BandWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string().optional()
 }).strict();
 
@@ -940,17 +940,15 @@ export const BandOrderByWithAggregationInputSchema: z.ZodType<Prisma.BandOrderBy
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => BandCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => BandAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => BandMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => BandMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => BandSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => BandMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const BandScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.BandScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => BandScalarWhereWithAggregatesInputSchema),z.lazy(() => BandScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => BandScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => BandScalarWhereWithAggregatesInputSchema),z.lazy(() => BandScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
@@ -958,7 +956,7 @@ export const PlayerWhereInputSchema: z.ZodType<Prisma.PlayerWhereInput> = z.obje
   AND: z.union([ z.lazy(() => PlayerWhereInputSchema),z.lazy(() => PlayerWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => PlayerWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PlayerWhereInputSchema),z.lazy(() => PlayerWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   user: z.union([ z.lazy(() => AuthUserRelationFilterSchema),z.lazy(() => AuthUserWhereInputSchema) ]).optional(),
@@ -978,7 +976,7 @@ export const PlayerOrderByWithRelationInputSchema: z.ZodType<Prisma.PlayerOrderB
 }).strict();
 
 export const PlayerWhereUniqueInputSchema: z.ZodType<Prisma.PlayerWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string().optional(),
   name: z.string().optional()
 }).strict();
@@ -988,17 +986,15 @@ export const PlayerOrderByWithAggregationInputSchema: z.ZodType<Prisma.PlayerOrd
   userId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => PlayerCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => PlayerAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => PlayerMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => PlayerMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => PlayerSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => PlayerMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const PlayerScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.PlayerScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => PlayerScalarWhereWithAggregatesInputSchema),z.lazy(() => PlayerScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => PlayerScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PlayerScalarWhereWithAggregatesInputSchema),z.lazy(() => PlayerScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   userId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
@@ -1007,10 +1003,10 @@ export const MembershipWhereInputSchema: z.ZodType<Prisma.MembershipWhereInput> 
   AND: z.union([ z.lazy(() => MembershipWhereInputSchema),z.lazy(() => MembershipWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => MembershipWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => MembershipWhereInputSchema),z.lazy(() => MembershipWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   isAdmin: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   band: z.union([ z.lazy(() => BandRelationFilterSchema),z.lazy(() => BandWhereInputSchema) ]).optional(),
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
 }).strict();
@@ -1025,7 +1021,7 @@ export const MembershipOrderByWithRelationInputSchema: z.ZodType<Prisma.Membersh
 }).strict();
 
 export const MembershipWhereUniqueInputSchema: z.ZodType<Prisma.MembershipWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   bandId_playerId: z.lazy(() => MembershipBandIdPlayerIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1035,29 +1031,27 @@ export const MembershipOrderByWithAggregationInputSchema: z.ZodType<Prisma.Membe
   bandId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => MembershipCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => MembershipAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => MembershipMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => MembershipMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => MembershipSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => MembershipMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const MembershipScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.MembershipScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => MembershipScalarWhereWithAggregatesInputSchema),z.lazy(() => MembershipScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => MembershipScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => MembershipScalarWhereWithAggregatesInputSchema),z.lazy(() => MembershipScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   isAdmin: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const GigWhereInputSchema: z.ZodType<Prisma.GigWhereInput> = z.object({
   AND: z.union([ z.lazy(() => GigWhereInputSchema),z.lazy(() => GigWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigWhereInputSchema),z.lazy(() => GigWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  bandId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1087,7 +1081,7 @@ export const GigOrderByWithRelationInputSchema: z.ZodType<Prisma.GigOrderByWithR
 }).strict();
 
 export const GigWhereUniqueInputSchema: z.ZodType<Prisma.GigWhereUniqueInput> = z.object({
-  id: z.number().int().optional()
+  id: z.string().uuid().optional()
 }).strict();
 
 export const GigOrderByWithAggregationInputSchema: z.ZodType<Prisma.GigOrderByWithAggregationInput> = z.object({
@@ -1099,19 +1093,17 @@ export const GigOrderByWithAggregationInputSchema: z.ZodType<Prisma.GigOrderByWi
   description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => GigCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => GigAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => GigMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => GigMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => GigSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => GigMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const GigScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.GigScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => GigScalarWhereWithAggregatesInputSchema),z.lazy(() => GigScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigScalarWhereWithAggregatesInputSchema),z.lazy(() => GigScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  bandId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   date: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -1122,11 +1114,11 @@ export const PresenceWhereInputSchema: z.ZodType<Prisma.PresenceWhereInput> = z.
   AND: z.union([ z.lazy(() => PresenceWhereInputSchema),z.lazy(() => PresenceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => PresenceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PresenceWhereInputSchema),z.lazy(() => PresenceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   value: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   isOrganizer: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional(),
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceListRelationFilterSchema).optional(),
@@ -1146,7 +1138,7 @@ export const PresenceOrderByWithRelationInputSchema: z.ZodType<Prisma.PresenceOr
 }).strict();
 
 export const PresenceWhereUniqueInputSchema: z.ZodType<Prisma.PresenceWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   gigId_playerId: z.lazy(() => PresenceGigIdPlayerIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1157,31 +1149,29 @@ export const PresenceOrderByWithAggregationInputSchema: z.ZodType<Prisma.Presenc
   gigId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => PresenceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => PresenceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => PresenceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => PresenceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => PresenceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => PresenceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const PresenceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.PresenceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => PresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => PresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => PresenceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => PresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   value: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   isOrganizer: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const RoleWhereInputSchema: z.ZodType<Prisma.RoleWhereInput> = z.object({
   AND: z.union([ z.lazy(() => RoleWhereInputSchema),z.lazy(() => RoleWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => RoleWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RoleWhereInputSchema),z.lazy(() => RoleWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   instrument: z.union([ z.lazy(() => InstrumentRelationFilterSchema),z.lazy(() => InstrumentWhereInputSchema) ]).optional(),
   player: z.union([ z.lazy(() => PlayerRelationFilterSchema),z.lazy(() => PlayerWhereInputSchema) ]).optional(),
 }).strict();
@@ -1196,7 +1186,7 @@ export const RoleOrderByWithRelationInputSchema: z.ZodType<Prisma.RoleOrderByWit
 }).strict();
 
 export const RoleWhereUniqueInputSchema: z.ZodType<Prisma.RoleWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   instrumentId_playerId: z.lazy(() => RoleInstrumentIdPlayerIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1206,27 +1196,25 @@ export const RoleOrderByWithAggregationInputSchema: z.ZodType<Prisma.RoleOrderBy
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => RoleCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => RoleAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => RoleMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => RoleMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => RoleSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => RoleMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const RoleScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.RoleScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => RoleScalarWhereWithAggregatesInputSchema),z.lazy(() => RoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => RoleScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RoleScalarWhereWithAggregatesInputSchema),z.lazy(() => RoleScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   playable: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const InstrumentWhereInputSchema: z.ZodType<Prisma.InstrumentWhereInput> = z.object({
   AND: z.union([ z.lazy(() => InstrumentWhereInputSchema),z.lazy(() => InstrumentWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => InstrumentWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => InstrumentWhereInputSchema),z.lazy(() => InstrumentWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   roles: z.lazy(() => RoleListRelationFilterSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceListRelationFilterSchema).optional(),
@@ -1244,7 +1232,7 @@ export const InstrumentOrderByWithRelationInputSchema: z.ZodType<Prisma.Instrume
 }).strict();
 
 export const InstrumentWhereUniqueInputSchema: z.ZodType<Prisma.InstrumentWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string().optional()
 }).strict();
 
@@ -1252,17 +1240,15 @@ export const InstrumentOrderByWithAggregationInputSchema: z.ZodType<Prisma.Instr
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => InstrumentCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => InstrumentAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => InstrumentMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => InstrumentMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => InstrumentSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => InstrumentMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const InstrumentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.InstrumentScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => InstrumentScalarWhereWithAggregatesInputSchema),z.lazy(() => InstrumentScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => InstrumentScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => InstrumentScalarWhereWithAggregatesInputSchema),z.lazy(() => InstrumentScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
@@ -1270,9 +1256,9 @@ export const GigVoiceWhereInputSchema: z.ZodType<Prisma.GigVoiceWhereInput> = z.
   AND: z.union([ z.lazy(() => GigVoiceWhereInputSchema),z.lazy(() => GigVoiceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigVoiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigVoiceWhereInputSchema),z.lazy(() => GigVoiceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   instrument: z.union([ z.lazy(() => InstrumentRelationFilterSchema),z.lazy(() => InstrumentWhereInputSchema) ]).optional(),
   gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional(),
 }).strict();
@@ -1286,7 +1272,7 @@ export const GigVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.GigVoiceOr
 }).strict();
 
 export const GigVoiceWhereUniqueInputSchema: z.ZodType<Prisma.GigVoiceWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   id_gigId: z.lazy(() => GigVoiceIdGigIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1295,28 +1281,26 @@ export const GigVoiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.GigVoic
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => GigVoiceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => GigVoiceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => GigVoiceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => GigVoiceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => GigVoiceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => GigVoiceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const GigVoiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.GigVoiceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => GigVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => GigVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigVoiceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => GigVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const BandVoiceWhereInputSchema: z.ZodType<Prisma.BandVoiceWhereInput> = z.object({
   AND: z.union([ z.lazy(() => BandVoiceWhereInputSchema),z.lazy(() => BandVoiceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => BandVoiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => BandVoiceWhereInputSchema),z.lazy(() => BandVoiceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   instrument: z.union([ z.lazy(() => InstrumentRelationFilterSchema),z.lazy(() => InstrumentWhereInputSchema) ]).optional(),
   band: z.union([ z.lazy(() => BandRelationFilterSchema),z.lazy(() => BandWhereInputSchema) ]).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceListRelationFilterSchema).optional()
@@ -1332,7 +1316,7 @@ export const BandVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.BandVoice
 }).strict();
 
 export const BandVoiceWhereUniqueInputSchema: z.ZodType<Prisma.BandVoiceWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   id_bandId: z.lazy(() => BandVoiceIdBandIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1341,28 +1325,26 @@ export const BandVoiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.BandVo
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => BandVoiceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => BandVoiceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => BandVoiceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => BandVoiceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => BandVoiceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => BandVoiceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const BandVoiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.BandVoiceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => BandVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => BandVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => BandVoiceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => BandVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => BandVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const DisabledVoiceWhereInputSchema: z.ZodType<Prisma.DisabledVoiceWhereInput> = z.object({
   AND: z.union([ z.lazy(() => DisabledVoiceWhereInputSchema),z.lazy(() => DisabledVoiceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => DisabledVoiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => DisabledVoiceWhereInputSchema),z.lazy(() => DisabledVoiceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  bandVoiceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  bandVoiceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional(),
   bandVoice: z.union([ z.lazy(() => BandVoiceRelationFilterSchema),z.lazy(() => BandVoiceWhereInputSchema) ]).optional(),
 }).strict();
@@ -1376,7 +1358,7 @@ export const DisabledVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.Disab
 }).strict();
 
 export const DisabledVoiceWhereUniqueInputSchema: z.ZodType<Prisma.DisabledVoiceWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   gigId_bandVoiceId: z.lazy(() => DisabledVoiceGigIdBandVoiceIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1385,28 +1367,26 @@ export const DisabledVoiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.Di
   gigId: z.lazy(() => SortOrderSchema).optional(),
   bandVoiceId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => DisabledVoiceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => DisabledVoiceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => DisabledVoiceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => DisabledVoiceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => DisabledVoiceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => DisabledVoiceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const DisabledVoiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.DisabledVoiceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => DisabledVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => DisabledVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => DisabledVoiceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => DisabledVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => DisabledVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  bandVoiceId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  bandVoiceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationVoiceWhereInputSchema: z.ZodType<Prisma.FormationVoiceWhereInput> = z.object({
   AND: z.union([ z.lazy(() => FormationVoiceWhereInputSchema),z.lazy(() => FormationVoiceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoiceWhereInputSchema),z.lazy(() => FormationVoiceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   formation: z.union([ z.lazy(() => FormationRelationFilterSchema),z.lazy(() => FormationWhereInputSchema) ]).optional(),
   instrument: z.union([ z.lazy(() => InstrumentRelationFilterSchema),z.lazy(() => InstrumentWhereInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceListRelationFilterSchema).optional()
@@ -1422,7 +1402,7 @@ export const FormationVoiceOrderByWithRelationInputSchema: z.ZodType<Prisma.Form
 }).strict();
 
 export const FormationVoiceWhereUniqueInputSchema: z.ZodType<Prisma.FormationVoiceWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   formationId_instrumentId: z.lazy(() => FormationVoiceFormationIdInstrumentIdCompoundUniqueInputSchema).optional()
 }).strict();
 
@@ -1431,28 +1411,26 @@ export const FormationVoiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.F
   formationId: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => FormationVoiceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => FormationVoiceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => FormationVoiceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => FormationVoiceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => FormationVoiceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => FormationVoiceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const FormationVoiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.FormationVoiceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => FormationVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoiceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoiceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationVoiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceWhereInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceWhereInput> = z.object({
   AND: z.union([ z.lazy(() => FormationUndefinedVoicePresenceWhereInputSchema),z.lazy(() => FormationUndefinedVoicePresenceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationUndefinedVoicePresenceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationUndefinedVoicePresenceWhereInputSchema),z.lazy(() => FormationUndefinedVoicePresenceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   formation: z.union([ z.lazy(() => FormationRelationFilterSchema),z.lazy(() => FormationWhereInputSchema) ]).optional(),
   presence: z.union([ z.lazy(() => PresenceRelationFilterSchema),z.lazy(() => PresenceWhereInputSchema) ]).optional(),
 }).strict();
@@ -1466,7 +1444,7 @@ export const FormationUndefinedVoicePresenceOrderByWithRelationInputSchema: z.Zo
 }).strict();
 
 export const FormationUndefinedVoicePresenceWhereUniqueInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceWhereUniqueInput> = z.object({
-  id: z.number().int().optional()
+  id: z.string().uuid().optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceOrderByWithAggregationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceOrderByWithAggregationInput> = z.object({
@@ -1474,28 +1452,26 @@ export const FormationUndefinedVoicePresenceOrderByWithAggregationInputSchema: z
   formationId: z.lazy(() => SortOrderSchema).optional(),
   presenceId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => FormationUndefinedVoicePresenceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => FormationUndefinedVoicePresenceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => FormationUndefinedVoicePresenceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => FormationUndefinedVoicePresenceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => FormationUndefinedVoicePresenceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => FormationUndefinedVoicePresenceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationUndefinedVoicePresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceWhereInputSchema: z.ZodType<Prisma.FormationVoicePresenceWhereInput> = z.object({
   AND: z.union([ z.lazy(() => FormationVoicePresenceWhereInputSchema),z.lazy(() => FormationVoicePresenceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoicePresenceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoicePresenceWhereInputSchema),z.lazy(() => FormationVoicePresenceWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationVoiceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationVoiceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   formationVoice: z.union([ z.lazy(() => FormationVoiceRelationFilterSchema),z.lazy(() => FormationVoiceWhereInputSchema) ]).optional(),
   presence: z.union([ z.lazy(() => PresenceRelationFilterSchema),z.lazy(() => PresenceWhereInputSchema) ]).optional(),
 }).strict();
@@ -1509,7 +1485,7 @@ export const FormationVoicePresenceOrderByWithRelationInputSchema: z.ZodType<Pri
 }).strict();
 
 export const FormationVoicePresenceWhereUniqueInputSchema: z.ZodType<Prisma.FormationVoicePresenceWhereUniqueInput> = z.object({
-  id: z.number().int().optional()
+  id: z.string().uuid().optional()
 }).strict();
 
 export const FormationVoicePresenceOrderByWithAggregationInputSchema: z.ZodType<Prisma.FormationVoicePresenceOrderByWithAggregationInput> = z.object({
@@ -1517,28 +1493,26 @@ export const FormationVoicePresenceOrderByWithAggregationInputSchema: z.ZodType<
   formationVoiceId: z.lazy(() => SortOrderSchema).optional(),
   presenceId: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => FormationVoicePresenceCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => FormationVoicePresenceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => FormationVoicePresenceMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => FormationVoicePresenceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => FormationVoicePresenceSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => FormationVoicePresenceMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const FormationVoicePresenceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.FormationVoicePresenceScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => FormationVoicePresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationVoicePresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoicePresenceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoicePresenceScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationVoicePresenceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  formationVoiceId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  formationVoiceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationWhereInputSchema: z.ZodType<Prisma.FormationWhereInput> = z.object({
   AND: z.union([ z.lazy(() => FormationWhereInputSchema),z.lazy(() => FormationWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationWhereInputSchema),z.lazy(() => FormationWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceListRelationFilterSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceListRelationFilterSchema).optional(),
   gig: z.union([ z.lazy(() => GigRelationFilterSchema),z.lazy(() => GigWhereInputSchema) ]).optional().nullable(),
@@ -1556,8 +1530,8 @@ export const FormationOrderByWithRelationInputSchema: z.ZodType<Prisma.Formation
 }).strict();
 
 export const FormationWhereUniqueInputSchema: z.ZodType<Prisma.FormationWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
-  gigCurrentFromId: z.number().int().optional()
+  id: z.string().uuid().optional(),
+  gigCurrentFromId: z.string().optional()
 }).strict();
 
 export const FormationOrderByWithAggregationInputSchema: z.ZodType<Prisma.FormationOrderByWithAggregationInput> = z.object({
@@ -1565,19 +1539,17 @@ export const FormationOrderByWithAggregationInputSchema: z.ZodType<Prisma.Format
   gigId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   gigCurrentFromId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   _count: z.lazy(() => FormationCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => FormationAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => FormationMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => FormationMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => FormationSumOrderByAggregateInputSchema).optional()
+  _min: z.lazy(() => FormationMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const FormationScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.FormationScalarWhereWithAggregatesInput> = z.object({
   AND: z.union([ z.lazy(() => FormationScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationScalarWhereWithAggregatesInputSchema),z.lazy(() => FormationScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const AuthKeyCreateInputSchema: z.ZodType<Prisma.AuthKeyCreateInput> = z.object({
@@ -1738,6 +1710,7 @@ export const AuthUserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AuthUserUn
 }).strict();
 
 export const BandCreateInputSchema: z.ZodType<Prisma.BandCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutBandInputSchema).optional(),
@@ -1745,7 +1718,7 @@ export const BandCreateInputSchema: z.ZodType<Prisma.BandCreateInput> = z.object
 }).strict();
 
 export const BandUncheckedCreateInputSchema: z.ZodType<Prisma.BandUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
@@ -1753,6 +1726,7 @@ export const BandUncheckedCreateInputSchema: z.ZodType<Prisma.BandUncheckedCreat
 }).strict();
 
 export const BandUpdateInputSchema: z.ZodType<Prisma.BandUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutBandNestedInputSchema).optional(),
@@ -1760,7 +1734,7 @@ export const BandUpdateInputSchema: z.ZodType<Prisma.BandUpdateInput> = z.object
 }).strict();
 
 export const BandUncheckedUpdateInputSchema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
@@ -1768,20 +1742,22 @@ export const BandUncheckedUpdateInputSchema: z.ZodType<Prisma.BandUncheckedUpdat
 }).strict();
 
 export const BandCreateManyInputSchema: z.ZodType<Prisma.BandCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string()
 }).strict();
 
 export const BandUpdateManyMutationInputSchema: z.ZodType<Prisma.BandUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const BandUncheckedUpdateManyInputSchema: z.ZodType<Prisma.BandUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PlayerCreateInputSchema: z.ZodType<Prisma.PlayerCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserCreateNestedOneWithoutPlayerInputSchema),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -1790,7 +1766,7 @@ export const PlayerCreateInputSchema: z.ZodType<Prisma.PlayerCreateInput> = z.ob
 }).strict();
 
 export const PlayerUncheckedCreateInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -1799,6 +1775,7 @@ export const PlayerUncheckedCreateInputSchema: z.ZodType<Prisma.PlayerUncheckedC
 }).strict();
 
 export const PlayerUpdateInputSchema: z.ZodType<Prisma.PlayerUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUpdateOneRequiredWithoutPlayerNestedInputSchema).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -1807,7 +1784,7 @@ export const PlayerUpdateInputSchema: z.ZodType<Prisma.PlayerUpdateInput> = z.ob
 }).strict();
 
 export const PlayerUncheckedUpdateInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -1816,66 +1793,71 @@ export const PlayerUncheckedUpdateInputSchema: z.ZodType<Prisma.PlayerUncheckedU
 }).strict();
 
 export const PlayerCreateManyInputSchema: z.ZodType<Prisma.PlayerCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string(),
   name: z.string()
 }).strict();
 
 export const PlayerUpdateManyMutationInputSchema: z.ZodType<Prisma.PlayerUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PlayerUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipCreateInputSchema: z.ZodType<Prisma.MembershipCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutMembershipsInputSchema),
   player: z.lazy(() => PlayerCreateNestedOneWithoutMembershipsInputSchema)
 }).strict();
 
 export const MembershipUncheckedCreateInputSchema: z.ZodType<Prisma.MembershipUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  bandId: z.number().int(),
-  playerId: z.number().int()
+  bandId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const MembershipUpdateInputSchema: z.ZodType<Prisma.MembershipUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutMembershipsNestedInputSchema).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutMembershipsNestedInputSchema).optional()
 }).strict();
 
 export const MembershipUncheckedUpdateInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipCreateManyInputSchema: z.ZodType<Prisma.MembershipCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  bandId: z.number().int(),
-  playerId: z.number().int()
+  bandId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const MembershipUpdateManyMutationInputSchema: z.ZodType<Prisma.MembershipUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const GigCreateInputSchema: z.ZodType<Prisma.GigCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -1890,9 +1872,9 @@ export const GigCreateInputSchema: z.ZodType<Prisma.GigCreateInput> = z.object({
 }).strict();
 
 export const GigUncheckedCreateInputSchema: z.ZodType<Prisma.GigUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -1905,6 +1887,7 @@ export const GigUncheckedCreateInputSchema: z.ZodType<Prisma.GigUncheckedCreateI
 }).strict();
 
 export const GigUpdateInputSchema: z.ZodType<Prisma.GigUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1919,9 +1902,9 @@ export const GigUpdateInputSchema: z.ZodType<Prisma.GigUpdateInput> = z.object({
 }).strict();
 
 export const GigUncheckedUpdateInputSchema: z.ZodType<Prisma.GigUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1934,9 +1917,9 @@ export const GigUncheckedUpdateInputSchema: z.ZodType<Prisma.GigUncheckedUpdateI
 }).strict();
 
 export const GigCreateManyInputSchema: z.ZodType<Prisma.GigCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -1944,6 +1927,7 @@ export const GigCreateManyInputSchema: z.ZodType<Prisma.GigCreateManyInput> = z.
 }).strict();
 
 export const GigUpdateManyMutationInputSchema: z.ZodType<Prisma.GigUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1952,9 +1936,9 @@ export const GigUpdateManyMutationInputSchema: z.ZodType<Prisma.GigUpdateManyMut
 }).strict();
 
 export const GigUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GigUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1962,6 +1946,7 @@ export const GigUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GigUncheckedUpd
 }).strict();
 
 export const PresenceCreateInputSchema: z.ZodType<Prisma.PresenceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutPresencesInputSchema),
@@ -1971,16 +1956,17 @@ export const PresenceCreateInputSchema: z.ZodType<Prisma.PresenceCreateInput> = 
 }).strict();
 
 export const PresenceUncheckedCreateInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int(),
-  playerId: z.number().int(),
+  gigId: z.string(),
+  playerId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional()
 }).strict();
 
 export const PresenceUpdateInputSchema: z.ZodType<Prisma.PresenceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutPresencesNestedInputSchema).optional(),
@@ -1990,81 +1976,86 @@ export const PresenceUpdateInputSchema: z.ZodType<Prisma.PresenceUpdateInput> = 
 }).strict();
 
 export const PresenceUncheckedUpdateInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional()
 }).strict();
 
 export const PresenceCreateManyInputSchema: z.ZodType<Prisma.PresenceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int(),
-  playerId: z.number().int()
+  gigId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const PresenceUpdateManyMutationInputSchema: z.ZodType<Prisma.PresenceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PresenceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleCreateInputSchema: z.ZodType<Prisma.RoleCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutRolesInputSchema),
   player: z.lazy(() => PlayerCreateNestedOneWithoutRolesInputSchema)
 }).strict();
 
 export const RoleUncheckedCreateInputSchema: z.ZodType<Prisma.RoleUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  instrumentId: z.number().int(),
-  playerId: z.number().int()
+  instrumentId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const RoleUpdateInputSchema: z.ZodType<Prisma.RoleUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutRolesNestedInputSchema).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutRolesNestedInputSchema).optional()
 }).strict();
 
 export const RoleUncheckedUpdateInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleCreateManyInputSchema: z.ZodType<Prisma.RoleCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  instrumentId: z.number().int(),
-  playerId: z.number().int()
+  instrumentId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const RoleUpdateManyMutationInputSchema: z.ZodType<Prisma.RoleUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleUncheckedUpdateManyInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const InstrumentCreateInputSchema: z.ZodType<Prisma.InstrumentCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -2073,7 +2064,7 @@ export const InstrumentCreateInputSchema: z.ZodType<Prisma.InstrumentCreateInput
 }).strict();
 
 export const InstrumentUncheckedCreateInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -2082,6 +2073,7 @@ export const InstrumentUncheckedCreateInputSchema: z.ZodType<Prisma.InstrumentUn
 }).strict();
 
 export const InstrumentUpdateInputSchema: z.ZodType<Prisma.InstrumentUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -2090,7 +2082,7 @@ export const InstrumentUpdateInputSchema: z.ZodType<Prisma.InstrumentUpdateInput
 }).strict();
 
 export const InstrumentUncheckedUpdateInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -2099,250 +2091,270 @@ export const InstrumentUncheckedUpdateInputSchema: z.ZodType<Prisma.InstrumentUn
 }).strict();
 
 export const InstrumentCreateManyInputSchema: z.ZodType<Prisma.InstrumentCreateManyInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string()
 }).strict();
 
 export const InstrumentUpdateManyMutationInputSchema: z.ZodType<Prisma.InstrumentUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const InstrumentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const GigVoiceCreateInputSchema: z.ZodType<Prisma.GigVoiceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutGigVoicesInputSchema),
   gig: z.lazy(() => GigCreateNestedOneWithoutGigVoicesInputSchema)
 }).strict();
 
 export const GigVoiceUncheckedCreateInputSchema: z.ZodType<Prisma.GigVoiceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
+  gigId: z.string()
 }).strict();
 
 export const GigVoiceUpdateInputSchema: z.ZodType<Prisma.GigVoiceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutGigVoicesNestedInputSchema).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutGigVoicesNestedInputSchema).optional()
 }).strict();
 
 export const GigVoiceUncheckedUpdateInputSchema: z.ZodType<Prisma.GigVoiceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const GigVoiceCreateManyInputSchema: z.ZodType<Prisma.GigVoiceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
+  gigId: z.string()
 }).strict();
 
 export const GigVoiceUpdateManyMutationInputSchema: z.ZodType<Prisma.GigVoiceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const GigVoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.GigVoiceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const BandVoiceCreateInputSchema: z.ZodType<Prisma.BandVoiceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutBandVoicesInputSchema),
   band: z.lazy(() => BandCreateNestedOneWithoutBandVoicesInputSchema),
   disabledVoices: z.lazy(() => DisabledVoiceCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedCreateInputSchema: z.ZodType<Prisma.BandVoiceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
-  bandId: z.number().int(),
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
+  bandId: z.string(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
 export const BandVoiceUpdateInputSchema: z.ZodType<Prisma.BandVoiceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedUpdateInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceCreateManyInputSchema: z.ZodType<Prisma.BandVoiceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
-  bandId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
+  bandId: z.string()
 }).strict();
 
 export const BandVoiceUpdateManyMutationInputSchema: z.ZodType<Prisma.BandVoiceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const BandVoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceCreateInputSchema: z.ZodType<Prisma.DisabledVoiceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutDisabledVoicesInputSchema),
   bandVoice: z.lazy(() => BandVoiceCreateNestedOneWithoutDisabledVoicesInputSchema)
 }).strict();
 
 export const DisabledVoiceUncheckedCreateInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int(),
-  bandVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string(),
+  bandVoiceId: z.string()
 }).strict();
 
 export const DisabledVoiceUpdateInputSchema: z.ZodType<Prisma.DisabledVoiceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutDisabledVoicesNestedInputSchema).optional(),
   bandVoice: z.lazy(() => BandVoiceUpdateOneRequiredWithoutDisabledVoicesNestedInputSchema).optional()
 }).strict();
 
 export const DisabledVoiceUncheckedUpdateInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceCreateManyInputSchema: z.ZodType<Prisma.DisabledVoiceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int(),
-  bandVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string(),
+  bandVoiceId: z.string()
 }).strict();
 
 export const DisabledVoiceUpdateManyMutationInputSchema: z.ZodType<Prisma.DisabledVoiceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoiceCreateInputSchema: z.ZodType<Prisma.FormationVoiceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   formation: z.lazy(() => FormationCreateNestedOneWithoutFormationVoicesInputSchema),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutFormationVoicesInputSchema),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedCreateInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
-  instrumentId: z.number().int(),
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
+  instrumentId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUpdateInputSchema: z.ZodType<Prisma.FormationVoiceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formation: z.lazy(() => FormationUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedUpdateInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceCreateManyInputSchema: z.ZodType<Prisma.FormationVoiceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
+  instrumentId: z.string()
 }).strict();
 
 export const FormationVoiceUpdateManyMutationInputSchema: z.ZodType<Prisma.FormationVoiceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   formation: z.lazy(() => FormationCreateNestedOneWithoutFormationUndefinedVoicePresencesInputSchema),
   presence: z.lazy(() => PresenceCreateNestedOneWithoutFormationUndefinedVoicePresenceInputSchema)
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedCreateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUpdateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formation: z.lazy(() => FormationUpdateOneRequiredWithoutFormationUndefinedVoicePresencesNestedInputSchema).optional(),
   presence: z.lazy(() => PresenceUpdateOneRequiredWithoutFormationUndefinedVoicePresenceNestedInputSchema).optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateManyInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUpdateManyMutationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceCreateInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoice: z.lazy(() => FormationVoiceCreateNestedOneWithoutFormationVoicePresencesInputSchema),
   presence: z.lazy(() => PresenceCreateNestedOneWithoutFormationVoicePresencesInputSchema)
 }).strict();
 
 export const FormationVoicePresenceUncheckedCreateInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  formationVoiceId: z.number().int(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationVoiceId: z.string(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationVoicePresenceUpdateInputSchema: z.ZodType<Prisma.FormationVoicePresenceUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoice: z.lazy(() => FormationVoiceUpdateOneRequiredWithoutFormationVoicePresencesNestedInputSchema).optional(),
   presence: z.lazy(() => PresenceUpdateOneRequiredWithoutFormationVoicePresencesNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoicePresenceUncheckedUpdateInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceCreateManyInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  formationVoiceId: z.number().int(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationVoiceId: z.string(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationVoicePresenceUpdateManyMutationInputSchema: z.ZodType<Prisma.FormationVoicePresenceUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationCreateInputSchema: z.ZodType<Prisma.FormationCreateInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoices: z.lazy(() => FormationVoiceCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceCreateNestedManyWithoutFormationInputSchema).optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutFormationsInputSchema).optional(),
@@ -2350,14 +2362,15 @@ export const FormationCreateInputSchema: z.ZodType<Prisma.FormationCreateInput> 
 }).strict();
 
 export const FormationUncheckedCreateInputSchema: z.ZodType<Prisma.FormationUncheckedCreateInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int().optional().nullable(),
-  gigCurrentFromId: z.number().int().optional().nullable(),
+  id: z.string().uuid().optional(),
+  gigId: z.string().optional().nullable(),
+  gigCurrentFromId: z.string().optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutFormationInputSchema).optional()
 }).strict();
 
 export const FormationUpdateInputSchema: z.ZodType<Prisma.FormationUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoices: z.lazy(() => FormationVoiceUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUpdateManyWithoutFormationNestedInputSchema).optional(),
   gig: z.lazy(() => GigUpdateOneWithoutFormationsNestedInputSchema).optional(),
@@ -2365,26 +2378,27 @@ export const FormationUpdateInputSchema: z.ZodType<Prisma.FormationUpdateInput> 
 }).strict();
 
 export const FormationUncheckedUpdateInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional()
 }).strict();
 
 export const FormationCreateManyInputSchema: z.ZodType<Prisma.FormationCreateManyInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int().optional().nullable(),
-  gigCurrentFromId: z.number().int().optional().nullable()
+  id: z.string().uuid().optional(),
+  gigId: z.string().optional().nullable(),
+  gigCurrentFromId: z.string().optional().nullable()
 }).strict();
 
 export const FormationUpdateManyMutationInputSchema: z.ZodType<Prisma.FormationUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
@@ -2636,17 +2650,6 @@ export const AuthUserMinOrderByAggregateInputSchema: z.ZodType<Prisma.AuthUserMi
   email_verified: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
-  equals: z.number().optional(),
-  in: z.union([ z.number().array(),z.number() ]).optional(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntFilterSchema) ]).optional(),
-}).strict();
-
 export const GigListRelationFilterSchema: z.ZodType<Prisma.GigListRelationFilter> = z.object({
   every: z.lazy(() => GigWhereInputSchema).optional(),
   some: z.lazy(() => GigWhereInputSchema).optional(),
@@ -2682,10 +2685,6 @@ export const BandCountOrderByAggregateInputSchema: z.ZodType<Prisma.BandCountOrd
   name: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const BandAvgOrderByAggregateInputSchema: z.ZodType<Prisma.BandAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const BandMaxOrderByAggregateInputSchema: z.ZodType<Prisma.BandMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional()
@@ -2694,26 +2693,6 @@ export const BandMaxOrderByAggregateInputSchema: z.ZodType<Prisma.BandMaxOrderBy
 export const BandMinOrderByAggregateInputSchema: z.ZodType<Prisma.BandMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const BandSumOrderByAggregateInputSchema: z.ZodType<Prisma.BandSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const IntWithAggregatesFilterSchema: z.ZodType<Prisma.IntWithAggregatesFilter> = z.object({
-  equals: z.number().optional(),
-  in: z.union([ z.number().array(),z.number() ]).optional(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
-  _sum: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedIntFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntFilterSchema).optional()
 }).strict();
 
 export const PresenceListRelationFilterSchema: z.ZodType<Prisma.PresenceListRelationFilter> = z.object({
@@ -2742,10 +2721,6 @@ export const PlayerCountOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerCoun
   name: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const PlayerAvgOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const PlayerMaxOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
@@ -2758,29 +2733,19 @@ export const PlayerMinOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerMinOrd
   name: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const PlayerSumOrderByAggregateInputSchema: z.ZodType<Prisma.PlayerSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const BandRelationFilterSchema: z.ZodType<Prisma.BandRelationFilter> = z.object({
   is: z.lazy(() => BandWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => BandWhereInputSchema).optional().nullable()
 }).strict();
 
 export const MembershipBandIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.MembershipBandIdPlayerIdCompoundUniqueInput> = z.object({
-  bandId: z.number(),
-  playerId: z.number()
+  bandId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const MembershipCountOrderByAggregateInputSchema: z.ZodType<Prisma.MembershipCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   isAdmin: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const MembershipAvgOrderByAggregateInputSchema: z.ZodType<Prisma.MembershipAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2797,23 +2762,6 @@ export const MembershipMinOrderByAggregateInputSchema: z.ZodType<Prisma.Membersh
   isAdmin: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const MembershipSumOrderByAggregateInputSchema: z.ZodType<Prisma.MembershipSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const IntNullableFilterSchema: z.ZodType<Prisma.IntNullableFilter> = z.object({
-  equals: z.number().optional().nullable(),
-  in: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
 export const DateTimeFilterSchema: z.ZodType<Prisma.DateTimeFilter> = z.object({
@@ -2872,11 +2820,6 @@ export const GigCountOrderByAggregateInputSchema: z.ZodType<Prisma.GigCountOrder
   playable: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const GigAvgOrderByAggregateInputSchema: z.ZodType<Prisma.GigAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const GigMaxOrderByAggregateInputSchema: z.ZodType<Prisma.GigMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -2895,27 +2838,6 @@ export const GigMinOrderByAggregateInputSchema: z.ZodType<Prisma.GigMinOrderByAg
   location: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const GigSumOrderByAggregateInputSchema: z.ZodType<Prisma.GigSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const IntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.IntNullableWithAggregatesFilter> = z.object({
-  equals: z.number().optional().nullable(),
-  in: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntNullableWithAggregatesFilterSchema) ]).optional().nullable(),
-  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
-  _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
 }).strict();
 
 export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAggregatesFilter> = z.object({
@@ -2958,20 +2880,14 @@ export const FormationUndefinedVoicePresenceOrderByRelationAggregateInputSchema:
 }).strict();
 
 export const PresenceGigIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.PresenceGigIdPlayerIdCompoundUniqueInput> = z.object({
-  gigId: z.number(),
-  playerId: z.number()
+  gigId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const PresenceCountOrderByAggregateInputSchema: z.ZodType<Prisma.PresenceCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   isOrganizer: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const PresenceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.PresenceAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2992,31 +2908,19 @@ export const PresenceMinOrderByAggregateInputSchema: z.ZodType<Prisma.PresenceMi
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const PresenceSumOrderByAggregateInputSchema: z.ZodType<Prisma.PresenceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const InstrumentRelationFilterSchema: z.ZodType<Prisma.InstrumentRelationFilter> = z.object({
   is: z.lazy(() => InstrumentWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => InstrumentWhereInputSchema).optional().nullable()
 }).strict();
 
 export const RoleInstrumentIdPlayerIdCompoundUniqueInputSchema: z.ZodType<Prisma.RoleInstrumentIdPlayerIdCompoundUniqueInput> = z.object({
-  instrumentId: z.number(),
-  playerId: z.number()
+  instrumentId: z.string(),
+  playerId: z.string()
 }).strict();
 
 export const RoleCountOrderByAggregateInputSchema: z.ZodType<Prisma.RoleCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const RoleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.RoleAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -3031,12 +2935,6 @@ export const RoleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.RoleMaxOrderBy
 export const RoleMinOrderByAggregateInputSchema: z.ZodType<Prisma.RoleMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   playable: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  playerId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const RoleSumOrderByAggregateInputSchema: z.ZodType<Prisma.RoleSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   playerId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -3056,10 +2954,6 @@ export const InstrumentCountOrderByAggregateInputSchema: z.ZodType<Prisma.Instru
   name: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const InstrumentAvgOrderByAggregateInputSchema: z.ZodType<Prisma.InstrumentAvgOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const InstrumentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.InstrumentMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional()
@@ -3070,22 +2964,12 @@ export const InstrumentMinOrderByAggregateInputSchema: z.ZodType<Prisma.Instrume
   name: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const InstrumentSumOrderByAggregateInputSchema: z.ZodType<Prisma.InstrumentSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const GigVoiceIdGigIdCompoundUniqueInputSchema: z.ZodType<Prisma.GigVoiceIdGigIdCompoundUniqueInput> = z.object({
-  id: z.number(),
-  gigId: z.number()
+  id: z.string(),
+  gigId: z.string()
 }).strict();
 
 export const GigVoiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.GigVoiceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const GigVoiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.GigVoiceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional()
@@ -3103,24 +2987,12 @@ export const GigVoiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.GigVoiceMi
   gigId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const GigVoiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.GigVoiceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const BandVoiceIdBandIdCompoundUniqueInputSchema: z.ZodType<Prisma.BandVoiceIdBandIdCompoundUniqueInput> = z.object({
-  id: z.number(),
-  bandId: z.number()
+  id: z.string(),
+  bandId: z.string()
 }).strict();
 
 export const BandVoiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.BandVoiceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const BandVoiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.BandVoiceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional(),
   bandId: z.lazy(() => SortOrderSchema).optional()
@@ -3138,29 +3010,17 @@ export const BandVoiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.BandVoice
   bandId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const BandVoiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.BandVoiceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional(),
-  bandId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const BandVoiceRelationFilterSchema: z.ZodType<Prisma.BandVoiceRelationFilter> = z.object({
   is: z.lazy(() => BandVoiceWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => BandVoiceWhereInputSchema).optional().nullable()
 }).strict();
 
 export const DisabledVoiceGigIdBandVoiceIdCompoundUniqueInputSchema: z.ZodType<Prisma.DisabledVoiceGigIdBandVoiceIdCompoundUniqueInput> = z.object({
-  gigId: z.number(),
-  bandVoiceId: z.number()
+  gigId: z.string(),
+  bandVoiceId: z.string()
 }).strict();
 
 export const DisabledVoiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.DisabledVoiceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  bandVoiceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const DisabledVoiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.DisabledVoiceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   bandVoiceId: z.lazy(() => SortOrderSchema).optional()
@@ -3178,24 +3038,12 @@ export const DisabledVoiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.Disab
   bandVoiceId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const DisabledVoiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.DisabledVoiceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  bandVoiceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const FormationVoiceFormationIdInstrumentIdCompoundUniqueInputSchema: z.ZodType<Prisma.FormationVoiceFormationIdInstrumentIdCompoundUniqueInput> = z.object({
-  formationId: z.number(),
-  instrumentId: z.number()
+  formationId: z.string(),
+  instrumentId: z.string()
 }).strict();
 
 export const FormationVoiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoiceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationId: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const FormationVoiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoiceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   formationId: z.lazy(() => SortOrderSchema).optional(),
   instrumentId: z.lazy(() => SortOrderSchema).optional()
@@ -3213,24 +3061,12 @@ export const FormationVoiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.Form
   instrumentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const FormationVoiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoiceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationId: z.lazy(() => SortOrderSchema).optional(),
-  instrumentId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const PresenceRelationFilterSchema: z.ZodType<Prisma.PresenceRelationFilter> = z.object({
   is: z.lazy(() => PresenceWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => PresenceWhereInputSchema).optional().nullable()
 }).strict();
 
 export const FormationUndefinedVoicePresenceCountOrderByAggregateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationId: z.lazy(() => SortOrderSchema).optional(),
-  presenceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const FormationUndefinedVoicePresenceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   formationId: z.lazy(() => SortOrderSchema).optional(),
   presenceId: z.lazy(() => SortOrderSchema).optional()
@@ -3248,24 +3084,12 @@ export const FormationUndefinedVoicePresenceMinOrderByAggregateInputSchema: z.Zo
   presenceId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const FormationUndefinedVoicePresenceSumOrderByAggregateInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationId: z.lazy(() => SortOrderSchema).optional(),
-  presenceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const FormationVoiceRelationFilterSchema: z.ZodType<Prisma.FormationVoiceRelationFilter> = z.object({
   is: z.lazy(() => FormationVoiceWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => FormationVoiceWhereInputSchema).optional().nullable()
 }).strict();
 
 export const FormationVoicePresenceCountOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoicePresenceCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationVoiceId: z.lazy(() => SortOrderSchema).optional(),
-  presenceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const FormationVoicePresenceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoicePresenceAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   formationVoiceId: z.lazy(() => SortOrderSchema).optional(),
   presenceId: z.lazy(() => SortOrderSchema).optional()
@@ -3283,19 +3107,7 @@ export const FormationVoicePresenceMinOrderByAggregateInputSchema: z.ZodType<Pri
   presenceId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const FormationVoicePresenceSumOrderByAggregateInputSchema: z.ZodType<Prisma.FormationVoicePresenceSumOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  formationVoiceId: z.lazy(() => SortOrderSchema).optional(),
-  presenceId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
 export const FormationCountOrderByAggregateInputSchema: z.ZodType<Prisma.FormationCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  gigCurrentFromId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const FormationAvgOrderByAggregateInputSchema: z.ZodType<Prisma.FormationAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   gigCurrentFromId: z.lazy(() => SortOrderSchema).optional()
@@ -3308,12 +3120,6 @@ export const FormationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Formation
 }).strict();
 
 export const FormationMinOrderByAggregateInputSchema: z.ZodType<Prisma.FormationMinOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  gigId: z.lazy(() => SortOrderSchema).optional(),
-  gigCurrentFromId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const FormationSumOrderByAggregateInputSchema: z.ZodType<Prisma.FormationSumOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   gigId: z.lazy(() => SortOrderSchema).optional(),
   gigCurrentFromId: z.lazy(() => SortOrderSchema).optional()
@@ -3573,14 +3379,6 @@ export const MembershipUpdateManyWithoutBandNestedInputSchema: z.ZodType<Prisma.
   update: z.union([ z.lazy(() => MembershipUpdateWithWhereUniqueWithoutBandInputSchema),z.lazy(() => MembershipUpdateWithWhereUniqueWithoutBandInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => MembershipUpdateManyWithWhereWithoutBandInputSchema),z.lazy(() => MembershipUpdateManyWithWhereWithoutBandInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => MembershipScalarWhereInputSchema),z.lazy(() => MembershipScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.object({
-  set: z.number().optional(),
-  increment: z.number().optional(),
-  decrement: z.number().optional(),
-  multiply: z.number().optional(),
-  divide: z.number().optional()
 }).strict();
 
 export const GigUncheckedUpdateManyWithoutBandNestedInputSchema: z.ZodType<Prisma.GigUncheckedUpdateManyWithoutBandNestedInput> = z.object({
@@ -3945,14 +3743,6 @@ export const FormationUpdateOneWithoutGigCurrentFromNestedInputSchema: z.ZodType
   delete: z.boolean().optional(),
   connect: z.lazy(() => FormationWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => FormationUpdateWithoutGigCurrentFromInputSchema),z.lazy(() => FormationUncheckedUpdateWithoutGigCurrentFromInputSchema) ]).optional(),
-}).strict();
-
-export const NullableIntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableIntFieldUpdateOperationsInput> = z.object({
-  set: z.number().optional().nullable(),
-  increment: z.number().optional(),
-  decrement: z.number().optional(),
-  multiply: z.number().optional(),
-  divide: z.number().optional()
 }).strict();
 
 export const PresenceUncheckedUpdateManyWithoutGigNestedInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyWithoutGigNestedInput> = z.object({
@@ -4870,22 +4660,6 @@ export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.ob
   not: z.union([ z.number(),z.lazy(() => NestedFloatFilterSchema) ]).optional(),
 }).strict();
 
-export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWithAggregatesFilter> = z.object({
-  equals: z.number().optional(),
-  in: z.union([ z.number().array(),z.number() ]).optional(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
-  _sum: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedIntFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntFilterSchema).optional()
-}).strict();
-
 export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> = z.object({
   equals: z.coerce.date().optional(),
   in: z.union([ z.coerce.date().array(),z.coerce.date() ]).optional(),
@@ -4895,22 +4669,6 @@ export const NestedDateTimeFilterSchema: z.ZodType<Prisma.NestedDateTimeFilter> 
   gt: z.coerce.date().optional(),
   gte: z.coerce.date().optional(),
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
-}).strict();
-
-export const NestedIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntNullableWithAggregatesFilter> = z.object({
-  equals: z.number().optional().nullable(),
-  in: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  notIn: z.union([ z.number().array(),z.number() ]).optional().nullable(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([ z.number(),z.lazy(() => NestedIntNullableWithAggregatesFilterSchema) ]).optional().nullable(),
-  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
-  _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
 }).strict();
 
 export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeWithAggregatesFilter> = z.object({
@@ -5058,6 +4816,7 @@ export const AuthKeyCreateManyAuth_userInputEnvelopeSchema: z.ZodType<Prisma.Aut
 }).strict();
 
 export const PlayerCreateWithoutUserInputSchema: z.ZodType<Prisma.PlayerCreateWithoutUserInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5065,7 +4824,7 @@ export const PlayerCreateWithoutUserInputSchema: z.ZodType<Prisma.PlayerCreateWi
 }).strict();
 
 export const PlayerUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutUserInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5136,6 +4895,7 @@ export const PlayerUpsertWithoutUserInputSchema: z.ZodType<Prisma.PlayerUpsertWi
 }).strict();
 
 export const PlayerUpdateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutUserInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5143,7 +4903,7 @@ export const PlayerUpdateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUpdateWi
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutUserInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5151,6 +4911,7 @@ export const PlayerUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.Playe
 }).strict();
 
 export const GigCreateWithoutBandInputSchema: z.ZodType<Prisma.GigCreateWithoutBandInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -5164,7 +4925,7 @@ export const GigCreateWithoutBandInputSchema: z.ZodType<Prisma.GigCreateWithoutB
 }).strict();
 
 export const GigUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -5188,13 +4949,14 @@ export const GigCreateManyBandInputEnvelopeSchema: z.ZodType<Prisma.GigCreateMan
 }).strict();
 
 export const BandVoiceCreateWithoutBandInputSchema: z.ZodType<Prisma.BandVoiceCreateWithoutBandInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutBandVoicesInputSchema),
   disabledVoices: z.lazy(() => DisabledVoiceCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.BandVoiceUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
@@ -5209,14 +4971,15 @@ export const BandVoiceCreateManyBandInputEnvelopeSchema: z.ZodType<Prisma.BandVo
 }).strict();
 
 export const MembershipCreateWithoutBandInputSchema: z.ZodType<Prisma.MembershipCreateWithoutBandInput> = z.object({
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutMembershipsInputSchema)
 }).strict();
 
 export const MembershipUncheckedCreateWithoutBandInputSchema: z.ZodType<Prisma.MembershipUncheckedCreateWithoutBandInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  playerId: z.number().int()
+  playerId: z.string()
 }).strict();
 
 export const MembershipCreateOrConnectWithoutBandInputSchema: z.ZodType<Prisma.MembershipCreateOrConnectWithoutBandInput> = z.object({
@@ -5249,9 +5012,9 @@ export const GigScalarWhereInputSchema: z.ZodType<Prisma.GigScalarWhereInput> = 
   AND: z.union([ z.lazy(() => GigScalarWhereInputSchema),z.lazy(() => GigScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigScalarWhereInputSchema),z.lazy(() => GigScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  bandId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   date: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   location: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -5278,9 +5041,9 @@ export const BandVoiceScalarWhereInputSchema: z.ZodType<Prisma.BandVoiceScalarWh
   AND: z.union([ z.lazy(() => BandVoiceScalarWhereInputSchema),z.lazy(() => BandVoiceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => BandVoiceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => BandVoiceScalarWhereInputSchema),z.lazy(() => BandVoiceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const MembershipUpsertWithWhereUniqueWithoutBandInputSchema: z.ZodType<Prisma.MembershipUpsertWithWhereUniqueWithoutBandInput> = z.object({
@@ -5303,10 +5066,10 @@ export const MembershipScalarWhereInputSchema: z.ZodType<Prisma.MembershipScalar
   AND: z.union([ z.lazy(() => MembershipScalarWhereInputSchema),z.lazy(() => MembershipScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => MembershipScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => MembershipScalarWhereInputSchema),z.lazy(() => MembershipScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   isAdmin: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  bandId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  bandId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const AuthUserCreateWithoutPlayerInputSchema: z.ZodType<Prisma.AuthUserCreateWithoutPlayerInput> = z.object({
@@ -5331,6 +5094,7 @@ export const AuthUserCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.A
 }).strict();
 
 export const PresenceCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCreateWithoutPlayerInput> = z.object({
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutPresencesInputSchema),
@@ -5339,10 +5103,10 @@ export const PresenceCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceCr
 }).strict();
 
 export const PresenceUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int(),
+  gigId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional()
 }).strict();
@@ -5358,14 +5122,15 @@ export const PresenceCreateManyPlayerInputEnvelopeSchema: z.ZodType<Prisma.Prese
 }).strict();
 
 export const RoleCreateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleCreateWithoutPlayerInput> = z.object({
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutRolesInputSchema)
 }).strict();
 
 export const RoleUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  instrumentId: z.number().int()
+  instrumentId: z.string()
 }).strict();
 
 export const RoleCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.RoleCreateOrConnectWithoutPlayerInput> = z.object({
@@ -5379,14 +5144,15 @@ export const RoleCreateManyPlayerInputEnvelopeSchema: z.ZodType<Prisma.RoleCreat
 }).strict();
 
 export const MembershipCreateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipCreateWithoutPlayerInput> = z.object({
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutMembershipsInputSchema)
 }).strict();
 
 export const MembershipUncheckedCreateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUncheckedCreateWithoutPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  bandId: z.number().int()
+  bandId: z.string()
 }).strict();
 
 export const MembershipCreateOrConnectWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipCreateOrConnectWithoutPlayerInput> = z.object({
@@ -5440,11 +5206,11 @@ export const PresenceScalarWhereInputSchema: z.ZodType<Prisma.PresenceScalarWher
   AND: z.union([ z.lazy(() => PresenceScalarWhereInputSchema),z.lazy(() => PresenceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => PresenceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => PresenceScalarWhereInputSchema),z.lazy(() => PresenceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   value: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   isOrganizer: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const RoleUpsertWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUpsertWithWhereUniqueWithoutPlayerInput> = z.object({
@@ -5467,10 +5233,10 @@ export const RoleScalarWhereInputSchema: z.ZodType<Prisma.RoleScalarWhereInput> 
   AND: z.union([ z.lazy(() => RoleScalarWhereInputSchema),z.lazy(() => RoleScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => RoleScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RoleScalarWhereInputSchema),z.lazy(() => RoleScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   playable: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  playerId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  playerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const MembershipUpsertWithWhereUniqueWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUpsertWithWhereUniqueWithoutPlayerInput> = z.object({
@@ -5490,13 +5256,14 @@ export const MembershipUpdateManyWithWhereWithoutPlayerInputSchema: z.ZodType<Pr
 }).strict();
 
 export const BandCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandCreateWithoutMembershipsInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutMembershipsInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -5508,6 +5275,7 @@ export const BandCreateOrConnectWithoutMembershipsInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const PlayerCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerCreateWithoutMembershipsInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserCreateNestedOneWithoutPlayerInputSchema),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5515,7 +5283,7 @@ export const PlayerCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerC
 }).strict();
 
 export const PlayerUncheckedCreateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutMembershipsInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5533,13 +5301,14 @@ export const BandUpsertWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUpser
 }).strict();
 
 export const BandUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUpdateWithoutMembershipsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutMembershipsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -5551,6 +5320,7 @@ export const PlayerUpsertWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerU
 }).strict();
 
 export const PlayerUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutMembershipsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUpdateOneRequiredWithoutPlayerNestedInputSchema).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5558,7 +5328,7 @@ export const PlayerUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerU
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutMembershipsInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutMembershipsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5566,6 +5336,7 @@ export const PlayerUncheckedUpdateWithoutMembershipsInputSchema: z.ZodType<Prism
 }).strict();
 
 export const PresenceCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreateWithoutGigInput> = z.object({
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutPresencesInputSchema),
@@ -5574,10 +5345,10 @@ export const PresenceCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceCreat
 }).strict();
 
 export const PresenceUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutGigInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  playerId: z.number().int(),
+  playerId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional()
 }).strict();
@@ -5593,13 +5364,14 @@ export const PresenceCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.Presence
 }).strict();
 
 export const BandCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandCreateWithoutGigsInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutGigsInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -5611,12 +5383,13 @@ export const BandCreateOrConnectWithoutGigsInputSchema: z.ZodType<Prisma.BandCre
 }).strict();
 
 export const GigVoiceCreateWithoutGigInputSchema: z.ZodType<Prisma.GigVoiceCreateWithoutGigInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutGigVoicesInputSchema)
 }).strict();
 
 export const GigVoiceUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.GigVoiceUncheckedCreateWithoutGigInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string()
 }).strict();
 
 export const GigVoiceCreateOrConnectWithoutGigInputSchema: z.ZodType<Prisma.GigVoiceCreateOrConnectWithoutGigInput> = z.object({
@@ -5630,12 +5403,13 @@ export const GigVoiceCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.GigVoice
 }).strict();
 
 export const DisabledVoiceCreateWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceCreateWithoutGigInput> = z.object({
+  id: z.string().uuid().optional(),
   bandVoice: z.lazy(() => BandVoiceCreateNestedOneWithoutDisabledVoicesInputSchema)
 }).strict();
 
 export const DisabledVoiceUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedCreateWithoutGigInput> = z.object({
-  id: z.number().int().optional(),
-  bandVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  bandVoiceId: z.string()
 }).strict();
 
 export const DisabledVoiceCreateOrConnectWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceCreateOrConnectWithoutGigInput> = z.object({
@@ -5649,14 +5423,15 @@ export const DisabledVoiceCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.Dis
 }).strict();
 
 export const FormationCreateWithoutGigInputSchema: z.ZodType<Prisma.FormationCreateWithoutGigInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoices: z.lazy(() => FormationVoiceCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceCreateNestedManyWithoutFormationInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigCreateNestedOneWithoutCurrentFormationInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedCreateWithoutGigInputSchema: z.ZodType<Prisma.FormationUncheckedCreateWithoutGigInput> = z.object({
-  id: z.number().int().optional(),
-  gigCurrentFromId: z.number().int().optional().nullable(),
+  id: z.string().uuid().optional(),
+  gigCurrentFromId: z.string().optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutFormationInputSchema).optional()
 }).strict();
@@ -5672,14 +5447,15 @@ export const FormationCreateManyGigInputEnvelopeSchema: z.ZodType<Prisma.Formati
 }).strict();
 
 export const FormationCreateWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.FormationCreateWithoutGigCurrentFromInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoices: z.lazy(() => FormationVoiceCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceCreateNestedManyWithoutFormationInputSchema).optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutFormationsInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedCreateWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.FormationUncheckedCreateWithoutGigCurrentFromInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int().optional().nullable(),
+  id: z.string().uuid().optional(),
+  gigId: z.string().optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedCreateNestedManyWithoutFormationInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutFormationInputSchema).optional()
 }).strict();
@@ -5711,13 +5487,14 @@ export const BandUpsertWithoutGigsInputSchema: z.ZodType<Prisma.BandUpsertWithou
 }).strict();
 
 export const BandUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUpdateWithoutGigsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutGigsInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutGigsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -5743,9 +5520,9 @@ export const GigVoiceScalarWhereInputSchema: z.ZodType<Prisma.GigVoiceScalarWher
   AND: z.union([ z.lazy(() => GigVoiceScalarWhereInputSchema),z.lazy(() => GigVoiceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => GigVoiceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => GigVoiceScalarWhereInputSchema),z.lazy(() => GigVoiceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const DisabledVoiceUpsertWithWhereUniqueWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceUpsertWithWhereUniqueWithoutGigInput> = z.object({
@@ -5768,9 +5545,9 @@ export const DisabledVoiceScalarWhereInputSchema: z.ZodType<Prisma.DisabledVoice
   AND: z.union([ z.lazy(() => DisabledVoiceScalarWhereInputSchema),z.lazy(() => DisabledVoiceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => DisabledVoiceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => DisabledVoiceScalarWhereInputSchema),z.lazy(() => DisabledVoiceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  bandVoiceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  bandVoiceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationUpsertWithWhereUniqueWithoutGigInputSchema: z.ZodType<Prisma.FormationUpsertWithWhereUniqueWithoutGigInput> = z.object({
@@ -5793,9 +5570,9 @@ export const FormationScalarWhereInputSchema: z.ZodType<Prisma.FormationScalarWh
   AND: z.union([ z.lazy(() => FormationScalarWhereInputSchema),z.lazy(() => FormationScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationScalarWhereInputSchema),z.lazy(() => FormationScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  gigId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  gigId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const FormationUpsertWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.FormationUpsertWithoutGigCurrentFromInput> = z.object({
@@ -5804,19 +5581,21 @@ export const FormationUpsertWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.F
 }).strict();
 
 export const FormationUpdateWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.FormationUpdateWithoutGigCurrentFromInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoices: z.lazy(() => FormationVoiceUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUpdateManyWithoutFormationNestedInputSchema).optional(),
   gig: z.lazy(() => GigUpdateOneWithoutFormationsNestedInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedUpdateWithoutGigCurrentFromInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateWithoutGigCurrentFromInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional()
 }).strict();
 
 export const GigCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateWithoutPresencesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -5830,9 +5609,9 @@ export const GigCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigCreateWit
 }).strict();
 
 export const GigUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutPresencesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -5849,6 +5628,7 @@ export const GigCreateOrConnectWithoutPresencesInputSchema: z.ZodType<Prisma.Gig
 }).strict();
 
 export const PlayerCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutPresencesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserCreateNestedOneWithoutPlayerInputSchema),
   roles: z.lazy(() => RoleCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5856,7 +5636,7 @@ export const PlayerCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerCre
 }).strict();
 
 export const PlayerUncheckedCreateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutPresencesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -5869,12 +5649,13 @@ export const PlayerCreateOrConnectWithoutPresencesInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const FormationVoicePresenceCreateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateWithoutPresenceInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoice: z.lazy(() => FormationVoiceCreateNestedOneWithoutFormationVoicePresencesInputSchema)
 }).strict();
 
 export const FormationVoicePresenceUncheckedCreateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedCreateWithoutPresenceInput> = z.object({
-  id: z.number().int().optional(),
-  formationVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationVoiceId: z.string()
 }).strict();
 
 export const FormationVoicePresenceCreateOrConnectWithoutPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateOrConnectWithoutPresenceInput> = z.object({
@@ -5888,12 +5669,13 @@ export const FormationVoicePresenceCreateManyPresenceInputEnvelopeSchema: z.ZodT
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateWithoutPresenceInput> = z.object({
+  id: z.string().uuid().optional(),
   formation: z.lazy(() => FormationCreateNestedOneWithoutFormationUndefinedVoicePresencesInputSchema)
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedCreateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedCreateWithoutPresenceInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateOrConnectWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateOrConnectWithoutPresenceInput> = z.object({
@@ -5912,6 +5694,7 @@ export const GigUpsertWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpsertWit
 }).strict();
 
 export const GigUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpdateWithoutPresencesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5925,9 +5708,9 @@ export const GigUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUpdateWit
 }).strict();
 
 export const GigUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutPresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -5944,6 +5727,7 @@ export const PlayerUpsertWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUps
 }).strict();
 
 export const PlayerUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutPresencesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUpdateOneRequiredWithoutPlayerNestedInputSchema).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5951,7 +5735,7 @@ export const PlayerUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUpd
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutPresencesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutPresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -5978,9 +5762,9 @@ export const FormationVoicePresenceScalarWhereInputSchema: z.ZodType<Prisma.Form
   AND: z.union([ z.lazy(() => FormationVoicePresenceScalarWhereInputSchema),z.lazy(() => FormationVoicePresenceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoicePresenceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoicePresenceScalarWhereInputSchema),z.lazy(() => FormationVoicePresenceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationVoiceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationVoiceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceUpsertWithWhereUniqueWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUpsertWithWhereUniqueWithoutPresenceInput> = z.object({
@@ -6003,12 +5787,13 @@ export const FormationUndefinedVoicePresenceScalarWhereInputSchema: z.ZodType<Pr
   AND: z.union([ z.lazy(() => FormationUndefinedVoicePresenceScalarWhereInputSchema),z.lazy(() => FormationUndefinedVoicePresenceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationUndefinedVoicePresenceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationUndefinedVoicePresenceScalarWhereInputSchema),z.lazy(() => FormationUndefinedVoicePresenceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  presenceId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  presenceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const InstrumentCreateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentCreateWithoutRolesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6016,7 +5801,7 @@ export const InstrumentCreateWithoutRolesInputSchema: z.ZodType<Prisma.Instrumen
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutRolesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6029,6 +5814,7 @@ export const InstrumentCreateOrConnectWithoutRolesInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const PlayerCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerCreateWithoutRolesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   user: z.lazy(() => AuthUserCreateNestedOneWithoutPlayerInputSchema),
   presences: z.lazy(() => PresenceCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -6036,7 +5822,7 @@ export const PlayerCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerCreateW
 }).strict();
 
 export const PlayerUncheckedCreateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedCreateWithoutRolesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   userId: z.string(),
   name: z.string(),
   presences: z.lazy(() => PresenceUncheckedCreateNestedManyWithoutPlayerInputSchema).optional(),
@@ -6054,6 +5840,7 @@ export const InstrumentUpsertWithoutRolesInputSchema: z.ZodType<Prisma.Instrumen
 }).strict();
 
 export const InstrumentUpdateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentUpdateWithoutRolesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6061,7 +5848,7 @@ export const InstrumentUpdateWithoutRolesInputSchema: z.ZodType<Prisma.Instrumen
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutRolesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6074,6 +5861,7 @@ export const PlayerUpsertWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpsertW
 }).strict();
 
 export const PlayerUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpdateWithoutRolesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => AuthUserUpdateOneRequiredWithoutPlayerNestedInputSchema).optional(),
   presences: z.lazy(() => PresenceUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -6081,7 +5869,7 @@ export const PlayerUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUpdateW
 }).strict();
 
 export const PlayerUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.PlayerUncheckedUpdateWithoutRolesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presences: z.lazy(() => PresenceUncheckedUpdateManyWithoutPlayerNestedInputSchema).optional(),
@@ -6089,14 +5877,15 @@ export const PlayerUncheckedUpdateWithoutRolesInputSchema: z.ZodType<Prisma.Play
 }).strict();
 
 export const RoleCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleCreateWithoutInstrumentInput> = z.object({
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
   player: z.lazy(() => PlayerCreateNestedOneWithoutRolesInputSchema)
 }).strict();
 
 export const RoleUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  playerId: z.number().int()
+  playerId: z.string()
 }).strict();
 
 export const RoleCreateOrConnectWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleCreateOrConnectWithoutInstrumentInput> = z.object({
@@ -6110,13 +5899,14 @@ export const RoleCreateManyInstrumentInputEnvelopeSchema: z.ZodType<Prisma.RoleC
 }).strict();
 
 export const BandVoiceCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.BandVoiceCreateWithoutInstrumentInput> = z.object({
+  id: z.string().uuid().optional(),
   band: z.lazy(() => BandCreateNestedOneWithoutBandVoicesInputSchema),
   disabledVoices: z.lazy(() => DisabledVoiceCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.BandVoiceUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  bandId: z.number().int(),
+  id: z.string().uuid().optional(),
+  bandId: z.string(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedCreateNestedManyWithoutBandVoiceInputSchema).optional()
 }).strict();
 
@@ -6131,12 +5921,13 @@ export const BandVoiceCreateManyInstrumentInputEnvelopeSchema: z.ZodType<Prisma.
 }).strict();
 
 export const GigVoiceCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.GigVoiceCreateWithoutInstrumentInput> = z.object({
+  id: z.string().uuid().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutGigVoicesInputSchema)
 }).strict();
 
 export const GigVoiceUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.GigVoiceUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string()
 }).strict();
 
 export const GigVoiceCreateOrConnectWithoutInstrumentInputSchema: z.ZodType<Prisma.GigVoiceCreateOrConnectWithoutInstrumentInput> = z.object({
@@ -6150,13 +5941,14 @@ export const GigVoiceCreateManyInstrumentInputEnvelopeSchema: z.ZodType<Prisma.G
 }).strict();
 
 export const FormationVoiceCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.FormationVoiceCreateWithoutInstrumentInput> = z.object({
+  id: z.string().uuid().optional(),
   formation: z.lazy(() => FormationCreateNestedOneWithoutFormationVoicesInputSchema),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedCreateWithoutInstrumentInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedCreateWithoutInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
@@ -6238,12 +6030,13 @@ export const FormationVoiceScalarWhereInputSchema: z.ZodType<Prisma.FormationVoi
   AND: z.union([ z.lazy(() => FormationVoiceScalarWhereInputSchema),z.lazy(() => FormationVoiceScalarWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => FormationVoiceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => FormationVoiceScalarWhereInputSchema),z.lazy(() => FormationVoiceScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  formationId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  instrumentId: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  formationId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  instrumentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const InstrumentCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.InstrumentCreateWithoutGigVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6251,7 +6044,7 @@ export const InstrumentCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.Instr
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutGigVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6264,6 +6057,7 @@ export const InstrumentCreateOrConnectWithoutGigVoicesInputSchema: z.ZodType<Pri
 }).strict();
 
 export const GigCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigCreateWithoutGigVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -6277,9 +6071,9 @@ export const GigCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigCreateWit
 }).strict();
 
 export const GigUncheckedCreateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutGigVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -6301,6 +6095,7 @@ export const InstrumentUpsertWithoutGigVoicesInputSchema: z.ZodType<Prisma.Instr
 }).strict();
 
 export const InstrumentUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.InstrumentUpdateWithoutGigVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6308,7 +6103,7 @@ export const InstrumentUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.Instr
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutGigVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6321,6 +6116,7 @@ export const GigUpsertWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigUpsertWit
 }).strict();
 
 export const GigUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigUpdateWithoutGigVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6334,9 +6130,9 @@ export const GigUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigUpdateWit
 }).strict();
 
 export const GigUncheckedUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutGigVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6348,6 +6144,7 @@ export const GigUncheckedUpdateWithoutGigVoicesInputSchema: z.ZodType<Prisma.Gig
 }).strict();
 
 export const InstrumentCreateWithoutBandVoicesInputSchema: z.ZodType<Prisma.InstrumentCreateWithoutBandVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutInstrumentInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6355,7 +6152,7 @@ export const InstrumentCreateWithoutBandVoicesInputSchema: z.ZodType<Prisma.Inst
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutBandVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutBandVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6368,13 +6165,14 @@ export const InstrumentCreateOrConnectWithoutBandVoicesInputSchema: z.ZodType<Pr
 }).strict();
 
 export const BandCreateWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandCreateWithoutBandVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipCreateNestedManyWithoutBandInputSchema).optional()
 }).strict();
 
 export const BandUncheckedCreateWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandUncheckedCreateWithoutBandVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   gigs: z.lazy(() => GigUncheckedCreateNestedManyWithoutBandInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedCreateNestedManyWithoutBandInputSchema).optional()
@@ -6386,12 +6184,13 @@ export const BandCreateOrConnectWithoutBandVoicesInputSchema: z.ZodType<Prisma.B
 }).strict();
 
 export const DisabledVoiceCreateWithoutBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceCreateWithoutBandVoiceInput> = z.object({
+  id: z.string().uuid().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutDisabledVoicesInputSchema)
 }).strict();
 
 export const DisabledVoiceUncheckedCreateWithoutBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedCreateWithoutBandVoiceInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string()
 }).strict();
 
 export const DisabledVoiceCreateOrConnectWithoutBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceCreateOrConnectWithoutBandVoiceInput> = z.object({
@@ -6410,6 +6209,7 @@ export const InstrumentUpsertWithoutBandVoicesInputSchema: z.ZodType<Prisma.Inst
 }).strict();
 
 export const InstrumentUpdateWithoutBandVoicesInputSchema: z.ZodType<Prisma.InstrumentUpdateWithoutBandVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6417,7 +6217,7 @@ export const InstrumentUpdateWithoutBandVoicesInputSchema: z.ZodType<Prisma.Inst
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutBandVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutBandVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   gigVoices: z.lazy(() => GigVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6430,13 +6230,14 @@ export const BandUpsertWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandUpsert
 }).strict();
 
 export const BandUpdateWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandUpdateWithoutBandVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUpdateManyWithoutBandNestedInputSchema).optional()
 }).strict();
 
 export const BandUncheckedUpdateWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandUncheckedUpdateWithoutBandVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gigs: z.lazy(() => GigUncheckedUpdateManyWithoutBandNestedInputSchema).optional(),
   memberships: z.lazy(() => MembershipUncheckedUpdateManyWithoutBandNestedInputSchema).optional()
@@ -6459,6 +6260,7 @@ export const DisabledVoiceUpdateManyWithWhereWithoutBandVoiceInputSchema: z.ZodT
 }).strict();
 
 export const GigCreateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigCreateWithoutDisabledVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -6472,9 +6274,9 @@ export const GigCreateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigCrea
 }).strict();
 
 export const GigUncheckedCreateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutDisabledVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -6491,14 +6293,15 @@ export const GigCreateOrConnectWithoutDisabledVoicesInputSchema: z.ZodType<Prism
 }).strict();
 
 export const BandVoiceCreateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.BandVoiceCreateWithoutDisabledVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutBandVoicesInputSchema),
   band: z.lazy(() => BandCreateNestedOneWithoutBandVoicesInputSchema)
 }).strict();
 
 export const BandVoiceUncheckedCreateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.BandVoiceUncheckedCreateWithoutDisabledVoicesInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
-  bandId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
+  bandId: z.string()
 }).strict();
 
 export const BandVoiceCreateOrConnectWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.BandVoiceCreateOrConnectWithoutDisabledVoicesInput> = z.object({
@@ -6512,6 +6315,7 @@ export const GigUpsertWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigUpse
 }).strict();
 
 export const GigUpdateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigUpdateWithoutDisabledVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6525,9 +6329,9 @@ export const GigUpdateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigUpda
 }).strict();
 
 export const GigUncheckedUpdateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutDisabledVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6544,26 +6348,28 @@ export const BandVoiceUpsertWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.B
 }).strict();
 
 export const BandVoiceUpdateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.BandVoiceUpdateWithoutDisabledVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedUpdateWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateWithoutDisabledVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationCreateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.FormationCreateWithoutFormationVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceCreateNestedManyWithoutFormationInputSchema).optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutFormationsInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigCreateNestedOneWithoutCurrentFormationInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedCreateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.FormationUncheckedCreateWithoutFormationVoicesInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int().optional().nullable(),
-  gigCurrentFromId: z.number().int().optional().nullable(),
+  id: z.string().uuid().optional(),
+  gigId: z.string().optional().nullable(),
+  gigCurrentFromId: z.string().optional().nullable(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutFormationInputSchema).optional()
 }).strict();
 
@@ -6573,6 +6379,7 @@ export const FormationCreateOrConnectWithoutFormationVoicesInputSchema: z.ZodTyp
 }).strict();
 
 export const InstrumentCreateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.InstrumentCreateWithoutFormationVoicesInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6580,7 +6387,7 @@ export const InstrumentCreateWithoutFormationVoicesInputSchema: z.ZodType<Prisma
 }).strict();
 
 export const InstrumentUncheckedCreateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedCreateWithoutFormationVoicesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   roles: z.lazy(() => RoleUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedCreateNestedManyWithoutInstrumentInputSchema).optional(),
@@ -6593,12 +6400,13 @@ export const InstrumentCreateOrConnectWithoutFormationVoicesInputSchema: z.ZodTy
 }).strict();
 
 export const FormationVoicePresenceCreateWithoutFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateWithoutFormationVoiceInput> = z.object({
+  id: z.string().uuid().optional(),
   presence: z.lazy(() => PresenceCreateNestedOneWithoutFormationVoicePresencesInputSchema)
 }).strict();
 
 export const FormationVoicePresenceUncheckedCreateWithoutFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedCreateWithoutFormationVoiceInput> = z.object({
-  id: z.number().int().optional(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationVoicePresenceCreateOrConnectWithoutFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateOrConnectWithoutFormationVoiceInput> = z.object({
@@ -6617,15 +6425,16 @@ export const FormationUpsertWithoutFormationVoicesInputSchema: z.ZodType<Prisma.
 }).strict();
 
 export const FormationUpdateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.FormationUpdateWithoutFormationVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUpdateManyWithoutFormationNestedInputSchema).optional(),
   gig: z.lazy(() => GigUpdateOneWithoutFormationsNestedInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigUpdateOneWithoutCurrentFormationNestedInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedUpdateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateWithoutFormationVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional()
 }).strict();
 
@@ -6635,6 +6444,7 @@ export const InstrumentUpsertWithoutFormationVoicesInputSchema: z.ZodType<Prisma
 }).strict();
 
 export const InstrumentUpdateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.InstrumentUpdateWithoutFormationVoicesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6642,7 +6452,7 @@ export const InstrumentUpdateWithoutFormationVoicesInputSchema: z.ZodType<Prisma
 }).strict();
 
 export const InstrumentUncheckedUpdateWithoutFormationVoicesInputSchema: z.ZodType<Prisma.InstrumentUncheckedUpdateWithoutFormationVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   roles: z.lazy(() => RoleUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
   bandVoices: z.lazy(() => BandVoiceUncheckedUpdateManyWithoutInstrumentNestedInputSchema).optional(),
@@ -6666,15 +6476,16 @@ export const FormationVoicePresenceUpdateManyWithWhereWithoutFormationVoiceInput
 }).strict();
 
 export const FormationCreateWithoutFormationUndefinedVoicePresencesInputSchema: z.ZodType<Prisma.FormationCreateWithoutFormationUndefinedVoicePresencesInput> = z.object({
+  id: z.string().uuid().optional(),
   formationVoices: z.lazy(() => FormationVoiceCreateNestedManyWithoutFormationInputSchema).optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutFormationsInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigCreateNestedOneWithoutCurrentFormationInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedCreateWithoutFormationUndefinedVoicePresencesInputSchema: z.ZodType<Prisma.FormationUncheckedCreateWithoutFormationUndefinedVoicePresencesInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int().optional().nullable(),
-  gigCurrentFromId: z.number().int().optional().nullable(),
+  id: z.string().uuid().optional(),
+  gigId: z.string().optional().nullable(),
+  gigCurrentFromId: z.string().optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedCreateNestedManyWithoutFormationInputSchema).optional()
 }).strict();
 
@@ -6684,6 +6495,7 @@ export const FormationCreateOrConnectWithoutFormationUndefinedVoicePresencesInpu
 }).strict();
 
 export const PresenceCreateWithoutFormationUndefinedVoicePresenceInputSchema: z.ZodType<Prisma.PresenceCreateWithoutFormationUndefinedVoicePresenceInput> = z.object({
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutPresencesInputSchema),
@@ -6692,11 +6504,11 @@ export const PresenceCreateWithoutFormationUndefinedVoicePresenceInputSchema: z.
 }).strict();
 
 export const PresenceUncheckedCreateWithoutFormationUndefinedVoicePresenceInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutFormationUndefinedVoicePresenceInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int(),
-  playerId: z.number().int(),
+  gigId: z.string(),
+  playerId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional()
 }).strict();
 
@@ -6711,15 +6523,16 @@ export const FormationUpsertWithoutFormationUndefinedVoicePresencesInputSchema: 
 }).strict();
 
 export const FormationUpdateWithoutFormationUndefinedVoicePresencesInputSchema: z.ZodType<Prisma.FormationUpdateWithoutFormationUndefinedVoicePresencesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoices: z.lazy(() => FormationVoiceUpdateManyWithoutFormationNestedInputSchema).optional(),
   gig: z.lazy(() => GigUpdateOneWithoutFormationsNestedInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigUpdateOneWithoutCurrentFormationNestedInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedUpdateWithoutFormationUndefinedVoicePresencesInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateWithoutFormationUndefinedVoicePresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional()
 }).strict();
 
@@ -6729,6 +6542,7 @@ export const PresenceUpsertWithoutFormationUndefinedVoicePresenceInputSchema: z.
 }).strict();
 
 export const PresenceUpdateWithoutFormationUndefinedVoicePresenceInputSchema: z.ZodType<Prisma.PresenceUpdateWithoutFormationUndefinedVoicePresenceInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutPresencesNestedInputSchema).optional(),
@@ -6737,23 +6551,24 @@ export const PresenceUpdateWithoutFormationUndefinedVoicePresenceInputSchema: z.
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutFormationUndefinedVoicePresenceInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutFormationUndefinedVoicePresenceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceCreateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoiceCreateWithoutFormationVoicePresencesInput> = z.object({
+  id: z.string().uuid().optional(),
   formation: z.lazy(() => FormationCreateNestedOneWithoutFormationVoicesInputSchema),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutFormationVoicesInputSchema)
 }).strict();
 
 export const FormationVoiceUncheckedCreateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedCreateWithoutFormationVoicePresencesInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string(),
+  instrumentId: z.string()
 }).strict();
 
 export const FormationVoiceCreateOrConnectWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoiceCreateOrConnectWithoutFormationVoicePresencesInput> = z.object({
@@ -6762,6 +6577,7 @@ export const FormationVoiceCreateOrConnectWithoutFormationVoicePresencesInputSch
 }).strict();
 
 export const PresenceCreateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.PresenceCreateWithoutFormationVoicePresencesInput> = z.object({
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
   gig: z.lazy(() => GigCreateNestedOneWithoutPresencesInputSchema),
@@ -6770,11 +6586,11 @@ export const PresenceCreateWithoutFormationVoicePresencesInputSchema: z.ZodType<
 }).strict();
 
 export const PresenceUncheckedCreateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.PresenceUncheckedCreateWithoutFormationVoicePresencesInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int(),
-  playerId: z.number().int(),
+  gigId: z.string(),
+  playerId: z.string(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedCreateNestedManyWithoutPresenceInputSchema).optional()
 }).strict();
 
@@ -6789,14 +6605,15 @@ export const FormationVoiceUpsertWithoutFormationVoicePresencesInputSchema: z.Zo
 }).strict();
 
 export const FormationVoiceUpdateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoiceUpdateWithoutFormationVoicePresencesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formation: z.lazy(() => FormationUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedUpdateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateWithoutFormationVoicePresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PresenceUpsertWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.PresenceUpsertWithoutFormationVoicePresencesInput> = z.object({
@@ -6805,6 +6622,7 @@ export const PresenceUpsertWithoutFormationVoicePresencesInputSchema: z.ZodType<
 }).strict();
 
 export const PresenceUpdateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.PresenceUpdateWithoutFormationVoicePresencesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutPresencesNestedInputSchema).optional(),
@@ -6813,22 +6631,23 @@ export const PresenceUpdateWithoutFormationVoicePresencesInputSchema: z.ZodType<
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutFormationVoicePresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceCreateWithoutFormationInputSchema: z.ZodType<Prisma.FormationVoiceCreateWithoutFormationInput> = z.object({
+  id: z.string().uuid().optional(),
   instrument: z.lazy(() => InstrumentCreateNestedOneWithoutFormationVoicesInputSchema),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedCreateWithoutFormationInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedCreateWithoutFormationInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int(),
+  id: z.string().uuid().optional(),
+  instrumentId: z.string(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedCreateNestedManyWithoutFormationVoiceInputSchema).optional()
 }).strict();
 
@@ -6843,12 +6662,13 @@ export const FormationVoiceCreateManyFormationInputEnvelopeSchema: z.ZodType<Pri
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateWithoutFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateWithoutFormationInput> = z.object({
+  id: z.string().uuid().optional(),
   presence: z.lazy(() => PresenceCreateNestedOneWithoutFormationUndefinedVoicePresenceInputSchema)
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedCreateWithoutFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedCreateWithoutFormationInput> = z.object({
-  id: z.number().int().optional(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateOrConnectWithoutFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateOrConnectWithoutFormationInput> = z.object({
@@ -6862,6 +6682,7 @@ export const FormationUndefinedVoicePresenceCreateManyFormationInputEnvelopeSche
 }).strict();
 
 export const GigCreateWithoutFormationsInputSchema: z.ZodType<Prisma.GigCreateWithoutFormationsInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -6875,9 +6696,9 @@ export const GigCreateWithoutFormationsInputSchema: z.ZodType<Prisma.GigCreateWi
 }).strict();
 
 export const GigUncheckedCreateWithoutFormationsInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutFormationsInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -6894,6 +6715,7 @@ export const GigCreateOrConnectWithoutFormationsInputSchema: z.ZodType<Prisma.Gi
 }).strict();
 
 export const GigCreateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigCreateWithoutCurrentFormationInput> = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -6907,9 +6729,9 @@ export const GigCreateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigCr
 }).strict();
 
 export const GigUncheckedCreateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigUncheckedCreateWithoutCurrentFormationInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
-  bandId: z.number().int().optional().nullable(),
+  bandId: z.string().optional().nullable(),
   date: z.coerce.date(),
   location: z.string(),
   description: z.string().optional().nullable(),
@@ -6963,6 +6785,7 @@ export const GigUpsertWithoutFormationsInputSchema: z.ZodType<Prisma.GigUpsertWi
 }).strict();
 
 export const GigUpdateWithoutFormationsInputSchema: z.ZodType<Prisma.GigUpdateWithoutFormationsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6976,9 +6799,9 @@ export const GigUpdateWithoutFormationsInputSchema: z.ZodType<Prisma.GigUpdateWi
 }).strict();
 
 export const GigUncheckedUpdateWithoutFormationsInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutFormationsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6995,6 +6818,7 @@ export const GigUpsertWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigUp
 }).strict();
 
 export const GigUpdateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigUpdateWithoutCurrentFormationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7008,9 +6832,9 @@ export const GigUpdateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigUp
 }).strict();
 
 export const GigUncheckedUpdateWithoutCurrentFormationInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutCurrentFormationInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  bandId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7074,7 +6898,7 @@ export const AuthKeyUncheckedUpdateManyWithoutAuth_keyInputSchema: z.ZodType<Pri
 }).strict();
 
 export const GigCreateManyBandInputSchema: z.ZodType<Prisma.GigCreateManyBandInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   date: z.coerce.date(),
   location: z.string(),
@@ -7083,17 +6907,18 @@ export const GigCreateManyBandInputSchema: z.ZodType<Prisma.GigCreateManyBandInp
 }).strict();
 
 export const BandVoiceCreateManyBandInputSchema: z.ZodType<Prisma.BandVoiceCreateManyBandInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string()
 }).strict();
 
 export const MembershipCreateManyBandInputSchema: z.ZodType<Prisma.MembershipCreateManyBandInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  playerId: z.number().int()
+  playerId: z.string()
 }).strict();
 
 export const GigUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUpdateWithoutBandInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7107,7 +6932,7 @@ export const GigUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUpdateWithoutB
 }).strict();
 
 export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7121,7 +6946,7 @@ export const GigUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.GigUnche
 }).strict();
 
 export const GigUncheckedUpdateManyWithoutGigsInputSchema: z.ZodType<Prisma.GigUncheckedUpdateManyWithoutGigsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   date: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   location: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7130,58 +6955,61 @@ export const GigUncheckedUpdateManyWithoutGigsInputSchema: z.ZodType<Prisma.GigU
 }).strict();
 
 export const BandVoiceUpdateWithoutBandInputSchema: z.ZodType<Prisma.BandVoiceUpdateWithoutBandInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedUpdateManyWithoutBandVoicesInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateManyWithoutBandVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUpdateWithoutBandInputSchema: z.ZodType<Prisma.MembershipUpdateWithoutBandInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutMembershipsNestedInputSchema).optional()
 }).strict();
 
 export const MembershipUncheckedUpdateWithoutBandInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateWithoutBandInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUncheckedUpdateManyWithoutMembershipsInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateManyWithoutMembershipsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PresenceCreateManyPlayerInputSchema: z.ZodType<Prisma.PresenceCreateManyPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  gigId: z.number().int()
+  gigId: z.string()
 }).strict();
 
 export const RoleCreateManyPlayerInputSchema: z.ZodType<Prisma.RoleCreateManyPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  instrumentId: z.number().int()
+  instrumentId: z.string()
 }).strict();
 
 export const MembershipCreateManyPlayerInputSchema: z.ZodType<Prisma.MembershipCreateManyPlayerInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   isAdmin: z.boolean().optional(),
-  bandId: z.number().int()
+  bandId: z.string()
 }).strict();
 
 export const PresenceUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUpdateWithoutPlayerInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutPresencesNestedInputSchema).optional(),
@@ -7190,72 +7018,75 @@ export const PresenceUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUp
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional()
 }).strict();
 
 export const PresenceUncheckedUpdateManyWithoutPresencesInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateManyWithoutPresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUpdateWithoutPlayerInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutRolesNestedInputSchema).optional()
 }).strict();
 
 export const RoleUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleUncheckedUpdateManyWithoutRolesInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateManyWithoutRolesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const MembershipUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUpdateWithoutPlayerInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutMembershipsNestedInputSchema).optional()
 }).strict();
 
 export const MembershipUncheckedUpdateWithoutPlayerInputSchema: z.ZodType<Prisma.MembershipUncheckedUpdateWithoutPlayerInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   isAdmin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PresenceCreateManyGigInputSchema: z.ZodType<Prisma.PresenceCreateManyGigInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   value: z.boolean().optional(),
   isOrganizer: z.boolean().optional(),
-  playerId: z.number().int()
+  playerId: z.string()
 }).strict();
 
 export const GigVoiceCreateManyGigInputSchema: z.ZodType<Prisma.GigVoiceCreateManyGigInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string()
 }).strict();
 
 export const DisabledVoiceCreateManyGigInputSchema: z.ZodType<Prisma.DisabledVoiceCreateManyGigInput> = z.object({
-  id: z.number().int().optional(),
-  bandVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  bandVoiceId: z.string()
 }).strict();
 
 export const FormationCreateManyGigInputSchema: z.ZodType<Prisma.FormationCreateManyGigInput> = z.object({
-  id: z.number().int().optional(),
-  gigCurrentFromId: z.number().int().optional().nullable()
+  id: z.string().uuid().optional(),
+  gigCurrentFromId: z.string().optional().nullable()
 }).strict();
 
 export const PresenceUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUpdateWithoutGigInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutPresencesNestedInputSchema).optional(),
@@ -7264,227 +7095,240 @@ export const PresenceUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUpdat
 }).strict();
 
 export const PresenceUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.PresenceUncheckedUpdateWithoutGigInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   value: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   isOrganizer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional(),
   formationUndefinedVoicePresence: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutPresenceNestedInputSchema).optional()
 }).strict();
 
 export const GigVoiceUpdateWithoutGigInputSchema: z.ZodType<Prisma.GigVoiceUpdateWithoutGigInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutGigVoicesNestedInputSchema).optional()
 }).strict();
 
 export const GigVoiceUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.GigVoiceUncheckedUpdateWithoutGigInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const GigVoiceUncheckedUpdateManyWithoutGigVoicesInputSchema: z.ZodType<Prisma.GigVoiceUncheckedUpdateManyWithoutGigVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceUpdateWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceUpdateWithoutGigInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   bandVoice: z.lazy(() => BandVoiceUpdateOneRequiredWithoutDisabledVoicesNestedInputSchema).optional()
 }).strict();
 
 export const DisabledVoiceUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedUpdateWithoutGigInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceUncheckedUpdateManyWithoutDisabledVoicesInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedUpdateManyWithoutDisabledVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUpdateWithoutGigInputSchema: z.ZodType<Prisma.FormationUpdateWithoutGigInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoices: z.lazy(() => FormationVoiceUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUpdateManyWithoutFormationNestedInputSchema).optional(),
   gigCurrentFrom: z.lazy(() => GigUpdateOneWithoutCurrentFormationNestedInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedUpdateWithoutGigInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateWithoutGigInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   formationVoices: z.lazy(() => FormationVoiceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional(),
   formationUndefinedVoicePresences: z.lazy(() => FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationNestedInputSchema).optional()
 }).strict();
 
 export const FormationUncheckedUpdateManyWithoutFormationsInputSchema: z.ZodType<Prisma.FormationUncheckedUpdateManyWithoutFormationsInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigCurrentFromId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigCurrentFromId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const FormationVoicePresenceCreateManyPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateManyPresenceInput> = z.object({
-  id: z.number().int().optional(),
-  formationVoiceId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationVoiceId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateManyPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateManyPresenceInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string()
 }).strict();
 
 export const FormationVoicePresenceUpdateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUpdateWithoutPresenceInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoice: z.lazy(() => FormationVoiceUpdateOneRequiredWithoutFormationVoicePresencesNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoicePresenceUncheckedUpdateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedUpdateWithoutPresenceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceUncheckedUpdateManyWithoutFormationVoicePresencesInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedUpdateManyWithoutFormationVoicePresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationVoiceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationVoiceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceUpdateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUpdateWithoutPresenceInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formation: z.lazy(() => FormationUpdateOneRequiredWithoutFormationUndefinedVoicePresencesNestedInputSchema).optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateWithoutPresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateWithoutPresenceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationUndefinedVoicePresenceInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationUndefinedVoicePresenceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const RoleCreateManyInstrumentInputSchema: z.ZodType<Prisma.RoleCreateManyInstrumentInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.string().uuid().optional(),
   playable: z.boolean().optional(),
-  playerId: z.number().int()
+  playerId: z.string()
 }).strict();
 
 export const BandVoiceCreateManyInstrumentInputSchema: z.ZodType<Prisma.BandVoiceCreateManyInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  bandId: z.number().int()
+  id: z.string().uuid().optional(),
+  bandId: z.string()
 }).strict();
 
 export const GigVoiceCreateManyInstrumentInputSchema: z.ZodType<Prisma.GigVoiceCreateManyInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string()
 }).strict();
 
 export const FormationVoiceCreateManyInstrumentInputSchema: z.ZodType<Prisma.FormationVoiceCreateManyInstrumentInput> = z.object({
-  id: z.number().int().optional(),
-  formationId: z.number().int()
+  id: z.string().uuid().optional(),
+  formationId: z.string()
 }).strict();
 
 export const RoleUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUpdateWithoutInstrumentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   player: z.lazy(() => PlayerUpdateOneRequiredWithoutRolesNestedInputSchema).optional()
 }).strict();
 
 export const RoleUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.RoleUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   playable: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  playerId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  playerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const BandVoiceUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.BandVoiceUpdateWithoutInstrumentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   band: z.lazy(() => BandUpdateOneRequiredWithoutBandVoicesNestedInputSchema).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const BandVoiceUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.BandVoiceUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  bandId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  bandId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   disabledVoices: z.lazy(() => DisabledVoiceUncheckedUpdateManyWithoutBandVoiceNestedInputSchema).optional()
 }).strict();
 
 export const GigVoiceUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.GigVoiceUpdateWithoutInstrumentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutGigVoicesNestedInputSchema).optional()
 }).strict();
 
 export const GigVoiceUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.GigVoiceUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoiceUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.FormationVoiceUpdateWithoutInstrumentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formation: z.lazy(() => FormationUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedUpdateWithoutInstrumentInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateWithoutInstrumentInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedUpdateManyWithoutFormationVoicesInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateManyWithoutFormationVoicesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  formationId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formationId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const DisabledVoiceCreateManyBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceCreateManyBandVoiceInput> = z.object({
-  id: z.number().int().optional(),
-  gigId: z.number().int()
+  id: z.string().uuid().optional(),
+  gigId: z.string()
 }).strict();
 
 export const DisabledVoiceUpdateWithoutBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceUpdateWithoutBandVoiceInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   gig: z.lazy(() => GigUpdateOneRequiredWithoutDisabledVoicesNestedInputSchema).optional()
 }).strict();
 
 export const DisabledVoiceUncheckedUpdateWithoutBandVoiceInputSchema: z.ZodType<Prisma.DisabledVoiceUncheckedUpdateWithoutBandVoiceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  gigId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  gigId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoicePresenceCreateManyFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceCreateManyFormationVoiceInput> = z.object({
-  id: z.number().int().optional(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationVoicePresenceUpdateWithoutFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUpdateWithoutFormationVoiceInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presence: z.lazy(() => PresenceUpdateOneRequiredWithoutFormationVoicePresencesNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoicePresenceUncheckedUpdateWithoutFormationVoiceInputSchema: z.ZodType<Prisma.FormationVoicePresenceUncheckedUpdateWithoutFormationVoiceInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationVoiceCreateManyFormationInputSchema: z.ZodType<Prisma.FormationVoiceCreateManyFormationInput> = z.object({
-  id: z.number().int().optional(),
-  instrumentId: z.number().int()
+  id: z.string().uuid().optional(),
+  instrumentId: z.string()
 }).strict();
 
 export const FormationUndefinedVoicePresenceCreateManyFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceCreateManyFormationInput> = z.object({
-  id: z.number().int().optional(),
-  presenceId: z.number().int()
+  id: z.string().uuid().optional(),
+  presenceId: z.string()
 }).strict();
 
 export const FormationVoiceUpdateWithoutFormationInputSchema: z.ZodType<Prisma.FormationVoiceUpdateWithoutFormationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   instrument: z.lazy(() => InstrumentUpdateOneRequiredWithoutFormationVoicesNestedInputSchema).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationVoiceUncheckedUpdateWithoutFormationInputSchema: z.ZodType<Prisma.FormationVoiceUncheckedUpdateWithoutFormationInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  instrumentId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  instrumentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   formationVoicePresences: z.lazy(() => FormationVoicePresenceUncheckedUpdateManyWithoutFormationVoiceNestedInputSchema).optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUpdateWithoutFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUpdateWithoutFormationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   presence: z.lazy(() => PresenceUpdateOneRequiredWithoutFormationUndefinedVoicePresenceNestedInputSchema).optional()
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateWithoutFormationInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateWithoutFormationInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationUndefinedVoicePresencesInputSchema: z.ZodType<Prisma.FormationUndefinedVoicePresenceUncheckedUpdateManyWithoutFormationUndefinedVoicePresencesInput> = z.object({
-  id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  presenceId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  presenceId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 /////////////////////////////////////////

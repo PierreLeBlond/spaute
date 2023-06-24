@@ -11,7 +11,7 @@ import { z } from "zod";
 
 const spamSchema = z.object({
   userId: z.string(),
-  gigId: z.number(),
+  gigId: z.string(),
   gigName: z.string()
 })
 

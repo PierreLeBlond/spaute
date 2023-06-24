@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 
 const schema = z.object({
-  bandId: z.number(),
-  playerId: z.number()
+  bandId: z.string(),
+  playerId: z.string()
 });
 
 export const load: PageServerLoad = async () => {

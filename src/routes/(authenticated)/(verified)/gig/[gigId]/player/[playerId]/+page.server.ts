@@ -6,8 +6,8 @@ import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
 
 const schema = z.object({
-  gigId: z.number(),
-  playerId: z.number()
+  gigId: z.string(),
+  playerId: z.string()
 });
 
 export const load: PageServerLoad = async (event) => {
@@ -15,9 +15,9 @@ export const load: PageServerLoad = async (event) => {
   const caller = router.createCaller(await createContext(event));
 
   const player = () => caller.players.read({
-    id: Number(playerId)
+    id: playerId
   });
-  const presence = () => caller.presences.read({ gigId: Number(gigId), playerId: Number(playerId) });
+  const presence = () => caller.presences.read({ gigId, playerId });
 
   const form = () => superValidate(schema);
 
