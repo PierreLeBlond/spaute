@@ -103,38 +103,40 @@
       {/each}
     </ul>
 
-    <p class="pb-2 text-sm">N'ont pas encore répondus</p>
-    {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
-      <Form
-        action="?/spam"
-        errors={[]}
-        enhance={spamEnhance}
-      >
-        <input
-          type="hidden"
-          name="userId"
-          value={data.currentPlayer.userId}
-        />
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <input
-          type="hidden"
-          name="gigName"
-          value={data.gig.name}
-        />
-        <Button
-          disabled={$spamSubmitting}
-          label={'Spaaaaaaaamer ces fanfarons !'}
-        />
-      </Form>
+    {#if remainingMemberships.length > 0}
+      <p class="pb-2 text-sm">N'ont pas encore répondus</p>
+      {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
+        <Form
+          action="?/spam"
+          errors={[]}
+          enhance={spamEnhance}
+        >
+          <input
+            type="hidden"
+            name="userId"
+            value={data.currentPlayer.userId}
+          />
+          <input
+            type="hidden"
+            name="gigId"
+            value={data.gig.id}
+          />
+          <input
+            type="hidden"
+            name="gigName"
+            value={data.gig.name}
+          />
+          <Button
+            disabled={$spamSubmitting}
+            label={'Spaaaaaaaamer ces fanfarons !'}
+          />
+        </Form>
+      {/if}
+      <ul class="p-2">
+        {#each remainingMemberships as membership}
+          <PlayerItem player={membership.player} />
+        {/each}
+      </ul>
     {/if}
-    <ul class="p-2">
-      {#each remainingMemberships as membership}
-        <PlayerItem player={membership.player} />
-      {/each}
-    </ul>
   </div>
 </div>
