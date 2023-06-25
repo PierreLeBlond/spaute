@@ -3,7 +3,7 @@ export type Constraints = Partial<{
   min: string | number;
   max: string | number;
   required: boolean;
-  step: number;
+  step: number | "any";
   minlength: number;
   maxlength: number;
 }>

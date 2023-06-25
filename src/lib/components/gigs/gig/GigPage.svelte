@@ -2,7 +2,7 @@
   import JoinGigForm from '$lib/components/gigs/presence/CreatePresenceForm.svelte';
   import UpdatePresenceForm from '$lib/components/gigs/presence/UpdatePresenceForm.svelte';
   import type { Band, Gig, Player, Presence } from '@prisma/client';
-  import type { Validation } from 'sveltekit-superforms/index';
+  import type { SuperValidated } from 'sveltekit-superforms';
 
   import type { PresenceSchema } from '../presence/presenceSchema';
   import GigView from './GigView.svelte';
@@ -14,7 +14,7 @@
   export let createAction: string;
   export let updateAction: string;
 
-  export let data: Validation<PresenceSchema>;
+  export let data: SuperValidated<PresenceSchema>;
 </script>
 
 <div class="flex w-full p-2">

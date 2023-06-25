@@ -23,7 +23,7 @@ const findBestConfiguration = (configurations: Configuration[]) => configuration
 
 export const computePlayability = async (gig: GigPayload) => {
 
-  const findConfigurations = (instrumentIds: number[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Configuration): Configuration[] => {
+  const findConfigurations = (instrumentIds: string[], presences: (Presence & { player: Player & { roles: Role[] } })[], configuration: Configuration, playable: boolean): Configuration[] => {
 
     const instrumentIdsCopy = instrumentIds.slice(0);
     const instrumentId = instrumentIdsCopy.pop();
@@ -31,7 +31,7 @@ export const computePlayability = async (gig: GigPayload) => {
     if (!instrumentId) {
       return [{
         presenceAndRoles: configuration.presenceAndRoles,
-        playable: true
+        playable
       }];
     }
 
@@ -46,7 +46,7 @@ export const computePlayability = async (gig: GigPayload) => {
       .filter(Boolean);
 
     if (presenceAndRoles.length == 0) {
-      return findConfigurations(instrumentIdsCopy, presences, configuration);
+      return findConfigurations(instrumentIdsCopy, presences, configuration, false);
     }
 
     const configurations = presenceAndRoles.flatMap(presenceAndRole => {
@@ -55,7 +55,7 @@ export const computePlayability = async (gig: GigPayload) => {
       return findConfigurations(instrumentIdsCopy, remainingPresences, {
         ...configuration,
         presenceAndRoles: [...configuration.presenceAndRoles, presenceAndRole]
-      });
+      }, playable);
     });
 
     return configurations;
@@ -71,7 +71,7 @@ export const computePlayability = async (gig: GigPayload) => {
   const configurations = findConfigurations(instrumentIds, presences, {
     playable: false,
     presenceAndRoles: []
-  });
+  }, true);
 
   const playable = configurations.some(configuration => configuration.playable);
 

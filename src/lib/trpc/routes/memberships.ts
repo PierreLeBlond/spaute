@@ -3,6 +3,8 @@ import { t } from "../t";
 import { MembershipBandIdPlayerIdCompoundUniqueInputSchema, MembershipWhereInputSchema } from "$lib/generated/zod";
 import { verifiedProcedure } from "../procedures/verifiedProcedure";
 import { adminProcedure } from "../procedures/adminProcedure";
+import { Novu } from "@novu/node";
+import { NOVU_API_KEY } from "$env/static/private";
 
 export const memberships = t.router({
   list: verifiedProcedure.input(MembershipWhereInputSchema).query(async ({ input }) => prisma.membership.findMany({
@@ -44,8 +46,34 @@ export const memberships = t.router({
             id: input.playerId
           }
         }
+      },
+      include: {
+        band: {
+          include: {
+            gigs: {
+              include: {
+                presences: true
+              }
+            }
+          }
+        }
       }
     });
+
+    const player = await prisma.player.findUniqueOrThrow({
+      where: {
+        id: input.playerId
+      }
+    });
+
+    const novu = new Novu(NOVU_API_KEY);
+    await Promise.all(
+      membership.band.gigs
+        .filter(gig => gig.presences.every(presence => presence.playerId != input.playerId))
+        .map(gig => novu.topics.addSubscribers(`gig:spam:${gig.id}`, { subscribers: [player.userId] }))
+
+    );
+
     return membership;
   }),
   makeAdmin: adminProcedure.input(

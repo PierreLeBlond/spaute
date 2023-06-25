@@ -8,11 +8,11 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { redirect } from 'sveltekit-flash-message/server'
 
-const updateSchema = gigSchema.extend({ gigId: z.number() });
+const updateSchema = gigSchema.extend({ gigId: z.string() });
 
-const deleteSchema = z.object({ gigId: z.number(), name: z.string(), nameCopy: z.string() });
-const updateDisabledVoiceSchema = z.object({ bandVoiceIds: z.array(z.number()), enableds: z.array(z.boolean()), gigId: z.number() });
-const deleteGigVoiceSchema = z.object({ id: z.number(), gigId: z.number() });
+const deleteSchema = z.object({ gigId: z.string(), name: z.string(), nameCopy: z.string() });
+const updateDisabledVoiceSchema = z.object({ bandVoiceIds: z.array(z.string()), enableds: z.array(z.boolean()), gigId: z.string() });
+const deleteGigVoiceSchema = z.object({ id: z.string(), gigId: z.string() });
 
 export const load: PageServerLoad = async (event) => {
   const { gig, bandVoices, disabledVoices } = await event.parent();
@@ -85,7 +85,7 @@ export const actions: Actions = {
       const { gigId } = updateDisabledVoiceForm.data;
       await Promise.all(
         updateDisabledVoiceForm.data.enableds.map(async (enabled, index) => {
-          const bandVoiceId = updateDisabledVoiceForm.data.bandVoiceIds[index] as number;
+          const bandVoiceId = updateDisabledVoiceForm.data.bandVoiceIds[index] as string;
 
           const disabledVoice = await caller.disabledVoices.read({ bandVoiceId, gigId });
 
@@ -158,6 +158,7 @@ export const actions: Actions = {
         "",
         error.message
       );
+      console.log(error);
       return message(form, 'Suppression impossible :(');
     }
 

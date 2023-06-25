@@ -4,7 +4,7 @@ import { z } from "zod";
 import { verified } from "./verified";
 
 const schema = z.object({
-  gigId: z.number()
+  gigId: z.string()
 });
 
 export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {

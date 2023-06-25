@@ -17,7 +17,7 @@ export const bandVoices = t.router({
       instrument: true
     }
   })),
-  delete: adminProcedure.input(z.object({ id: z.number(), bandId: z.number() })).mutation(({ input }) => prisma.bandVoice.delete({
+  delete: adminProcedure.input(z.object({ id: z.string(), bandId: z.string() })).mutation(({ input }) => prisma.bandVoice.delete({
     where: {
       id_bandId: {
         id: input.id,

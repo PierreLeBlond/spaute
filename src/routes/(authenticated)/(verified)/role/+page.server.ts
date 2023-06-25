@@ -6,8 +6,8 @@ import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
 
 const schema = z.object({
-  playerId: z.number(),
-  instrumentId: z.number(),
+  playerId: z.string(),
+  instrumentId: z.string(),
   playable: z.boolean()
 })
 

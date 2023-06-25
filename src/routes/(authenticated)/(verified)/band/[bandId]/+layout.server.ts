@@ -7,8 +7,8 @@ export const load: LayoutServerLoad = async (event) => {
   const { bandId } = event.params;
 
   const caller = router.createCaller(await createContext(event));
-  const band = await caller.bands.read({ id: Number(bandId) });
-  const currentMembership = () => caller.memberships.read({ bandId: Number(bandId), playerId: currentPlayer.id });
+  const band = await caller.bands.read({ id: bandId });
+  const currentMembership = () => caller.memberships.read({ bandId: bandId, playerId: currentPlayer.id });
 
   return {
     band,

@@ -6,8 +6,8 @@ import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
 
 const schema = z.object({
-  gigId: z.number(),
-  instrumentId: z.number()
+  gigId: z.string(),
+  instrumentId: z.string()
 })
 
 export const load: PageServerLoad = async (event) => {

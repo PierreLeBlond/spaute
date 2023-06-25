@@ -14,6 +14,17 @@
     taintedMessage: null
   });
   message.subscribe(sendToast);
+  const {
+    form: passwordForm,
+    errors: passwordErrors,
+    enhance: passwordEnhance,
+    submitting: passwordSubmitting,
+    message: passwordMessage,
+    constraints: passwordConstraints
+  } = superForm(data.passwordForm, {
+    taintedMessage: null
+  });
+  passwordMessage.subscribe(sendToast);
 </script>
 
 <div class="flex">
@@ -22,6 +33,7 @@
 
 <div class="flex w-full flex-col items-center justify-center p-8">
   <Form
+    action={'?/send'}
     errors={$errors._errors || []}
     {enhance}
   >
@@ -31,15 +43,39 @@
         label={'email'}
         bind:value={$form['email']}
         errors={$errors['email'] || []}
-        {...$constraints['email']}
+        constraints={$constraints['email']}
       />
       <div class="w-64 pt-2">
-        <h2 class="text-xs">Envoyer un mail de récupération</h2>
+        <h2 class="text-xs">Envoyer un code de récupération</h2>
         <Button
           label="Envoyer"
           disabled={$submitting || !$tainted}
         />
       </div>
+    </div>
+  </Form>
+  <Form
+    action={'?/verify'}
+    errors={$passwordErrors._errors || []}
+    enhance={passwordEnhance}
+  >
+    <div class="flex flex-col items-center justify-center pt-8">
+      <Text
+        name={'password'}
+        label={'code de validation'}
+        bind:value={$passwordForm['password']}
+        errors={$passwordErrors['password'] || []}
+        constraints={$passwordConstraints['password']}
+      />
+      <input
+        type="hidden"
+        name="email"
+        value={$form['email']}
+      />
+      <Button
+        label="Valider"
+        disabled={$passwordSubmitting}
+      />
     </div>
   </Form>
 </div>

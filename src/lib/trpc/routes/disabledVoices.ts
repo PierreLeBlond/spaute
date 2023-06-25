@@ -9,7 +9,7 @@ export const disabledVoices = t.router({
   list: verifiedProcedure.input(DisabledVoiceWhereInputSchema).query(({ input }) => prisma.disabledVoice.findMany({
     where: input
   })),
-  read: verifiedProcedure.input(z.object({ bandVoiceId: z.number(), gigId: z.number() })).query(({ input: { bandVoiceId, gigId } }) => prisma.disabledVoice.findUnique({
+  read: verifiedProcedure.input(z.object({ bandVoiceId: z.string(), gigId: z.string() })).query(({ input: { bandVoiceId, gigId } }) => prisma.disabledVoice.findUnique({
     where: {
       gigId_bandVoiceId: {
         bandVoiceId,
@@ -17,7 +17,7 @@ export const disabledVoices = t.router({
       }
     }
   })),
-  delete: organizerProcedure.input(z.object({ bandVoiceId: z.number(), gigId: z.number() })).mutation(({ input: { bandVoiceId, gigId } }) => prisma.disabledVoice.delete({
+  delete: organizerProcedure.input(z.object({ bandVoiceId: z.string(), gigId: z.string() })).mutation(({ input: { bandVoiceId, gigId } }) => prisma.disabledVoice.delete({
     where: {
       gigId_bandVoiceId: {
         bandVoiceId,

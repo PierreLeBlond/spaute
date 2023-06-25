@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import type { Band, Gig, Presence } from '@prisma/client';
   import { DateTime } from 'luxon';
 
@@ -9,6 +10,11 @@
   export let showLink = true;
 
   $: link = `${$page.url.origin}/gig/${gig.id}`;
+  const copyLinkToClipboard = () => {
+    navigator.clipboard.writeText(link).then(() => {
+      sendToast('Lien copié !');
+    });
+  };
 </script>
 
 <div class="grid grid-cols-6 items-center justify-center text-sm">
@@ -83,10 +89,13 @@
         d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"
       />
     </svg>
-    <a
-      class="col-span-5 text-sm text-cyan-600"
-      href={link}>{link}</a
+    <div
+      class="col-span-5 cursor-pointer text-sm text-cyan-600"
+      on:click={copyLinkToClipboard}
+      on:keydown={copyLinkToClipboard}
     >
+      copier le lien de la presta
+    </div>
   {/if}
   {#if !presence}
     <p class="col-span-5 col-start-2">Je ne sais pas si j'y participe.</p>

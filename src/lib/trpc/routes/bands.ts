@@ -34,7 +34,7 @@ export const bands = t.router({
         }
       }
     })),
-  delete: adminProcedure.input(z.object({ bandId: z.number() })).mutation(async ({ input }) => {
+  delete: adminProcedure.input(z.object({ bandId: z.string() })).mutation(async ({ input }) => {
     const response = await prisma.band.delete({
       where: {
         id: input.bandId

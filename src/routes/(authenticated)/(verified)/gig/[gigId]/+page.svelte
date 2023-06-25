@@ -1,13 +1,21 @@
 <script lang="ts">
+  import Button from '$lib/components/forms/Button.svelte';
+  import Form from '$lib/components/forms/Form.svelte';
   import GigPage from '$lib/components/gigs/gig/GigPage.svelte';
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
   import PlayerView from '$lib/components/gigs/gig/PlayerView.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
+  import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
+
+  const { enhance: spamEnhance, submitting: spamSubmitting, message: spamMessage } = superForm(data.spamForm);
+
+  spamMessage.subscribe(sendToast);
 
   $: remainingMemberships = data.band
     ? data.band.memberships.filter((membership) =>
@@ -95,11 +103,40 @@
       {/each}
     </ul>
 
-    <p class="text-sm">N'ont pas encore répondus</p>
-    <ul class="p-2">
-      {#each remainingMemberships as membership}
-        <PlayerItem player={membership.player} />
-      {/each}
-    </ul>
+    {#if remainingMemberships.length > 0}
+      <p class="pb-2 text-sm">N'ont pas encore répondus</p>
+      {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
+        <Form
+          action="?/spam"
+          errors={[]}
+          enhance={spamEnhance}
+        >
+          <input
+            type="hidden"
+            name="userId"
+            value={data.currentPlayer.userId}
+          />
+          <input
+            type="hidden"
+            name="gigId"
+            value={data.gig.id}
+          />
+          <input
+            type="hidden"
+            name="gigName"
+            value={data.gig.name}
+          />
+          <Button
+            disabled={$spamSubmitting}
+            label={'Spaaaaaaaamer ces fanfarons !'}
+          />
+        </Form>
+      {/if}
+      <ul class="p-2">
+        {#each remainingMemberships as membership}
+          <PlayerItem player={membership.player} />
+        {/each}
+      </ul>
+    {/if}
   </div>
 </div>

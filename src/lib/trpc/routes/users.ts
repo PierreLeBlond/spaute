@@ -2,15 +2,13 @@ import { t } from "../t";
 import { publicProcedure } from "../procedures/publicProcedure";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { auth, emailVerificationToken, passwordResetToken } from "$lib/lucia";
+import { auth, passwordResetToken } from "$lib/lucia";
 import { LuciaError } from "lucia-auth";
 import { authenticatedProcedure } from "../procedures/authenticatedProcedure";
-import * as nodemailer from 'nodemailer';
-import { SMTP_USER, SMTP_FROM, SMTP_PASS, SMTP_HOST } from '$env/static/private';
+import { NOVU_API_KEY } from '$env/static/private';
 import prisma from "$lib/prisma";
-import { render } from "svelte-email";
-import Verification from '$lib/emails/Verification.svelte';
-import Recovering from '$lib/emails/Recovering.svelte';
+import { Novu } from '@novu/node';
+import { otpToken } from "$lib/token";
 import { LuciaTokenError } from "@lucia-auth/tokens";
 
 export const users = t.router({
@@ -36,6 +34,8 @@ export const users = t.router({
       });
       const session = await auth.createSession(user.userId);
       ctx.auth.setSession(session);
+
+
     } catch (error) {
       if (!(error instanceof LuciaError)) {
         throw new TRPCError({
@@ -111,17 +111,8 @@ export const users = t.router({
       })
     }
 
-    const token = await emailVerificationToken.issue(user.userId);
-
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: 587,
-      secure: false,
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS
-      }
-    });
+    const otp = await otpToken.issue(user.userId);
+    const novu = new Novu(NOVU_API_KEY);
 
     const currentPlayer = await prisma.player.findUniqueOrThrow({
       where: {
@@ -129,36 +120,36 @@ export const users = t.router({
       }
     });
 
-    const emailHtml = render({
-      template: Verification,
-      props: {
-        name: currentPlayer.name,
-        token: token.toString()
+    novu.trigger('email-validation', {
+      to: {
+        subscriberId: user.userId,
+        email: user.email
+      },
+      payload: {
+        password: otp.toString(),
+        name: currentPlayer.name
       }
     });
-
-    const options = {
-      from: SMTP_FROM,
-      to: user.email,
-      subject: '[Spaute] Vérification de ton email',
-      html: emailHtml
-    };
-
-    transporter.sendMail(options);
   }),
-  verifyEmail: authenticatedProcedure.input(z.object({ token: z.string() })).mutation(async ({ input, ctx }) => {
+  verifyEmail: authenticatedProcedure.input(z.object({ password: z.string() })).mutation(async ({ input, ctx }) => {
     try {
-
-      const token = await emailVerificationToken.validate(input.token);
+      const token = await otpToken.validate(input.password, ctx.user.userId);
       await auth.invalidateAllUserSessions(token.userId);
       await auth.updateUserAttributes(token.userId, {
         email_verified: true
       });
-      const session = await auth.createSession(token.userId);
+
+      const novu = new Novu(NOVU_API_KEY);
+
+      await novu.subscribers.identify(ctx.user.userId, {
+        email: ctx.user.email,
+        locale: 'fr'
+      });
+
+      const session = await auth.createSession(ctx.user.userId);
       ctx.auth.setSession(session);
 
     } catch (error) {
-
       if (!(error instanceof LuciaTokenError)) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
@@ -205,17 +196,8 @@ export const users = t.router({
       })
     }
 
-    const token = await passwordResetToken.issue(user.id);
-
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: 587,
-      secure: false,
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS
-      }
-    });
+    const otp = await otpToken.issue(user.id);
+    const novu = new Novu(NOVU_API_KEY);
 
     const currentPlayer = await prisma.player.findUniqueOrThrow({
       where: {
@@ -223,22 +205,59 @@ export const users = t.router({
       }
     });
 
-    const emailHtml = render({
-      template: Recovering,
-      props: {
-        name: currentPlayer.name,
-        token: token.toString()
+    novu.trigger('password-reset', {
+      to: {
+        subscriberId: user.id,
+        email: user.email
+      },
+      payload: {
+        password: otp.toString(),
+        name: currentPlayer.name
       }
     });
+  }),
+  getResetPasswordToken: publicProcedure.input(z.object({ password: z.string(), email: z.string() })).mutation(async ({ input }) => {
+    try {
+      const user = await prisma.authUser.findUniqueOrThrow({
+        where: {
+          email: input.email
+        }
+      });
 
-    const options = {
-      from: SMTP_FROM,
-      to: user.email,
-      subject: '[Spaute] Récupération de ton compte',
-      html: emailHtml
-    };
+      await otpToken.validate(input.password, user.id);
+      const token = await passwordResetToken.issue(user.id);
+      return { token: token.toString() };
+    } catch (error) {
+      if (!(error instanceof LuciaTokenError)) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unexpected error occured.',
+          cause: error
+        });
+      }
 
-    transporter.sendMail(options);
+      if (error.message === "EXPIRED_TOKEN") {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'The token has expired...',
+          cause: error
+        });
+      }
+
+      if (error.message === "INVALID_TOKEN") {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'The token is invalid...',
+          cause: error
+        });
+      }
+
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Unexpected lucia token error occured.',
+        cause: error
+      });
+    }
   }),
   resetPassword: publicProcedure.input(z.object({ token: z.string(), password: z.string() })).mutation(async ({ input }) => {
     try {

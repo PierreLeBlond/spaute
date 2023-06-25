@@ -7,16 +7,16 @@ import { TRPCError } from '@trpc/server';
 import { redirect } from 'sveltekit-flash-message/server'
 
 const deleteBandVoiceSchema = z.object({
-  bandId: z.number(),
-  id: z.number()
+  bandId: z.string(),
+  id: z.string()
 });
 
-const deleteSchema = z.object({ bandId: z.number(), name: z.string(), nameCopy: z.string() });
+const deleteSchema = z.object({ bandId: z.string(), name: z.string(), nameCopy: z.string() });
 
 export const load: PageServerLoad = async (event) => {
   const { bandId } = event.params;
   const caller = router.createCaller(await createContext(event));
-  const bandVoices = () => caller.bandVoices.list({ bandId: Number(bandId) });
+  const bandVoices = () => caller.bandVoices.list({ bandId: bandId });
   const deleteBandVoiceForm = () => superValidate(deleteBandVoiceSchema, { id: 'deleteBandVoiceForm' });
   const deleteForm = () => superValidate(deleteSchema, { id: 'deleteForm' });
   return {

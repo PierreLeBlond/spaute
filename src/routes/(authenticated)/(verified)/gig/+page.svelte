@@ -38,7 +38,7 @@
         id={'bandId'}
         label={'fanfare'}
       >
-        <option value={-1}> Presta indépendante ! </option>
+        <option value={''}> Presta indépendante ! </option>
         {#each data.memberships as membership}
           <option value={membership.band.id}>
             {membership.band.name}
@@ -51,14 +51,14 @@
         label="titre"
         bind:value={$form['name']}
         errors={$errors['name'] || []}
-        {...$constraints['name']}
+        constraints={$constraints['name']}
       />
       <Text
         name="location"
         label="lieu"
         bind:value={$form['location']}
         errors={$errors['location'] || []}
-        {...$constraints['location']}
+        constraints={$constraints['location']}
       />
       <DateInput
         name="date"

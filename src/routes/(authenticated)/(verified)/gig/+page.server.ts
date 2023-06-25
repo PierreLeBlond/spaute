@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { gigSchema } from '$lib/components/gigs/gig/gigSchema';
 import { z } from 'zod';
 
-const schema = gigSchema.extend({ bandId: z.number() });
+const schema = gigSchema.extend({ bandId: z.string() });
 
 export const load: PageServerLoad = async (event) => {
   const { currentPlayer } = await event.parent();
@@ -34,7 +34,7 @@ export const actions: Actions = {
     const { date, time, bandId, ...rest } = form.data;
 
     const data = {
-      bandId: bandId > 0 ? bandId : null,
+      bandId: bandId != '' ? bandId : null,
       date: DateTime.fromISO(`${date}T${time}`).toJSDate(),
       ...rest,
     }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
 
+  import Notifications from './notifications/Notifications.svelte';
   import Toaster from './toast/Toaster.svelte';
 </script>
 
@@ -36,31 +37,7 @@
     </g>
   </svg>
   <div class="z-10 grid h-full w-full auto-rows-fr grid-cols-5 sm:w-96">
-    <div class="relative col-span-1 flex flex-col items-center justify-evenly py-2">
-      {#if $page.data['backPathname']}
-        <a
-          href={$page.data['backPathname']}
-          class="flex items-center justify-center text-cyan-300"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            fill="currentColor"
-            class="bi bi-arrow-left-circle-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
-            />
-          </svg>
-        </a>
-      {/if}
-      {#if $page.data['backName']}
-        <p class="truncate text-xs">{$page.data['backName']}</p>
-      {/if}
-    </div>
-    <div class="relative col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
+    <div class="relative col-span-1 flex flex-col items-center justify-evenly truncate py-2">
       {#if $page.data['currentPlayer']}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +54,11 @@
           />
         </svg>
         <p class="truncate text-xs">{$page.data['currentPlayer'].name}</p>
+      {/if}
+    </div>
+    <div class="relative col-span-1 col-start-4 flex flex-col items-center justify-evenly truncate py-2">
+      {#if $page.data['currentPlayer']}
+        <Notifications userId={$page.data['currentPlayer'].userId} />
       {/if}
     </div>
     <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
@@ -101,7 +83,7 @@
         <p class="text-xs">logout</p>
       {/if}
     </div>
-    <div class="relative col-span-3 row-start-2 flex flex-col items-start justify-start overflow-y-auto pl-8">
+    <div class="relative col-span-5 row-start-2 flex flex-col items-start justify-start overflow-y-auto pl-8">
       <h1 class="text-xl">
         {$page.data['title']}
       </h1>
