@@ -5,6 +5,35 @@ import { createContext } from '$lib/trpc/context';
 import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
+import {
+  UPSTASH_REDIS_REST_TOKEN,
+  UPSTASH_REDIS_REST_URL,
+} from "$env/static/private";
+
+import { building } from "$app/environment";
+
+let redis: Redis;
+let sendRatelimit: Ratelimit;
+let verifyRatelimit: Ratelimit;
+
+if (!building) {
+  redis = new Redis({
+    url: UPSTASH_REDIS_REST_URL,
+    token: UPSTASH_REDIS_REST_TOKEN,
+  });
+
+  verifyRatelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(3, "10 s"),
+  });
+
+  sendRatelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(1, "60 s"),
+  });
+}
 
 const schema = z.object({});
 
@@ -60,6 +89,23 @@ export const actions: Actions = {
     const { request } = event;
     const form = await superValidate(request, schema);
 
+    const ip = event.getClientAddress();
+    const rateLimitAttempt = await sendRatelimit.limit(ip);
+    if (!rateLimitAttempt.success) {
+      const timeRemaining = Math.floor(
+        (rateLimitAttempt.reset - new Date().getTime()) / 1000
+      );
+      setError(
+        form,
+        "",
+        `Attends ${timeRemaining} secondes pour un nouvel email !`,
+        {
+          status: 429
+        }
+      );
+      return message(form, 'Pas si vite !');
+    }
+
     try {
       await router.createCaller(await createContext(event)).users.sendVerificationEmail();
       return message(form, 'Email envoyé !');
@@ -67,13 +113,36 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      return message(form, error.message);
+      setError(
+        form,
+        "",
+        error.message
+      );
+      return message(form, 'Outch !');
     }
 
   },
   verify: async (event) => {
     const { request } = event;
+
     const form = await superValidate(request, passwordSchema, { id: 'passwordForm' });
+
+    const ip = event.getClientAddress();
+    const rateLimitAttempt = await verifyRatelimit.limit(ip);
+    if (!rateLimitAttempt.success) {
+      const timeRemaining = Math.floor(
+        (rateLimitAttempt.reset - new Date().getTime()) / 1000
+      );
+      setError(
+        form,
+        "",
+        `Trop de tentatives ! Essais à nouveau dans ${timeRemaining} secondes`,
+        {
+          status: 429
+        }
+      );
+      return message(form, 'Pas si vite !');
+    }
 
     try {
       await router.createCaller(await createContext(event)).users.verifyEmail({ password: form.data.password });

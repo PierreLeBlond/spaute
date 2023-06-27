@@ -8,6 +8,29 @@ import { NOVU_API_KEY } from "$env/static/private";
 import { TriggerRecipientsTypeEnum } from "@novu/shared";
 import { Novu } from "@novu/node";
 import { z } from "zod";
+import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
+import {
+  UPSTASH_REDIS_REST_TOKEN,
+  UPSTASH_REDIS_REST_URL,
+} from "$env/static/private";
+
+import { building } from "$app/environment";
+
+let redis: Redis;
+let spamRatelimit: Ratelimit;
+
+if (!building) {
+  redis = new Redis({
+    url: UPSTASH_REDIS_REST_URL,
+    token: UPSTASH_REDIS_REST_TOKEN,
+  });
+
+  spamRatelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(1, "1h"),
+  });
+}
 
 const spamSchema = z.object({
   userId: z.string(),
@@ -82,6 +105,22 @@ export const actions: Actions = {
   spam: async (event) => {
     const { request } = event;
     const form = await superValidate(request, spamSchema, { id: 'spamForm' });
+
+    const rateLimitAttempt = await spamRatelimit.limit(form.data.gigId);
+    if (!rateLimitAttempt.success) {
+      const timeRemaining = Math.floor(
+        (rateLimitAttempt.reset - new Date().getTime()) / 1000
+      );
+      setError(
+        form,
+        "",
+        `Attends ${Math.floor(timeRemaining / 60)} minutes pour spammer à nouveau !`,
+        {
+          status: 429
+        }
+      );
+      return message(form, 'Pas si vite !');
+    }
 
     const novu = new Novu(NOVU_API_KEY);
     const spamTopicKey = `gig:spam:${form.data.gigId}`;
