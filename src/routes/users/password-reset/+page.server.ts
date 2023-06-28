@@ -5,6 +5,35 @@ import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { redirect } from '@sveltejs/kit';
+import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
+import {
+  UPSTASH_REDIS_REST_TOKEN,
+  UPSTASH_REDIS_REST_URL,
+} from "$env/static/private";
+
+import { building } from "$app/environment";
+
+let redis: Redis;
+let sendRatelimit: Ratelimit;
+let verifyRatelimit: Ratelimit;
+
+if (!building) {
+  redis = new Redis({
+    url: UPSTASH_REDIS_REST_URL,
+    token: UPSTASH_REDIS_REST_TOKEN,
+  });
+
+  verifyRatelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(3, "10 s"),
+  });
+
+  sendRatelimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(1, "60 s"),
+  });
+}
 
 const schema = z.object({ email: z.string().email() });
 
@@ -50,6 +79,23 @@ export const actions: Actions = {
     const { request } = event;
     const form = await superValidate(request, schema);
 
+    const ip = event.getClientAddress();
+    const rateLimitAttempt = await sendRatelimit.limit(ip);
+    if (!rateLimitAttempt.success) {
+      const timeRemaining = Math.floor(
+        (rateLimitAttempt.reset - new Date().getTime()) / 1000
+      );
+      setError(
+        form,
+        "",
+        `Attends encore ${timeRemaining} secondes avant de demander un nouvel email !`,
+        {
+          status: 429
+        }
+      );
+      return message(form, 'Pas si vite !');
+    }
+
     const { email } = form.data;
 
     try {
@@ -71,6 +117,23 @@ export const actions: Actions = {
   verify: async (event) => {
     const { request } = event;
     const form = await superValidate(request, passwordSchema, { id: 'passwordForm' });
+
+    const ip = event.getClientAddress();
+    const rateLimitAttempt = await verifyRatelimit.limit(ip);
+    if (!rateLimitAttempt.success) {
+      const timeRemaining = Math.floor(
+        (rateLimitAttempt.reset - new Date().getTime()) / 1000
+      );
+      setError(
+        form,
+        "",
+        `Trop de tentatives ! Essais à nouveau dans ${timeRemaining} secondes`,
+        {
+          status: 429
+        }
+      );
+      return message(form, 'Pas si vite !');
+    }
 
     try {
       const result = await router.createCaller(await createContext(event)).users.getResetPasswordToken({ password: form.data.password, email: form.data.email });

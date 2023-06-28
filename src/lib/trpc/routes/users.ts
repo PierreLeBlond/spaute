@@ -10,6 +10,7 @@ import prisma from "$lib/prisma";
 import { Novu } from '@novu/node';
 import { otpToken } from "$lib/token";
 import { LuciaTokenError } from "@lucia-auth/tokens";
+import { Prisma } from "@prisma/client";
 
 export const users = t.router({
   create: publicProcedure.input(
@@ -37,6 +38,15 @@ export const users = t.router({
 
 
     } catch (error) {
+
+      if ((error instanceof Prisma.PrismaClientKnownRequestError) && error.code == 'P2002') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Email déjà utilisé...',
+          cause: error
+        });
+      }
+
       if (!(error instanceof LuciaError)) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

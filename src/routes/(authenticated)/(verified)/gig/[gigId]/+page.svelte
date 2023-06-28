@@ -13,7 +13,12 @@
 
   export let data: PageData;
 
-  const { enhance: spamEnhance, submitting: spamSubmitting, message: spamMessage } = superForm(data.spamForm);
+  const {
+    errors: spamErrors,
+    enhance: spamEnhance,
+    submitting: spamSubmitting,
+    message: spamMessage
+  } = superForm(data.spamForm);
 
   spamMessage.subscribe(sendToast);
 
@@ -108,7 +113,7 @@
       {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
         <Form
           action="?/spam"
-          errors={[]}
+          errors={$spamErrors._errors || []}
           enhance={spamEnhance}
         >
           <input
