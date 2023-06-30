@@ -1,9 +1,8 @@
-import { NOVU_API_KEY } from "$env/static/private";
+import { addSubscriber } from "$lib/hook/notifications/addSubscriber";
 import { auth } from "$lib/lucia";
 import { otpToken } from "$lib/token";
 import { authenticatedProcedure } from "$lib/trpc/procedures/authenticatedProcedure";
 import { LuciaTokenError } from "@lucia-auth/tokens";
-import { Novu } from "@novu/node";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -16,14 +15,10 @@ export const verifyEmail = authenticatedProcedure
       .then(token => Promise.all([
         auth.invalidateAllUserSessions(token.userId),
         auth.updateUserAttributes(token.userId, { email_verified: true })
-      ])).then(() => {
-        const novu = new Novu(NOVU_API_KEY);
-
-        return novu.subscribers.identify(ctx.user.userId, {
-          email: ctx.user.email,
-          locale: 'fr'
-        })
-      }).then(() =>
+      ])).then(() => addSubscriber({
+        userId: ctx.user.userId,
+        email: ctx.user.email
+      })).then(() =>
         auth.createSession(ctx.user.userId)
       ).then(session =>
         ctx.auth.setSession(session)

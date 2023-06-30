@@ -1,8 +1,7 @@
-import { NOVU_API_KEY } from "$env/static/private";
+import { triggerEmailVerification } from "$lib/hook/notifications/triggerEmailVerification";
 import prisma from "$lib/prisma";
 import { otpToken } from "$lib/token";
 import { authenticatedProcedure } from "$lib/trpc/procedures/authenticatedProcedure";
-import { Novu } from "@novu/node";
 import { TRPCError } from "@trpc/server";
 
 export const sendVerificationEmail = authenticatedProcedure
@@ -16,23 +15,17 @@ export const sendVerificationEmail = authenticatedProcedure
       })
     }
 
-    const otp = await otpToken.issue(user.userId);
-    const novu = new Novu(NOVU_API_KEY);
-
+    const token = await otpToken.issue(user.userId);
     const currentPlayer = await prisma.player.findUniqueOrThrow({
       where: {
         userId: user.userId
       }
     });
 
-    novu.trigger('email-validation', {
-      to: {
-        subscriberId: user.userId,
-        email: user.email
-      },
-      payload: {
-        password: otp.toString(),
-        name: currentPlayer.name
-      }
-    });
+    return triggerEmailVerification({
+      userId: user.userId,
+      email: user.email,
+      name: currentPlayer.name,
+      token: token.toString()
+    })
   });
