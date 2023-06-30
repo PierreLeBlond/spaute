@@ -1,6 +1,27 @@
 import prisma from "$lib/prisma"
 import type { BandVoice, Player, Role, Presence, Gig, Band, DisabledVoice, GigVoice } from "@prisma/client";
 
+export const gigIncludes = {
+  include: {
+    band: {
+      include: {
+        bandVoices: true
+      }
+    },
+    gigVoices: true,
+    disabledVoices: true,
+    presences: {
+      include: {
+        player: {
+          include: {
+            roles: true
+          }
+        }
+      }
+    }
+  }
+}
+
 type GigPayload = Gig & { band: Band & { bandVoices: BandVoice[] } | null, gigVoices: GigVoice[], disabledVoices: DisabledVoice[], presences: (Presence & { player: Player & { roles: Role[] } })[] };
 type PresenceAndRole = {
   presence: Presence & {

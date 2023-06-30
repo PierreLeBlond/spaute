@@ -1,3 +1,4 @@
+import { computePlayability, gigIncludes } from "$lib/hook/computePlayability";
 import { triggerDeletedGigNotifications } from "$lib/hook/notifications/triggerDeletedGigNotifications";
 import prisma from "$lib/prisma";
 import { organizerProcedure } from "$lib/trpc/procedures/organizerProcedure";
@@ -7,17 +8,17 @@ const schema = z.object({ gigId: z.string() });
 
 export const del = organizerProcedure
   .input(schema)
-  .mutation(({ input, ctx }) => prisma.gig.delete({
-    where: {
-      id: input.gigId
-    },
-    include: {
-      presences: {
-        include: {
-          player: true
-        }
-      }
-    }
-  }).then(gig => triggerDeletedGigNotifications({
-    gig, userId: ctx.user.userId
-  })));
+  .mutation(async ({ input, ctx }) => {
+    const gig = await prisma.gig.delete({
+      where: {
+        id: input.gigId
+      },
+      ...gigIncludes
+    });
+
+    await computePlayability(gig);
+
+    await triggerDeletedGigNotifications({
+      gig, userId: ctx.user.userId
+    })
+  });

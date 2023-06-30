@@ -1,4 +1,5 @@
 import { PresenceSchema } from "$lib/generated/zod";
+import { computePlayability, gigIncludes } from "$lib/hook/computePlayability";
 import { removeSubscriberFromGig } from "$lib/hook/notifications/removeSubscriberFromGig";
 import prisma from "$lib/prisma";
 import { verifiedProcedure } from "$lib/trpc/procedures/verifiedProcedure";
@@ -21,8 +22,13 @@ export const create = verifiedProcedure
             id: playerId
           }
         },
+      },
+      include: {
+        gig: gigIncludes
       }
     });
+
+    await computePlayability(presence.gig);
 
     await removeSubscriberFromGig({
       userId: ctx.user.userId,

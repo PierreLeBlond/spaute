@@ -1,4 +1,5 @@
 import { RoleSchema } from "$lib/generated/zod";
+import { computePlayabilities, gigIncludes } from "$lib/hook/computePlayability";
 import prisma from "$lib/prisma";
 import { ownerProcedure } from "$lib/trpc/procedures/ownerProcedure";
 import { Prisma } from "@prisma/client";
@@ -20,8 +21,22 @@ export const create = ownerProcedure
         connect: {
           id: instrumentId
         }
+      },
+    },
+    include: {
+      player: {
+        include: {
+          presences: {
+            include: {
+              gig: gigIncludes
+            }
+          }
+        }
       }
     }
+  }).then(async (role) => {
+    await computePlayabilities(role.player.presences.map(presence => presence.gig));
+    return role;
   }).catch((error) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code == 'P2002') {
       throw new TRPCError({
