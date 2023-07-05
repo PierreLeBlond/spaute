@@ -1,29 +1,37 @@
 <script lang="ts">
+  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+  import type { z, AnyZodObject } from 'zod';
+
   import Errors from './Errors.svelte';
 
-  export let name: string;
-  export let label: string;
-  export let value: string | null = '';
-  export let maxlength: number = 320;
+  type T = $$Generic<AnyZodObject>;
 
-  export let errors: string[] = [];
+  export let form: SuperForm<ZodValidation<T>, string>;
+  export let field: FormPathLeaves<z.infer<T>>;
+  export let label: string;
+
+  const { value, errors, constraints } = formFieldProxy(form as SuperForm<ZodValidation<T>, unknown>, field);
 </script>
 
 <div class="flex h-full flex-col">
   <div class="flex justify-between text-xs">
     <label
-      for="{name}-input"
+      for="{field}-input"
       class="text-xs">{label}</label
     >
-    <p>{value?.length || 0}/{maxlength}</p>
+    {#if !!$constraints?.maxlength}
+      <p>{$value?.length || 0}/{$constraints.maxlength}</p>
+    {/if}
   </div>
   <textarea
-    id="{name}-input"
-    {name}
+    id="{field}-input"
+    name={field}
     class="grow rounded border-red-500 bg-neutral-200 text-sm"
-    class:border={errors.length != 0}
-    bind:value
-    {maxlength}
+    class:border={$errors}
+    bind:value={$value}
+    {...$constraints}
+    {...$$restProps}
   />
-  <Errors {errors} />
+  <Errors errors={$errors} />
 </div>

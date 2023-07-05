@@ -4,43 +4,38 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  let checked: boolean;
+  const form = superForm(data.form);
 
-  const { errors, enhance, message } = superForm(data.form);
-  message.subscribe(sendToast);
+  $: options = data.instruments.map((instrument) => ({
+    value: instrument.id,
+    label: instrument.name
+  }));
 </script>
 
 <ReturnLink href="/roles" />
 
 <div class="w-full p-2">
-  <Form
-    errors={$errors._errors || []}
-    {enhance}
-  >
+  <Form {form}>
     <div class="grid grid-cols-2 gap-x-2 gap-y-2">
       <p class="col-span-2 text-xs">Ajouter un pupitre</p>
       <Select
-        id="instrumentId"
-        label="instrument"
-      >
-        {#each data.instruments as instrument}
-          <option value={instrument.id}>
-            {instrument.name}
-          </option>
-        {/each}
-      </Select>
+        {form}
+        field={'instrumentId'}
+        label={'instrument'}
+        {options}
+      />
       <div class="col-span-2">
         <Checkbox
-          name="playable"
-          label={checked ? 'je gère mon pupitre' : 'je gère pas encore'}
-          bind:checked
+          {form}
+          field="playable"
+          checkedLabel="je gère mon pupitre"
+          uncheckedLabel="je gère pas encore"
         />
       </div>
       <input
@@ -49,7 +44,10 @@
         value={data.currentPlayer.id}
       />
       <div class="col-span-2">
-        <Button label={'Ajouter'} />
+        <Button
+          {form}
+          label="Ajouter"
+        />
       </div>
     </div>
   </Form>

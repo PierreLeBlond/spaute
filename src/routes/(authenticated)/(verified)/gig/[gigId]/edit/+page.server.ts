@@ -158,7 +158,6 @@ export const actions: Actions = {
         "",
         error.message
       );
-      console.log(error);
       return message(form, 'Suppression impossible :(');
     }
 

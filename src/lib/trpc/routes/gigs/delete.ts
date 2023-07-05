@@ -1,4 +1,4 @@
-import { computePlayability, gigIncludes } from "$lib/hook/computePlayability";
+import { gigIncludes } from "$lib/hook/computePlayability";
 import { triggerDeletedGigNotifications } from "$lib/hook/notifications/triggerDeletedGigNotifications";
 import prisma from "$lib/prisma";
 import { organizerProcedure } from "$lib/trpc/procedures/organizerProcedure";
@@ -15,8 +15,6 @@ export const del = organizerProcedure
       },
       ...gigIncludes
     });
-
-    await computePlayability(gig);
 
     await triggerDeletedGigNotifications({
       gig, userId: ctx.user.userId

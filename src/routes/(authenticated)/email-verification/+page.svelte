@@ -3,28 +3,18 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import Link from '$lib/components/links/Link.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { errors, enhance, submitting, message } = superForm(data.form, {
+  const form = superForm(data.form, {
     taintedMessage: null
   });
-  message.subscribe(sendToast);
-  const {
-    form: passwordForm,
-    errors: passwordErrors,
-    enhance: passwordEnhance,
-    submitting: passwordSubmitting,
-    message: passwordMessage,
-    constraints: passwordConstraints
-  } = superForm(data.passwordForm, {
+  const passwordForm = superForm(data.passwordForm, {
     taintedMessage: null
   });
-  passwordMessage.subscribe(sendToast);
 </script>
 
 <div class="flex-col items-center justify-center p-8">
@@ -35,31 +25,27 @@
     </p>
 
     <Form
-      action={'?/send'}
-      errors={$errors._errors || []}
-      {enhance}
+      {form}
+      action="?/send"
     >
       <h2 class="text-xs">Envoyer un code de validation</h2>
       <Button
+        {form}
         label="Envoyer"
-        disabled={$submitting}
       />
     </Form>
     <Form
-      action={'?/verify'}
-      errors={$passwordErrors._errors || []}
-      enhance={passwordEnhance}
+      form={passwordForm}
+      action="?/verify"
     >
       <Text
-        name={'password'}
-        label={'code de validation'}
-        bind:value={$passwordForm['password']}
-        errors={$passwordErrors['password'] || []}
-        constraints={$passwordConstraints['password']}
+        form={passwordForm}
+        field="password"
+        label="code de validation"
       />
       <Button
+        form={passwordForm}
         label="Valider"
-        disabled={$passwordSubmitting}
       />
     </Form>
   {:else}

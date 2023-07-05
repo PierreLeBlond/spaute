@@ -2,7 +2,6 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
   import DateInput from '$lib/components/forms/DateInput.svelte';
-  import DeleteButton from '$lib/components/forms/DeleteButton.svelte';
   import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
@@ -12,7 +11,6 @@
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
 
@@ -22,47 +20,23 @@
 
   const hasWriteAccess = data.currentPresence?.isOrganizer || data.currentMembership?.isAdmin;
 
-  const {
-    form: updateForm,
-    errors: updateErrors,
-    constraints: updateConstraints,
-    enhance: updateEnhance,
-    tainted: updateTainted,
-    submitting: updateSubmitting,
-    message: updateMessage
-  } = superForm(data.updateForm, {
+  const updateForm = superForm(data.updateForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
-  updateMessage.subscribe(sendToast);
 
-  const {
-    form: updateDisabledVoiceForm,
-    errors: updateDisabbledVoiceErrors,
-    enhance: updateDisabledVoiceEnhance,
-    tainted: updateDisabledVoiceTainted,
-    submitting: updateDisabledVoiceSubmitting,
-    message: updateDisabledVoiceMessage
-  } = superForm(data.updateDisabledVoiceForm, {
+  const updateDisabledVoiceForm = superForm(data.updateDisabledVoiceForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
-  updateDisabledVoiceMessage.subscribe(sendToast);
 
-  const { enhance: deleteGigVoiceEnhance, message: deleteGigVoiceMessage } = superForm(data.deleteGigVoiceForm);
-  deleteGigVoiceMessage.subscribe(sendToast);
+  const { form } = updateDisabledVoiceForm;
 
-  const {
-    form: deleteForm,
-    errors: deleteErrors,
-    constraints: deleteConstraints,
-    enhance: deleteEnhance,
-    submitting: deleteSubmitting,
-    message: deleteMessage
-  } = superForm(data.deleteForm, {
+  const deleteGigVoiceForm = superForm(data.deleteGigVoiceForm);
+
+  const deleteForm = superForm(data.deleteForm, {
     flashMessage: {
       module: flashModule
     }
   });
-  deleteMessage.subscribe(sendToast);
 </script>
 
 <div class="flex">
@@ -72,9 +46,8 @@
 <div class="w-full overflow-y-auto p-2">
   {#if hasWriteAccess}
     <Form
+      form={updateForm}
       action="?/update"
-      errors={$updateErrors._errors || []}
-      enhance={updateEnhance}
     >
       <div
         class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
@@ -82,36 +55,30 @@
       >
         <p class="col-span-2 text-xs text-neutral-600">Modifier la presta</p>
         <Text
-          name="name"
+          form={updateForm}
+          field="name"
           label="titre"
-          bind:value={$updateForm['name']}
-          errors={$updateErrors['name'] || []}
-          constraints={$updateConstraints['name']}
         />
         <Text
-          name="location"
+          form={updateForm}
+          field="location"
           label="lieu"
-          bind:value={$updateForm['location']}
-          errors={$updateErrors['location'] || []}
-          constraints={$updateConstraints['location']}
         />
         <DateInput
-          name="date"
+          form={updateForm}
+          field="date"
           label="date"
-          bind:value={$updateForm['date']}
-          errors={$updateErrors['date'] || []}
         />
         <TimeInput
-          name="time"
+          form={updateForm}
+          field="time"
           label="heure"
-          bind:value={$updateForm['time']}
-          errors={$updateErrors['time'] || []}
         />
         <div class="col-span-2">
           <TextArea
-            name="description"
+            form={updateForm}
+            field="description"
             label="description"
-            bind:value={$updateForm['description']}
           />
         </div>
         <input
@@ -121,8 +88,8 @@
         />
         <div class="col-span-2">
           <Button
-            label={'Mettre à jour'}
-            disabled={$updateSubmitting || !$updateTainted}
+            form={updateForm}
+            label="Mettre à jour"
           />
         </div>
       </div>
@@ -134,59 +101,55 @@
       Pupitres de la fanfare <i>{data.gig.band.name}</i>
     </h2>
 
-    <div class="pb-2">
-      <List>
-        {#if data.bandVoices.length == 0}
-          <p class="text-xs">La fanfare n'a pas de pupitres :(</p>
-        {:else}
-          {#each data.bandVoices as bandVoice, index}
-            <ListItem>
-              <div class="flex w-full items-center justify-between">
-                <p
-                  class="w-full rounded p-2 text-sm"
-                  class:text-neutral-500={!$updateDisabledVoiceForm['enableds'][index]}
-                >
-                  {bandVoice.instrument.name}
-                </p>
-                {#if hasWriteAccess}
-                  <input
-                    form="updateDisabledVoiceForm"
-                    type="hidden"
-                    name="bandVoiceIds"
-                    value={bandVoice.id}
-                  />
-                  <div class="col-span-6">
-                    <Checkbox
-                      form="updateDisabledVoiceForm"
-                      name="enableds"
-                      label=""
-                      disabled={!data.currentPresence?.isOrganizer}
-                      bind:checked={$updateDisabledVoiceForm['enableds'][index]}
-                    />
-                  </div>
-                {/if}
-              </div>
-            </ListItem>
-          {/each}
-        {/if}
-      </List>
-    </div>
+    <div class="pb-2" />
     {#if hasWriteAccess}
       <Form
-        id="updateDisabledVoiceForm"
+        form={updateDisabledVoiceForm}
         action="?/updateDisabledVoice"
-        errors={$updateDisabbledVoiceErrors._errors || []}
-        enhance={updateDisabledVoiceEnhance}
       >
         <input
           type="hidden"
           name="gigId"
           value={data.gig.id}
         />
+        <List>
+          {#if data.bandVoices.length == 0}
+            <p class="text-xs">La fanfare n'a pas de pupitres :(</p>
+          {:else}
+            {#each data.bandVoices as bandVoice, index}
+              <ListItem>
+                <div class="flex w-full items-center justify-between">
+                  <p
+                    class="w-full rounded p-2 text-sm"
+                    class:text-neutral-500={!$form.enableds[index]}
+                  >
+                    {bandVoice.instrument.name}
+                  </p>
+                  {#if hasWriteAccess}
+                    <input
+                      form="updateDisabledVoiceForm"
+                      type="hidden"
+                      name="bandVoiceIds"
+                      value={bandVoice.id}
+                    />
+                    <div class="col-span-6">
+                      <Checkbox
+                        form={updateDisabledVoiceForm}
+                        name="enableds"
+                        field="enableds[{index}]"
+                        disabled={!data.currentPresence?.isOrganizer}
+                      />
+                    </div>
+                  {/if}
+                </div>
+              </ListItem>
+            {/each}
+          {/if}
+        </List>
         <div class="col-span-6">
           <Button
+            form={updateDisabledVoiceForm}
             label={'Mettre à jour'}
-            disabled={$updateDisabledVoiceSubmitting || !$updateDisabledVoiceTainted}
           />
         </div>
       </Form>
@@ -216,10 +179,9 @@
                 {voice.instrument.name}
               </p>
               {#if hasWriteAccess}
-                <form
-                  method="POST"
+                <Form
+                  form={deleteGigVoiceForm}
                   action="?/deleteGigVoice"
-                  use:deleteGigVoiceEnhance
                 >
                   <input
                     type="hidden"
@@ -232,7 +194,7 @@
                     value={voice.gigId}
                   />
                   <DeleteButtonIcon />
-                </form>
+                </Form>
               {/if}
             </div>
           </ListItem>
@@ -242,34 +204,33 @@
   </div>
 
   {#if hasWriteAccess}
-    <form
-      class="border border-red-500 p-2 text-red-500"
-      method="POST"
-      action="?/delete"
-      use:deleteEnhance
-    >
-      <p class="text-xs">Suppression de la presta</p>
-      <input
-        type="hidden"
-        name="gigId"
-        value={data.gig.id}
-      />
-      <input
-        type="hidden"
-        name="name"
-        value={data.gig.name}
-      />
-      <Text
-        name="nameCopy"
-        label="recopie son titre pour valider la suppression"
-        bind:value={$deleteForm['nameCopy']}
-        errors={$deleteErrors['nameCopy'] || []}
-        constraints={$deleteConstraints['nameCopy']}
-      />
-      <DeleteButton
-        label={'Supprimer'}
-        disabled={$deleteSubmitting}
-      />
-    </form>
+    <div class="border border-red-500 p-2 text-red-500">
+      <Form
+        form={deleteForm}
+        action="?/delete"
+      >
+        <p class="text-xs">Suppression de la presta</p>
+        <input
+          type="hidden"
+          name="gigId"
+          value={data.gig.id}
+        />
+        <input
+          type="hidden"
+          name="name"
+          value={data.gig.name}
+        />
+        <Text
+          form={deleteForm}
+          field="nameCopy"
+          label="recopie son titre pour valider la suppression"
+        />
+        <Button
+          form={deleteForm}
+          label="Supprimer"
+          deleting={true}
+        />
+      </Form>
+    </div>
   {/if}
 </div>

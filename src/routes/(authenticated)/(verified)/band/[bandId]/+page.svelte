@@ -7,15 +7,13 @@
   import List from '$lib/components/layout/List.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { errors, enhance, message } = superForm(data.form);
-  message.subscribe(sendToast);
+  const form = superForm(data.form);
 </script>
 
 <div class="flex justify-between">
@@ -27,10 +25,7 @@
 
 {#if !data.currentMembership}
   <div class="w-full p-2">
-    <Form
-      errors={$errors._errors || []}
-      {enhance}
-    >
+    <Form {form}>
       <p class="text-xs">Allez viens, on est bien !</p>
       <input
         type="hidden"
@@ -42,7 +37,10 @@
         name="playerId"
         value={data.currentPlayer.id}
       />
-      <Button label={'Rejoindre'} />
+      <Button
+        {form}
+        label="Rejoindre"
+      />
     </Form>
   </div>
 {/if}

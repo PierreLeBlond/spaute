@@ -4,7 +4,7 @@
 >
   let status: number;
 
-  export const sendToast = (message: string) => {
+  export const sendToast = (message: string | undefined) => {
     if (!message || message == '') {
       return;
     }

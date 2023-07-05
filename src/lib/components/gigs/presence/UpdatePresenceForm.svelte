@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import type { Gig, Player } from '@prisma/client';
-  import type { Validation } from 'sveltekit-superforms';
-  import { superForm } from 'sveltekit-superforms/client';
+  import type { ZodValidation } from 'sveltekit-superforms';
+  import type { SuperForm } from 'sveltekit-superforms/client';
 
   import Button from '../../forms/Button.svelte';
   import Checkbox from '../../forms/Checkbox.svelte';
@@ -13,18 +12,12 @@
   export let player: Player;
   export let action: string;
 
-  export let data: Validation<PresenceSchema>;
-
-  const { form, errors, enhance, tainted, submitting, message } = superForm(data, {
-    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
-  });
-  message.subscribe(sendToast);
+  export let form: SuperForm<ZodValidation<PresenceSchema>, string>;
 </script>
 
 <Form
+  {form}
   {action}
-  errors={$errors._errors || []}
-  {enhance}
 >
   <div class="grid w-full grid-cols-1 gap-y-2">
     <input
@@ -38,13 +31,14 @@
       value={player.id}
     />
     <Checkbox
-      name="value"
-      label={$form['value'] ? 'je participe' : 'je ne participe pas'}
-      bind:checked={$form['value']}
+      {form}
+      field="value"
+      checkedLabel="je participe"
+      uncheckedLabel="je ne participe pas"
     />
     <Button
-      label={'Mettre à jour'}
-      disabled={$submitting || !$tainted}
+      {form}
+      label="Mettre à jour"
     />
   </div>
 </Form>

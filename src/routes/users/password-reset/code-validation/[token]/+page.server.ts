@@ -11,17 +11,19 @@ const schema = z.object({
   passwordConfirmation: z.string(),
 });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url }) => {
   const form = await superValidate(schema);
+  const email = url.searchParams.get('email');
 
   return {
     form,
-    index: 100001,
+    email,
+    index: 100002,
     tabs: [
       {
-        href: 'users/password-reset',
-        key: 'users/password-reset',
-        label: 'reset'
+        href: `users/password-reset/code-validation?email=${email}`,
+        key: 'users/password-reset/code-validation',
+        label: 'mise à jour'
       }
     ]
   }

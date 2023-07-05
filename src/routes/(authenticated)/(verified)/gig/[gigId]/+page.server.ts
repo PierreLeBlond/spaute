@@ -2,7 +2,6 @@ import { createContext } from "$lib/trpc/context";
 import { router } from "$lib/trpc/router";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
 import type { Actions, PageServerLoad } from "./$types";
-import { presenceSchema } from "$lib/components/gigs/presence/presenceSchema";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Redis } from "@upstash/redis";
@@ -29,6 +28,12 @@ if (!building) {
     limiter: Ratelimit.slidingWindow(1, "1h"),
   });
 }
+
+const presenceSchema = z.object({
+  value: z.boolean(),
+  gigId: z.string(),
+  playerId: z.string()
+});
 
 const spamSchema = z.object({
   userId: z.string(),

@@ -15,6 +15,7 @@ export const load: PageServerLoad = async (event) => {
   const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
   const form = () => superValidate(schema);
 
+
   return {
     form: form(),
     memberships: memberships(),

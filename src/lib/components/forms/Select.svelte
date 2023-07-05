@@ -1,25 +1,38 @@
 <script lang="ts">
+  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms';
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
+  import type { z, AnyZodObject } from 'zod';
+
   import Errors from './Errors.svelte';
 
-  export let id: string;
+  type T = $$Generic<AnyZodObject>;
+
+  export let form: SuperForm<ZodValidation<T>, string>;
+  export let field: FormPathLeaves<z.infer<T>>;
   export let label: string;
 
-  export let errors: string[] = [];
+  export let options: { value: string | null; label: string }[];
+
+  const { errors } = formFieldProxy(form as SuperForm<ZodValidation<T>, unknown>, field);
 </script>
 
 <div class="flex flex-col">
   <label
-    for="{id}-input"
+    for="{field}-input"
     class="text-xs">{label}</label
   >
   <select
-    name={id}
-    id="{id}-input"
+    name={field}
+    id="{field}-input"
     class="h-8 rounded border-red-500 bg-neutral-200 text-sm"
-    class:border={errors.length != 0}
+    class:border={$errors}
   >
-    <slot />
+    {#each options as option}
+      <option value={option.value}>
+        {option.label}
+      </option>
+    {/each}
   </select>
 
-  <Errors {errors} />
+  <Errors errors={$errors} />
 </div>
