@@ -36,6 +36,11 @@ const spamSchema = z.object({
   gigName: z.string()
 })
 
+const joinSchema = z.object({
+  bandId: z.string(),
+  playerId: z.string()
+});
+
 export const load: PageServerLoad = async (event) => {
   const { currentPresence } = await event.parent();
 
@@ -45,9 +50,12 @@ export const load: PageServerLoad = async (event) => {
     value: currentPresence?.value
   }, presenceSchema, { id: 'presenceForm' });
 
+  const joinForm = () => superValidate(joinSchema, { id: 'joinForm' });
+
   return {
     form: form(),
     spamForm: spamForm(),
+    joinForm: joinForm(),
     index: 102
   };
 }
@@ -127,6 +135,25 @@ export const actions: Actions = {
     })
 
     return message(form, 'Fanfaronx spamééx :)');
+  },
+  join: async (event) => {
+    const { request } = event;
+    const form = await superValidate(request, joinSchema, { id: 'joinForm' });
+
+    try {
+      await router.createCaller(await createContext(event)).memberships.create(form.data);
+      return message(form, 'Bienvenue :)');
+    } catch (error) {
+      if (!(error instanceof TRPCError)) {
+        throw error;
+      }
+      setError(
+        form,
+        "",
+        error.message
+      );
+      return message(form, 'Echec :(');
+    }
   }
 }
 
