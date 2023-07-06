@@ -16,7 +16,7 @@
     <input
       type="search"
       placeholder="Rechercher par nom..."
-      class="h-full w-full rounded-full border border-blue-300 bg-neutral-200 indent-2 text-sm text-cyan-600"
+      class="h-full w-full rounded-full border border-blue-300 bg-neutral-200 indent-2 text-sm text-cyan-600 focus:outline-cyan-600"
       bind:value={searchValue}
       on:input={() => eventDispatcher('input')}
     />
