@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DeleteButton from '$lib/components/buttons/DeleteButton.svelte';
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
@@ -85,7 +85,7 @@
             href={message.cta.data.url}
             class="grow rounded p-2 text-xs">{message.content}</a
           >
-          <DeleteButton on:click={() => removeNotification(message._id)} />
+          <DeleteButtonIcon on:click={() => removeNotification(message._id)} />
         </div>
       </ListLinkItem>
     {/each}

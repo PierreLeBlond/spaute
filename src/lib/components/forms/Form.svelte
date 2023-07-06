@@ -6,6 +6,7 @@
   import Errors from './Errors.svelte';
 
   export let action: string | undefined = undefined;
+  export let hideErrors = false;
 
   type T = $$Generic<AnyZodObject>;
 
@@ -17,12 +18,13 @@
 
 <form
   id={$formId}
-  class="w-full"
   method="POST"
   {action}
   use:enhance
   novalidate
 >
   <slot />
-  <Errors errors={$errors._errors} />
+  {#if !hideErrors}
+    <Errors errors={$errors._errors} />
+  {/if}
 </form>

@@ -27,7 +27,7 @@
   <textarea
     id="{field}-input"
     name={field}
-    class="grow rounded border-red-500 bg-neutral-200 text-sm"
+    class="grow rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
     class:border={$errors}
     bind:value={$value}
     {...$constraints}

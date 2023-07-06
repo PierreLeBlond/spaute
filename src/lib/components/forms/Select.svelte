@@ -24,7 +24,7 @@
   <select
     name={field}
     id="{field}-input"
-    class="h-8 rounded border-red-500 bg-neutral-200 text-sm"
+    class="h-8 rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
     class:border={$errors}
   >
     {#each options as option}

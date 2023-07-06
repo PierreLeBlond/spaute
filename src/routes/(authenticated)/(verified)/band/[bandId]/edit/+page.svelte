@@ -53,6 +53,7 @@
                 <Form
                   form={deleteBandVoiceForm}
                   action="?/deleteBandVoice"
+                  hideErrors={true}
                 >
                   <input
                     type="hidden"
