@@ -10,6 +10,7 @@ import {
   UPSTASH_REDIS_REST_TOKEN,
   UPSTASH_REDIS_REST_URL,
 } from "$env/static/private";
+import { presenceSchema } from "$lib/components/gigs/presence/presenceSchema";
 
 import { building } from "$app/environment";
 import { triggerGigSpam } from "$lib/hook/notifications/triggerGigSpam";
@@ -28,12 +29,6 @@ if (!building) {
     limiter: Ratelimit.slidingWindow(1, "1h"),
   });
 }
-
-const presenceSchema = z.object({
-  value: z.boolean(),
-  gigId: z.string(),
-  playerId: z.string()
-});
 
 const spamSchema = z.object({
   userId: z.string(),

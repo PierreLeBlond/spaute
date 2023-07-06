@@ -13,7 +13,9 @@
 
   export let data: PageData;
 
-  const form = superForm(data.form);
+  const form = superForm(data.form, {
+    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
+  });
 
   $: options = [
     {
@@ -76,6 +78,7 @@
         <Button
           {form}
           label={'Créer'}
+          disabledWhenNotTainted={true}
         />
       </div>
     </div>

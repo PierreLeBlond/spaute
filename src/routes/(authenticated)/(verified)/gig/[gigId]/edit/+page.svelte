@@ -90,6 +90,7 @@
           <Button
             form={updateForm}
             label="Mettre à jour"
+            disabledWhenNotTainted={true}
           />
         </div>
       </div>
@@ -150,6 +151,7 @@
           <Button
             form={updateDisabledVoiceForm}
             label={'Mettre à jour'}
+            disabledWhenNotTainted={true}
           />
         </div>
       </Form>
@@ -229,6 +231,7 @@
           form={deleteForm}
           label="Supprimer"
           deleting={true}
+          disabledWhenNotTainted={true}
         />
       </Form>
     </div>

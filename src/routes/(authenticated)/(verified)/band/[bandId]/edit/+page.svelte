@@ -100,6 +100,7 @@
         form={deleteForm}
         label="Supprimer"
         deleting={true}
+        disabledWhenNotTainted={true}
       />
     </Form>
   </div>

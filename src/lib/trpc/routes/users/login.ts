@@ -24,7 +24,7 @@ export const login = publicProcedure
           });
         }
 
-        if (error instanceof LuciaError && error.message == 'AUTH_INVALID_KEY_ID') {
+        if (error instanceof LuciaError && (error.message == 'AUTH_INVALID_PASSWORD' || error.message == 'AUTH_INVALID_KEY_ID')) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'Identifiants incorrects...',
