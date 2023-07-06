@@ -6,21 +6,14 @@
   import PlayerView from '$lib/components/gigs/gig/PlayerView.svelte';
   import EditLink from '$lib/components/links/EditLink.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const {
-    errors: spamErrors,
-    enhance: spamEnhance,
-    submitting: spamSubmitting,
-    message: spamMessage
-  } = superForm(data.spamForm);
-
-  spamMessage.subscribe(sendToast);
+  const spamForm = superForm(data.spamForm);
+  const form = superForm(data.form);
 
   $: remainingMemberships = data.band
     ? data.band.memberships.filter((membership) =>
@@ -44,7 +37,7 @@
     presence={data.currentPresence}
     createAction={'?/create'}
     updateAction={'?/update'}
-    data={data.form}
+    {form}
   />
 
   <div class="bg-neutral-200 p-2">
@@ -112,9 +105,8 @@
       <p class="pb-2 text-sm">N'ont pas encore répondus</p>
       {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
         <Form
+          form={spamForm}
           action="?/spam"
-          errors={$spamErrors._errors || []}
-          enhance={spamEnhance}
         >
           <input
             type="hidden"
@@ -132,7 +124,7 @@
             value={data.gig.name}
           />
           <Button
-            disabled={$spamSubmitting}
+            form={spamForm}
             label={'Spaaaaaaaamer ces fanfarons !'}
           />
         </Form>

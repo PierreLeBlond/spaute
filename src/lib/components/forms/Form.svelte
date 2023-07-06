@@ -1,21 +1,28 @@
 <script lang="ts">
+  import { sendToast } from '$lib/components/toast/Toaster.svelte';
+  import type { ZodValidation } from 'sveltekit-superforms';
+  import type { SuperForm } from 'sveltekit-superforms/client';
+
   import Errors from './Errors.svelte';
 
-  export let id: string | undefined = undefined;
   export let action: string | undefined = undefined;
-  export let enhance: (el: HTMLFormElement) => void;
 
-  export let errors: string[];
+  type T = $$Generic<AnyZodObject>;
+
+  export let form: SuperForm<ZodValidation<T>, string>;
+
+  const { errors, enhance, message, formId } = form;
+  message.subscribe(sendToast);
 </script>
 
 <form
+  id={$formId}
   class="w-full"
   method="POST"
   {action}
-  {id}
   use:enhance
   novalidate
 >
   <slot />
-  <Errors {errors} />
+  <Errors errors={$errors._errors} />
 </form>

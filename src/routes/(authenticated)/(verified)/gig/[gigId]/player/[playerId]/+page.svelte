@@ -2,15 +2,13 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const { errors, enhance, message } = superForm(data.form);
-  message.subscribe(sendToast);
+  const form = superForm(data.form);
 </script>
 
 <ReturnLink href="/gig/{data['gig'].id}" />
@@ -19,10 +17,7 @@
 
 {#if !data.presence?.isOrganizer}
   <div class="flex w-full p-2">
-    <Form
-      errors={$errors._errors || []}
-      {enhance}
-    >
+    <Form {form}>
       <input
         type="hidden"
         name="gigId"
@@ -33,7 +28,10 @@
         name="playerId"
         value={data.player.id}
       />
-      <Button label={'Promouvoir en organisateurice'} />
+      <Button
+        {form}
+        label="Promouvoir en organisateurice"
+      />
     </Form>
   </div>
 {:else}

@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import type { Gig, Player } from '@prisma/client';
-  import type { SuperValidated } from 'sveltekit-superforms';
-  import { superForm } from 'sveltekit-superforms/client';
+  import type { ZodValidation } from 'sveltekit-superforms';
+  import type { SuperForm } from 'sveltekit-superforms/client';
 
   import Button from '../../forms/Button.svelte';
   import Form from '../../forms/Form.svelte';
@@ -12,17 +11,13 @@
   export let player: Player;
   export let action: string;
 
-  export let data: SuperValidated<PresenceSchema>;
-
-  const { enhance, submitting, message } = superForm(data);
-  message.subscribe(sendToast);
+  export let form: SuperForm<ZodValidation<PresenceSchema>, string>;
 </script>
 
 <div class="grid grid-cols-2 gap-x-2 text-sm">
   <Form
+    {form}
     {action}
-    errors={[]}
-    {enhance}
   >
     <input
       type="hidden"
@@ -40,14 +35,13 @@
       value={true}
     />
     <Button
-      disabled={$submitting}
-      label={'Participe'}
+      {form}
+      label="Participe"
     />
   </Form>
   <Form
+    {form}
     {action}
-    errors={[]}
-    {enhance}
   >
     <input
       type="hidden"
@@ -65,8 +59,8 @@
       value={false}
     />
     <Button
-      disabled={$submitting}
-      label={'Ne participe pas'}
+      {form}
+      label="Ne participe pas"
     />
   </Form>
 </div>

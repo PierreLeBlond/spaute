@@ -6,29 +6,17 @@
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
-  import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
 
   export let data: PageData;
 
-  const {
-    form,
-    errors,
-    enhance: updateEnhance,
-    tainted,
-    submitting,
-    message: updateMessage
-  } = superForm(data.updateForm, {
+  const updateForm = superForm(data.updateForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
 
-  updateMessage.subscribe(sendToast);
-
-  const { enhance: deleteEnhance, message: deleteMessage } = superForm(data.deleteForm);
-
-  deleteMessage.subscribe(sendToast);
+  const deleteForm = superForm(data.deleteForm);
 </script>
 
 <div class="p-4">
@@ -51,10 +39,9 @@
             </p>
           </div>
           <div class="flex items-center justify-center">
-            <form
-              method="POST"
+            <Form
+              form={deleteForm}
               action="?/delete"
-              use:deleteEnhance
             >
               <input
                 type="hidden"
@@ -67,7 +54,7 @@
                 name="id"
               />
               <DeleteButtonIcon />
-            </form>
+            </Form>
           </div>
           <input
             form="updateForm"
@@ -77,10 +64,11 @@
           />
           <div class="col-span-6">
             <Checkbox
-              form="updateForm"
+              form={updateForm}
               name="playables"
-              label={$form['playables'][index] ? 'je gère mon pupitre' : 'je gère pas encore'}
-              bind:checked={$form['playables'][index]}
+              field="playables[{index}]"
+              checkedLabel="je gère mon pupitre"
+              uncheckedLabel="je gère pas encore"
             />
           </div>
         </div>
@@ -91,10 +79,8 @@
 
 <div class="p-4">
   <Form
-    id="updateForm"
+    form={updateForm}
     action="?/update"
-    errors={$errors._errors || []}
-    enhance={updateEnhance}
   >
     <input
       type="hidden"
@@ -103,8 +89,9 @@
     />
     <div class="col-span-6">
       <Button
+        form={updateForm}
         label={'Mettre à jour'}
-        disabled={$submitting || !$tainted}
+            disabledWhenNotTainted={true}
       />
     </div>
   </Form>

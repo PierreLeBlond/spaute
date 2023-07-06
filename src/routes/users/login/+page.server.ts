@@ -1,10 +1,10 @@
-import { redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from './$types';
 import { z } from "zod";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { router } from "$lib/trpc/router";
 import { createContext } from "$lib/trpc/context";
 import { TRPCError } from "@trpc/server";
+import { redirect } from 'sveltekit-flash-message/server'
 
 const schema = z.object({
   email: z.string(),
@@ -36,9 +36,8 @@ export const actions: Actions = {
 
       if (fromPathname) {
         event.cookies.delete('fromPathname');
-        throw redirect(302, fromPathname);
       }
-      return message(form, 'Hello !');
+      throw redirect(302, fromPathname || '/', 'Hello !', event);
 
     } catch (error) {
       if (!(error instanceof TRPCError)) {
