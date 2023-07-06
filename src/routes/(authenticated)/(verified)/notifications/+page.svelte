@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DeleteButtonIcon from '$lib/components/form/DeleteButtonIcon.svelte';
+  import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
   import ReturnLink from '$lib/components/links/ReturnLink.svelte';
