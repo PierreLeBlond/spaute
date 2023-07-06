@@ -147,7 +147,7 @@
             {/each}
           {/if}
         </List>
-        <div class="col-span-6">
+        <div class="col-span-6 pt-2">
           <Button
             form={updateDisabledVoiceForm}
             label={'Mettre à jour'}
@@ -184,6 +184,7 @@
                 <Form
                   form={deleteGigVoiceForm}
                   action="?/deleteGigVoice"
+                  hideErrors={true}
                 >
                   <input
                     type="hidden"
