@@ -83,23 +83,25 @@ export const actions: Actions = {
     try {
       const caller = router.createCaller(await createContext(event));
       const { gigId } = updateDisabledVoiceForm.data;
-      await Promise.all(
-        updateDisabledVoiceForm.data.enableds.map(async (enabled, index) => {
-          const bandVoiceId = updateDisabledVoiceForm.data.bandVoiceIds[index] as string;
 
-          const disabledVoice = await caller.disabledVoices.read({ bandVoiceId, gigId });
+      const disabledVoicesData = await Promise.all(updateDisabledVoiceForm.data.enableds.map(async (enabled, index) => {
+        const bandVoiceId = updateDisabledVoiceForm.data.bandVoiceIds[index] as string;
 
-          if ((disabledVoice && !enabled) || (!disabledVoice && enabled)) {
-            return;
-          }
+        const disabledVoice = await caller.disabledVoices.read({ bandVoiceId, gigId });
 
-          if (enabled) {
-            await caller.disabledVoices.delete({ bandVoiceId, gigId })
-          } else {
-            await caller.disabledVoices.create({ bandVoiceId, gigId })
-          }
-        })
-      )
+        return { disabledVoice, enabled, bandVoiceId };
+      }));
+
+      const changedDisabledVoices = disabledVoicesData.filter(disabledVoiceData => (disabledVoiceData.disabledVoice && !disabledVoiceData.enabled) || (!disabledVoiceData.disabledVoice && disabledVoiceData.enabled));
+
+      await caller.disabledVoices.createOrDeleteMany({
+        gigId,
+        schemas: changedDisabledVoices.map(changedDisabledVoice => ({
+          bandVoiceId: changedDisabledVoice.bandVoiceId,
+          create: changedDisabledVoice.enabled,
+        }))
+      })
+
       return message(updateDisabledVoiceForm, 'Pupitres mis à jour :)');
     } catch (error) {
       if (!(error instanceof TRPCError)) {
