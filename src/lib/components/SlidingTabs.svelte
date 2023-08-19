@@ -53,8 +53,8 @@
 >
   {#key href}
     <div
-      in:slide|local={{ sign: 1 }}
-      out:slide|local={{ sign: -1 }}
+      in:slide={{ sign: 1 }}
+      out:slide={{ sign: -1 }}
       class="absolute flex h-full w-full flex-col"
     >
       <slot />

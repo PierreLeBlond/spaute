@@ -74,9 +74,11 @@
     <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
       {#if $page.data['currentPlayer']}
         <div
+          class="flex cursor-pointer items-center justify-center text-cyan-600"
+          role="button"
+          tabindex="0"
           on:click={logout}
           on:keydown={logout}
-          class="flex cursor-pointer items-center justify-center text-cyan-600"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

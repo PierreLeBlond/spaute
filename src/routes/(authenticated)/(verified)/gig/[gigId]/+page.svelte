@@ -142,6 +142,8 @@
       </svg>
       <div
         class="col-span-5 cursor-pointer text-sm text-cyan-600"
+        role="button"
+        tabindex="0"
         on:click={copyLinkToClipboard}
         on:keydown={copyLinkToClipboard}
       >
