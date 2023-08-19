@@ -18,6 +18,12 @@
   <ReturnLink href="/users/login" />
 </div>
 
+<p class="px-16 pt-8 text-center text-xs">
+  Pour te créer un nouveau <b>mot de passe</b>, nous avons besoin vérifier ton identité en t'envoyant par <b>email</b>
+  un
+  <b>code de validation</b> !
+</p>
+
 <div class="flex w-full flex-col items-center justify-center p-8">
   <Form {form}>
     <div class="flex flex-col items-center justify-center">
@@ -26,13 +32,10 @@
         field="email"
         label="email"
       />
-      <div class="w-64 pt-2">
-        <h2 class="text-xs">Envoyer un code de récupération</h2>
-        <Button
-          {form}
-          label="Envoyer"
-        />
-      </div>
+      <Button
+        {form}
+        label="Envoyer"
+      />
     </div>
   </Form>
 </div>

@@ -40,7 +40,7 @@ export const load: PageServerLoad = async () => {
       {
         href: 'users/password-reset',
         key: 'users/password-reset',
-        label: 'récupération'
+        label: 'mdp oublié'
       }
     ],
     index: 100000
@@ -73,7 +73,7 @@ export const actions: Actions = {
     const { email } = form.data;
 
     try {
-      await router.createCaller(await createContext(event)).users.sendRecoveryEmail({ email });
+      await router.createCaller(await createContext(event)).users.sendPasswordResetPassword({ email });
       throw redirect(302, `/users/password-reset/code-validation?email=${email}`, 'Email envoyé !', event);
     } catch (error) {
       if (!(error instanceof TRPCError)) {

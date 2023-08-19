@@ -8,7 +8,7 @@ declare global {
 		interface Locals {
 			playerId?: string;
 			redirectAfterLogin?: string;
-			auth: import("lucia-auth").AuthRequest;
+			auth: import("lucia").AuthRequest;
 			user: {
 				userId: string;
 				email: string;
@@ -25,9 +25,10 @@ declare global {
 declare global {
 	namespace Lucia {
 		type Auth = import("$lib/lucia").Auth;
-		type UserAttributes = {
+		type DatabaseUserAttributes = {
 			email: string,
 			email_verified: boolean,
+			has_password: boolean,
 			player: PlayerCreateNestedOneWithoutUserInput
 		};
 	}

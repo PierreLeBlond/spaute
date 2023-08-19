@@ -1,18 +1,22 @@
 import { t } from "$lib/trpc/t";
 import { create } from "./create";
-import { getResetPasswordToken } from "./getResetPasswordToken";
+import { validatePasswordReset } from "./validatePasswordReset";
 import { login } from "./login";
 import { resetPassword } from "./resetPassword";
-import { sendRecoveryEmail } from "./sendRecoveryEmail";
-import { sendVerificationEmail } from "./sendVerificationEmail";
+import { sendSignupPassword } from "./sendSignupPassword";
+import { sendPasswordResetPassword } from "./sendPasswordResetPassword";
+import { sendEmailVerificationPassword } from "./sendEmailVerificationPassword";
 import { verifyEmail } from "./verifyEmail";
+import { signup } from "./signup";
 
 export const users = t.router({
   create,
   login,
-  sendVerificationEmail,
+  sendEmailVerificationPassword,
   verifyEmail,
-  sendRecoveryEmail,
-  getResetPasswordToken,
-  resetPassword
+  sendPasswordResetPassword,
+  validatePasswordReset,
+  resetPassword,
+  sendSignupPassword,
+  signup
 })

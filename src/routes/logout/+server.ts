@@ -2,7 +2,7 @@ import type { RequestHandler } from './$types';
 import { auth } from "$lib/lucia";
 import { redirect } from 'sveltekit-flash-message/server'
 
-export const GET: RequestHandler = async (event) => {
+export const POST: RequestHandler = async (event) => {
   const session = await event.locals.auth.validate();
   if (session) {
     await auth.invalidateSession(session.sessionId); // invalidate session

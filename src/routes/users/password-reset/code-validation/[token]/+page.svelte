@@ -22,7 +22,7 @@
   <ReturnLink href={`/users/password-reset/code-validation?email=${data.email}`} />
 </div>
 
-<div class="flex-col items-center justify-center p-8">
+<div class="flex w-full flex-col items-center justify-center p-8">
   <Form {form}>
     <div class="flex flex-col items-center justify-center">
       <Password
@@ -35,12 +35,10 @@
         field={'passwordConfirmation'}
         label={'confirmation du mot de passe'}
       />
-      <div class="w-64 pt-2">
-        <Button
-          {form}
-          label="Mettre à jour"
-        />
-      </div>
+      <Button
+        {form}
+        label="Mettre à jour"
+      />
     </div>
   </Form>
 </div>

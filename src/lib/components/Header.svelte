@@ -1,8 +1,18 @@
 <script lang="ts">
+  import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
 
   import Notifications from './notifications/Notifications.svelte';
   import Toaster from './toast/Toaster.svelte';
+
+  const logout = async () => {
+    await fetch('/logout', {
+      method: 'POST'
+    });
+
+    await invalidateAll();
+    goto('/users/login');
+  };
 </script>
 
 <header class="relative flex h-full w-full justify-center bg-neutral-100">
@@ -63,9 +73,10 @@
     </div>
     <div class="relative col-span-1 col-start-5 flex flex-col items-center justify-evenly py-2">
       {#if $page.data['currentPlayer']}
-        <a
-          href="/logout"
-          class="flex items-center justify-center text-cyan-600"
+        <div
+          on:click={logout}
+          on:keydown={logout}
+          class="flex cursor-pointer items-center justify-center text-cyan-600"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +90,7 @@
               d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
             />
           </svg>
-        </a>
+        </div>
         <p class="text-xs">logout</p>
       {/if}
     </div>

@@ -1,6 +1,6 @@
 import { auth } from "$lib/lucia";
+import prisma from "$lib/prisma";
 import { publicProcedure } from "$lib/trpc/procedures/publicProcedure";
-import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -8,9 +8,27 @@ const schema = z.object({ email: z.string(), password: z.string(), name: z.strin
 
 export const create = publicProcedure
   .input(schema)
-  .mutation(({ input, ctx }) =>
-    auth.createUser({
-      primaryKey: {
+  .mutation(async ({ input, ctx }) => {
+    let existingUser;
+
+    const authUser = await prisma.user.findUnique({
+      where: {
+        email: input.email
+      }
+    });
+
+    existingUser = authUser ? await auth.getUser(authUser.id) : null;
+
+    // User exists
+    if (existingUser) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Email déjà utilisé...'
+      });
+    }
+
+    return auth.createUser({
+      key: {
         providerId: "email",
         providerUserId: input.email,
         password: input.password
@@ -18,6 +36,7 @@ export const create = publicProcedure
       attributes: {
         email: input.email,
         email_verified: false,
+        has_password: true,
         player: {
           create: {
             name: input.name
@@ -25,26 +44,11 @@ export const create = publicProcedure
         }
       }
     }).then(
-      user => auth.createSession(user.userId)
+      user => auth.createSession({
+        userId: user.userId,
+        attributes: {}
+      })
     ).then(
       session => ctx.auth.setSession(session)
-    ).catch(error => {
-      if ((error instanceof Prisma.PrismaClientKnownRequestError) && error.code == 'P2002') {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Email déjà utilisé...',
-          cause: error
-        });
-      }
-
-      if (error.message == 'AUTH_DUPLICATE_KEY_ID') {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Email déjà utilisé...',
-          cause: error
-        });
-      }
-
-      throw error;
-
-    }));
+    )
+  });

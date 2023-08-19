@@ -1,7 +1,7 @@
 import { auth } from "$lib/lucia";
 import { publicProcedure } from "$lib/trpc/procedures/publicProcedure";
 import { TRPCError } from "@trpc/server";
-import { LuciaError } from "lucia-auth";
+import { LuciaError } from "lucia";
 import { z } from "zod";
 
 const schema = z.object({ email: z.string(), password: z.string() });
@@ -11,7 +11,10 @@ export const login = publicProcedure
   .mutation(({ input, ctx }) =>
     auth.useKey("email", input.email, input.password)
       .then(
-        key => auth.createSession(key.userId)
+        key => auth.createSession({
+          userId: key.userId,
+          attributes: {}
+        })
       ).then(
         session => ctx.auth.setSession(session)
       ).catch(error => {

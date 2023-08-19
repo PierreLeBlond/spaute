@@ -87,13 +87,13 @@ export const actions: Actions = {
     }
 
     try {
-      const result = await router.createCaller(await createContext(event)).users.getResetPasswordToken({ password: form.data.password, email: form.data.email });
+      const result = await router.createCaller(await createContext(event)).users.validatePasswordReset({ password: form.data.password, email: form.data.email });
       throw redirect(302, `/users/password-reset/code-validation/${result.token}?email=${form.data.email}`);
     } catch (error) {
-      if (error instanceof TRPCError && error.cause?.message === "EXPIRED_TOKEN") {
+      if (error instanceof TRPCError && error.code === "TIMEOUT") {
         throw redirect(302, `/users/password-reset/code-validation?expired=true&email=${form.data.email}`);
       }
-      if (error instanceof TRPCError && error.cause?.message === "INVALID_TOKEN") {
+      if (error instanceof TRPCError && error.code === "NOT_FOUND") {
         throw redirect(302, `/users/password-reset/code-validation?invalid=true&email=${form.data.email}`);
       }
       throw error;

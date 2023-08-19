@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
@@ -13,20 +12,15 @@ import {
 } from "$env/static/private";
 
 import { building } from "$app/environment";
+import { redirect } from 'sveltekit-flash-message/server';
 
 let redis: Redis;
 let sendRatelimit: Ratelimit;
-let verifyRatelimit: Ratelimit;
 
 if (!building) {
   redis = new Redis({
     url: UPSTASH_REDIS_REST_URL,
     token: UPSTASH_REDIS_REST_TOKEN,
-  });
-
-  verifyRatelimit = new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(3, "10 s"),
   });
 
   sendRatelimit = new Ratelimit({
@@ -35,43 +29,13 @@ if (!building) {
   });
 }
 
-const schema = z.object({});
+const schema = z.object({ email: z.string().email() });
 
-const passwordSchema = z.object({
-  password: z.string()
-});
-
-export const load: PageServerLoad = async ({ locals, cookies, url }) => {
-  const { user } = await locals.auth.validateUser();
-
-  if (!user) {
-    throw redirect(302, "/users/login");
-  }
-
+export const load: PageServerLoad = async () => {
   const form = await superValidate(schema);
-  const expired = url.searchParams.get('expired');
-  const invalid = url.searchParams.get('invalid');
-
-  if (expired) {
-    const error = 'Le code de validation a expiré !';
-    setError(form, "", error);
-  }
-
-  if (invalid) {
-    const error = 'Le code de validation n\'est pas valide !';
-    setError(form, "", error);
-  }
-
-  const passwordForm = await superValidate(passwordSchema, { id: 'passwordForm' });
-
-  const fromPathname = cookies.get('fromPathname');
 
   return {
     form,
-    passwordForm,
-    fromPathname: fromPathname ?? '/gigs',
-    email: user.email,
-    emailVerified: user.emailVerified,
     tabs: [
       {
         href: '/email-verification',
@@ -84,7 +48,7 @@ export const load: PageServerLoad = async ({ locals, cookies, url }) => {
 };
 
 export const actions: Actions = {
-  send: async (event) => {
+  default: async (event) => {
 
     const { request } = event;
     const form = await superValidate(request, schema);
@@ -106,9 +70,11 @@ export const actions: Actions = {
       return message(form, 'Pas si vite !');
     }
 
+    const { email } = form.data;
+
     try {
-      await router.createCaller(await createContext(event)).users.sendVerificationEmail();
-      return message(form, 'Email envoyé !');
+      await router.createCaller(await createContext(event)).users.sendEmailVerificationPassword();
+      throw redirect(302, `/email-verification/code-validation?email=${email}`, 'Email envoyé !', event);
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;
@@ -119,42 +85,6 @@ export const actions: Actions = {
         error.message
       );
       return message(form, 'Outch !');
-    }
-
-  },
-  verify: async (event) => {
-    const { request } = event;
-
-    const form = await superValidate(request, passwordSchema, { id: 'passwordForm' });
-
-    const ip = event.getClientAddress();
-    const rateLimitAttempt = await verifyRatelimit.limit(ip);
-    if (!rateLimitAttempt.success) {
-      const timeRemaining = Math.floor(
-        (rateLimitAttempt.reset - new Date().getTime()) / 1000
-      );
-      setError(
-        form,
-        "",
-        `Trop de tentatives ! Essais à nouveau dans ${timeRemaining} secondes`,
-        {
-          status: 429
-        }
-      );
-      return message(form, 'Pas si vite !');
-    }
-
-    try {
-      await router.createCaller(await createContext(event)).users.verifyEmail({ password: form.data.password });
-      throw redirect(302, '/email-verification');
-    } catch (error) {
-      if (error instanceof TRPCError && error.cause?.message === "EXPIRED_TOKEN") {
-        throw redirect(302, '/email-verification?expired=true');
-      }
-      if (error instanceof TRPCError && error.cause?.message === "INVALID_TOKEN") {
-        throw redirect(302, '/email-verification?invalid=true');
-      }
-      throw redirect(302, '/email-verification');
     }
 
   }
