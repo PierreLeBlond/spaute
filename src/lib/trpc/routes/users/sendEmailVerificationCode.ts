@@ -1,10 +1,10 @@
-import { triggerEmailVerification } from "$lib/hook/notifications/triggerEmailVerification";
+import { triggerEmailVerificationEmail } from "$lib/hook/notifications/triggerEmailVerificationEmail";
 import prisma from "$lib/prisma";
-import { otpToken } from "$lib/token";
 import { authenticatedProcedure } from "$lib/trpc/procedures/authenticatedProcedure";
 import { TRPCError } from "@trpc/server";
+import { createOneTimePassword } from "./utils/createOneTimePassword";
 
-export const sendVerificationEmail = authenticatedProcedure
+export const sendEmailVerificationCode = authenticatedProcedure
   .mutation(async ({ ctx }) => {
     const { user } = ctx;
 
@@ -15,17 +15,18 @@ export const sendVerificationEmail = authenticatedProcedure
       })
     }
 
-    const token = await otpToken.issue(user.userId);
+    const password = await createOneTimePassword(user.email);
+
     const currentPlayer = await prisma.player.findUniqueOrThrow({
       where: {
         userId: user.userId
       }
     });
 
-    return triggerEmailVerification({
+    return triggerEmailVerificationEmail({
       userId: user.userId,
       email: user.email,
       name: currentPlayer.name,
-      token: token.toString()
+      password
     })
   });

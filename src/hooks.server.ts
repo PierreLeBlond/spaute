@@ -9,7 +9,8 @@ import { auth } from "$lib/lucia";
 const authHandle: Handle = async ({ event, resolve }) => {
   event.locals.auth = auth.handleRequest(event);
 
-  const { user } = await event.locals.auth.validateUser();
+  const session = await event.locals.auth.validate();
+  const user = session?.user ?? null;
 
   event.locals.user = user;
 
@@ -51,8 +52,6 @@ export const handleError: HandleServerError = (input) => {
       code: error?.code ?? 'UNKNOWN'
     };
   }
-
-  console.error(`Unexpected error has occured: ${error.message}`);
 
   return {
     message: error.message,

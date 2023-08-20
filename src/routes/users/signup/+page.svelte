@@ -16,33 +16,35 @@
 
 <div class="flex w-full items-center justify-center p-8">
   <Form {form}>
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center pt-8">
       <Text
         {form}
         field="email"
         label="email"
+        autocomplete="email"
       />
       <Password
         {form}
         field="password"
         label="mot de passe"
+        autocomplete="new-password"
       />
       <Password
         {form}
         field="passwordConfirmation"
         label="confirmation du mot de passe"
+        autocomplete="new-password"
       />
       <Text
         {form}
         field="name"
         label="nom de fanfaronx"
+        autocomplete="username"
       />
-      <div class="w-64 pt-2">
-        <Button
-          {form}
-          label="Sign up"
-        />
-      </div>
+      <Button
+        {form}
+        label="Sign up"
+      />
     </div>
   </Form>
 </div>

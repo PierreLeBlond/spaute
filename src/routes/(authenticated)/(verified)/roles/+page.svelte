@@ -42,7 +42,7 @@
             <Form
               form={deleteForm}
               action="?/delete"
-              hideErrors={true}
+              hideErrors
             >
               <input
                 type="hidden"
@@ -92,7 +92,7 @@
       <Button
         form={updateForm}
         label={'Mettre à jour'}
-        disabledWhenNotTainted={true}
+        disabledWhenNotTainted
       />
     </div>
   </Form>

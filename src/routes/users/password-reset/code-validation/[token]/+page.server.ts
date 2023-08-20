@@ -47,13 +47,13 @@ export const actions: Actions = {
     }
 
     try {
-      await router.createCaller(await createContext(event)).users.resetPassword({ token, password });
+      await router.createCaller(await createContext(event)).users.resetPassword({ tokenId: token, password });
       throw redirect(302, '/users/login', 'Mot de passe mis à jour !', event);
     } catch (error) {
-      if (error instanceof TRPCError && error.cause?.message === "EXPIRED_TOKEN") {
+      if (error instanceof TRPCError && error.code === "TIMEOUT") {
         throw redirect(302, '/users/password-reset?expired=true');
       }
-      if (error instanceof TRPCError && error.cause?.message === "INVALID_TOKEN") {
+      if (error instanceof TRPCError && error.code === "NOT_FOUND") {
         throw redirect(302, '/users/password-reset?invalid=true');
       }
       throw error;

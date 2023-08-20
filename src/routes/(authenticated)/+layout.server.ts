@@ -5,7 +5,8 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
   const { locals } = event;
-  const { user } = await locals.auth.validateUser();
+  const session = await locals.auth.validate();
+  const user = session?.user;
   if (!user) {
     throw redirect(302, "/users/login");
   }
@@ -14,6 +15,7 @@ export const load: LayoutServerLoad = async (event) => {
   const currentPlayer = await caller.players.read({ userId: user.userId });
 
   return {
+    user,
     currentPlayer,
     title: currentPlayer.name
   }

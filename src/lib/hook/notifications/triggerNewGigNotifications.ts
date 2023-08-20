@@ -1,14 +1,11 @@
-import { NOVU_API_KEY } from "$env/static/private";
 import { TriggerRecipientsTypeEnum } from "@novu/shared";
-import { Novu } from "@novu/node";
 import type { Gig } from "@prisma/client";
 import prisma from "$lib/prisma";
+import { novu } from "$lib/novu";
 
 export const triggerNewGigNotifications = async (data: {
   gig: Gig, userId: string
 }) => {
-  const novu = new Novu(NOVU_API_KEY);
-
   const topicKey = `gig:${data.gig.id}`;
   const spamTopicKey = `gig:spam:${data.gig.id}`;
 

@@ -53,7 +53,7 @@
                 <Form
                   form={deleteBandVoiceForm}
                   action="?/deleteBandVoice"
-                  hideErrors={true}
+                  hideErrors
                 >
                   <input
                     type="hidden"
@@ -100,8 +100,8 @@
       <Button
         form={deleteForm}
         label="Supprimer"
-        deleting={true}
-        disabledWhenNotTainted={true}
+        deleting
+        disabledWhenNotTainted
       />
     </Form>
   </div>

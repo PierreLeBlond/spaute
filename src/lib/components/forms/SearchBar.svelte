@@ -46,6 +46,8 @@
       <g
         id="cross"
         class="text-cyan-600 hover:cursor-pointer"
+        role="button"
+        tabindex="0"
         on:click={clear}
         on:keydown={clear}
       >

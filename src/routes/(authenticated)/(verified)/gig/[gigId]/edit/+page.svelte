@@ -90,7 +90,7 @@
           <Button
             form={updateForm}
             label="Mettre à jour"
-            disabledWhenNotTainted={true}
+            disabledWhenNotTainted
           />
         </div>
       </div>
@@ -151,7 +151,7 @@
           <Button
             form={updateDisabledVoiceForm}
             label={'Mettre à jour'}
-            disabledWhenNotTainted={true}
+            disabledWhenNotTainted
           />
         </div>
       </Form>
@@ -184,7 +184,7 @@
                 <Form
                   form={deleteGigVoiceForm}
                   action="?/deleteGigVoice"
-                  hideErrors={true}
+                  hideErrors
                 >
                   <input
                     type="hidden"
@@ -231,8 +231,8 @@
         <Button
           form={deleteForm}
           label="Supprimer"
-          deleting={true}
-          disabledWhenNotTainted={true}
+          deleting
+          disabledWhenNotTainted
         />
       </Form>
     </div>

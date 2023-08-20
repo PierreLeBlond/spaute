@@ -13,37 +13,51 @@ generator zod {
   output   = "../src/lib/generated/zod"
 }
 
-model AuthKey {
-  id              String   @id @unique
-  hashed_password String?
-  user_id         String
-  primary_key     Boolean
-  expires         BigInt?
-  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+model OneTimePassword {
+  password String @unique
+  email    String @unique
+  expires  BigInt
 
-  @@index([user_id])
-  @@map("auth_key")
+  @@id([password, email])
 }
 
-model AuthSession {
-  id             String   @id @unique
+model Token {
+  id      String @unique
+  user_id String @unique
+  expires BigInt
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Session {
+  id             String @id @unique
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("auth_session")
 }
 
-model AuthUser {
-  id             String        @id @unique
-  auth_session   AuthSession[]
-  auth_key       AuthKey[]
-  email          String        @unique
-  email_verified Boolean       @default(false)
+model User {
+  id             String    @id @unique
+  auth_session   Session[]
+  key            Key[]
+  email          String    @unique
+  email_verified Boolean   @default(false)
+
+  has_password Boolean @default(false)
 
   player Player?
+  otp    Token?
 
   @@map("auth_user")
 }
@@ -57,9 +71,9 @@ model Band {
 }
 
 model Player {
-  id     String   @id @default(uuid())
-  user   AuthUser @relation(fields: [userId], references: [id])
-  userId String   @unique
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 
   name        String       @unique
   presences   Presence[]
