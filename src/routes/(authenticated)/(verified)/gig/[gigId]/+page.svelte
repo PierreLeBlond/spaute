@@ -75,7 +75,7 @@
             <Form
               {form}
               action="?/join"
-              hideErrors={true}
+              hideErrors
             >
               <input
                 type="hidden"

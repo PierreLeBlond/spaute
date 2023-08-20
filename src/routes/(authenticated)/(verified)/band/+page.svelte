@@ -31,7 +31,7 @@
         <Button
           {form}
           label="Créer"
-          disabledWhenNotTainted={true}
+          disabledWhenNotTainted
         />
       </div>
     </div>

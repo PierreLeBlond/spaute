@@ -32,7 +32,7 @@
     <input
       type="hidden"
       name="value"
-      value={true}
+      value
     />
     <Button
       {form}
