@@ -73,7 +73,7 @@ export const actions: Actions = {
     const { email } = form.data;
 
     try {
-      await router.createCaller(await createContext(event)).users.sendPasswordResetPassword({ email });
+      await router.createCaller(await createContext(event)).users.sendPasswordResetCode({ email });
       throw redirect(302, `/users/password-reset/code-validation?email=${email}`, 'Email envoyé !', event);
     } catch (error) {
       if (!(error instanceof TRPCError)) {

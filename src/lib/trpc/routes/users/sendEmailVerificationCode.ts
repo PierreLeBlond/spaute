@@ -4,7 +4,7 @@ import { authenticatedProcedure } from "$lib/trpc/procedures/authenticatedProced
 import { TRPCError } from "@trpc/server";
 import { createOneTimePassword } from "./utils/createOneTimePassword";
 
-export const sendEmailVerificationPassword = authenticatedProcedure
+export const sendEmailVerificationCode = authenticatedProcedure
   .mutation(async ({ ctx }) => {
     const { user } = ctx;
 

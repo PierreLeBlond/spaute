@@ -7,7 +7,7 @@ import { createOneTimePassword } from "./utils/createOneTimePassword";
 
 const schema = z.object({ email: z.string().email() });
 
-export const sendPasswordResetPassword = publicProcedure
+export const sendPasswordResetCode = publicProcedure
   .input(schema)
   .mutation(async ({ input }) => {
     const user = await prisma.user.findUnique({

@@ -10,9 +10,9 @@ import {
   UPSTASH_REDIS_REST_TOKEN,
   UPSTASH_REDIS_REST_URL,
 } from "$env/static/private";
+import { redirect } from 'sveltekit-flash-message/server'
 
 import { building } from "$app/environment";
-import { redirect } from 'sveltekit-flash-message/server';
 
 let redis: Redis;
 let sendRatelimit: Ratelimit;
@@ -29,7 +29,7 @@ if (!building) {
   });
 }
 
-const schema = z.object({ email: z.string().email() });
+const schema = z.object({});
 
 export const load: PageServerLoad = async () => {
   const form = await superValidate(schema);
@@ -38,12 +38,12 @@ export const load: PageServerLoad = async () => {
     form,
     tabs: [
       {
-        href: '/email-verification',
-        key: '/email-verification',
-        label: 'vérification'
+        href: 'settings/password-change',
+        key: 'settings/password-change',
+        label: 'nouveau mdp'
       }
     ],
-    index: 10000
+    index: 0.2
   }
 };
 
@@ -62,7 +62,7 @@ export const actions: Actions = {
       setError(
         form,
         "",
-        `Attends ${timeRemaining} secondes pour un nouvel email !`,
+        `Attends encore ${timeRemaining} secondes avant de demander un nouvel email !`,
         {
           status: 429
         }
@@ -70,11 +70,9 @@ export const actions: Actions = {
       return message(form, 'Pas si vite !');
     }
 
-    const { email } = form.data;
-
     try {
-      await router.createCaller(await createContext(event)).users.sendEmailVerificationCode();
-      throw redirect(302, `/email-verification/code-validation?email=${email}`, 'Email envoyé !', event);
+      await router.createCaller(await createContext(event)).users.sendPasswordChangeCode();
+      throw redirect(302, `/settings/password-change/code-validation`, 'Email envoyé !', event);
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;

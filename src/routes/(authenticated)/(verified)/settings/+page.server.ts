@@ -18,7 +18,7 @@ export const load = (async ({ parent }) => {
 
   return {
     form: form(),
-    index: 1000000,
+    index: 0.1,
     tabs: [
       {
         href: '/settings',

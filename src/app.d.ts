@@ -13,6 +13,7 @@ declare global {
 				userId: string;
 				email: string;
 				emailVerified: boolean;
+				hasPassword: boolean
 			} | null;
 		}
 		interface PageData {

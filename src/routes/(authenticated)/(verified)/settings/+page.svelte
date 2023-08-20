@@ -5,7 +5,8 @@
   import Text from '$lib/components/forms/Text.svelte';
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
-    
+  import Link from '$lib/components/links/Link.svelte';
+
   export let data: PageData;
 
   const form = superForm(data.form, {
@@ -39,3 +40,6 @@
   </Form>
 </div>
 
+<div class="mx-8 flex flex-col justify-center px-8 pb-8 pt-8 border-t-2">
+  <Link href="/settings/password-change">{data.user.hasPassword ? 'Changement' : 'Création'} de mot de passe</Link>
+</div>
