@@ -27,13 +27,15 @@
     <div class="flex flex-col items-center justify-center">
       <Password
         {form}
-        field={'password'}
-        label={'nouveau mot de passe'}
+        field="password"
+        label="nouveau mot de passe"
+        autocomplete="new-password"
       />
       <Password
         {form}
-        field={'passwordConfirmation'}
-        label={'confirmation du mot de passe'}
+        field="passwordConfirmation"
+        label="confirmation du mot de passe"
+        autocomplete="new-password"
       />
       <Button
         {form}

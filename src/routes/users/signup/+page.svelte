@@ -21,21 +21,25 @@
         {form}
         field="email"
         label="email"
+        autocomplete="email"
       />
       <Password
         {form}
         field="password"
         label="mot de passe"
+        autocomplete="new-password"
       />
       <Password
         {form}
         field="passwordConfirmation"
         label="confirmation du mot de passe"
+        autocomplete="new-password"
       />
       <Text
         {form}
         field="name"
         label="nom de fanfaronx"
+        autocomplete="username"
       />
       <Button
         {form}

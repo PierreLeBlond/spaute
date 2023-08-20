@@ -30,6 +30,7 @@
         {form}
         field="email"
         label="email"
+        autocomplete="email"
       />
       <Button
         {form}

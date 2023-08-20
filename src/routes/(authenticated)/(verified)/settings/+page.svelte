@@ -30,6 +30,7 @@
         {form}
         field="name"
         label="nom de fanfaronx"
+        autocomplete="username"
       />
       <Button
         {form}

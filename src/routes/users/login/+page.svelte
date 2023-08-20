@@ -33,11 +33,13 @@
         {form}
         field="email"
         label="email"
+        autocomplete="email"
       />
       <Password
         {form}
-        field={'password'}
-        label={'mot de passe'}
+        field="password"
+        label="mot de passe"
+        autocomplete="current-password"
       />
       <Button
         label="Log in"
