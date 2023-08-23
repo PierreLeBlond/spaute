@@ -4,7 +4,6 @@ import { redirect } from '@sveltejs/kit';
 import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
-
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
