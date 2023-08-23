@@ -8,11 +8,8 @@
   export let data: PageData;
 </script>
 
-<div class="p-4">
-  <RightLink
-    href="/band"
-    label="Créer une fanfare"
-  />
+<div class="py-8 px-16">
+  <RightLink href="/band">Créer une fanfare</RightLink>
 </div>
 <List>
   {#if data.memberships.length == 0}
@@ -30,9 +27,6 @@
     {/each}
   {/if}
 </List>
-<div class="p-4">
-  <RightLink
-    href="/bands/search"
-    label="Rechercher une fanfare"
-  />
+<div class="py-8 px-16">
+  <RightLink href="/bands/search">Rechercher</RightLink>
 </div>

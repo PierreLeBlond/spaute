@@ -7,6 +7,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -20,35 +22,30 @@
 
 <ReturnLink href="/roles" />
 
-<div class="w-full p-2">
+<FormLayout>
   <Form {form}>
-    <div class="grid grid-cols-2 gap-x-2 gap-y-2">
-      <p class="col-span-2 text-xs">Ajouter un pupitre</p>
+    <InputsLayout>
       <Select
         {form}
         field={'instrumentId'}
         label={'instrument'}
         {options}
       />
-      <div class="col-span-2">
-        <Checkbox
-          {form}
-          field="playable"
-          checkedLabel="je gère mon pupitre"
-          uncheckedLabel="je gère pas encore"
-        />
-      </div>
+      <Checkbox
+        {form}
+        field="playable"
+        checkedLabel="je gère mon pupitre"
+        uncheckedLabel="je gère pas encore"
+      />
       <input
         type="hidden"
         name="playerId"
         value={data.currentPlayer.id}
       />
-      <div class="col-span-2">
-        <Button
-          {form}
-          label="Ajouter"
-        />
-      </div>
-    </div>
+      <Button
+        {form}
+        label="Ajouter"
+      />
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

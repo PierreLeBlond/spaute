@@ -6,6 +6,8 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
   import Link from '$lib/components/links/Link.svelte';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -18,9 +20,9 @@
   <ReturnLink href={'/gigs'} />
 </div>
 
-<div class="flex w-full items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center pt-8">
+    <InputsLayout>
       <input
         type="hidden"
         name="playerId"
@@ -37,10 +39,10 @@
         label="Mettre à jour"
         disabledWhenNotTainted
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>
 
-<div class="mx-8 flex flex-col justify-center px-8 pb-8 pt-8 border-t-2">
-  <Link href="/settings/password-change">{data.user.hasPassword ? 'Changement' : 'Création'} de mot de passe</Link>
+<div class="mx-8 flex flex-col justify-center p-8 border-t-2">
+  <Link href="/settings/password-change">{data.user.hasPassword ? 'Changer de' : 'Créer un'} mot de passe</Link>
 </div>

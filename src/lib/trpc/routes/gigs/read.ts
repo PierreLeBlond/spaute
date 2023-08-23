@@ -1,10 +1,9 @@
-import { GigWhereUniqueInputSchema } from "$lib/generated/zod";
-import prisma from "$lib/prisma";
-import { verifiedProcedure } from "$lib/trpc/procedures/verifiedProcedure";
+import { GigWhereUniqueInputSchema } from '$lib/generated/zod';
+import prisma from '$lib/prisma';
+import { verifiedProcedure } from '$lib/trpc/procedures/verifiedProcedure';
 
-export const read = verifiedProcedure
-  .input(GigWhereUniqueInputSchema)
-  .query(async ({ input }) => prisma.gig.findUniqueOrThrow({
+export const read = verifiedProcedure.input(GigWhereUniqueInputSchema).query(async ({ input }) =>
+  prisma.gig.findUniqueOrThrow({
     where: input,
     include: {
       band: true,
@@ -26,7 +25,7 @@ export const read = verifiedProcedure
                   }
                 }
               },
-              instrument: true,
+              instrument: true
             }
           },
           formationUndefinedVoicePresences: {
@@ -41,4 +40,5 @@ export const read = verifiedProcedure
         }
       }
     }
-  }));
+  })
+);

@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
@@ -7,7 +8,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
   const user = session?.user;
 
   if (user) {
-    throw redirect(302, "/");
+    throw redirect(302, '/');
   }
 
   return {
@@ -15,14 +16,14 @@ export const load: LayoutServerLoad = async ({ locals }) => {
       {
         href: '/users/login',
         key: '/users/login',
-        label: 'login'
+        label: 'connexion'
       },
       {
         href: '/users/signup',
         key: '/users/signup',
-        label: 'signup'
+        label: 'inscription'
       }
     ],
     title: 'Spaute'
-  }
+  };
 };

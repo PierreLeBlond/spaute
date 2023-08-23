@@ -1,11 +1,9 @@
-import { TriggerRecipientsTypeEnum } from "@novu/shared";
-import type { Gig } from "@prisma/client";
-import prisma from "$lib/prisma";
-import { novu } from "$lib/novu";
+import { novu } from '$lib/novu';
+import prisma from '$lib/prisma';
+import { TriggerRecipientsTypeEnum } from '@novu/shared';
+import type { Gig } from '@prisma/client';
 
-export const triggerNewGigNotifications = async (data: {
-  gig: Gig, userId: string
-}) => {
+export const triggerNewGigNotifications = async (data: { gig: Gig; userId: string }) => {
   const topicKey = `gig:${data.gig.id}`;
   const spamTopicKey = `gig:spam:${data.gig.id}`;
 
@@ -20,7 +18,7 @@ export const triggerNewGigNotifications = async (data: {
   });
 
   await novu.topics.addSubscribers(topicKey, {
-    subscribers: [data.userId],
+    subscribers: [data.userId]
   });
 
   if (!data.gig.bandId) {
@@ -41,15 +39,15 @@ export const triggerNewGigNotifications = async (data: {
   });
 
   await novu.topics.addSubscribers(topicKey, {
-    subscribers: band.memberships.map(membership => membership.player.userId)
+    subscribers: band.memberships.map((membership) => membership.player.userId)
   });
 
   await novu.topics.addSubscribers(spamTopicKey, {
-    subscribers: band.memberships.map(membership => membership.player.userId)
+    subscribers: band.memberships.map((membership) => membership.player.userId)
   });
 
   await novu.topics.removeSubscribers(spamTopicKey, {
-    subscribers: [data.userId],
+    subscribers: [data.userId]
   });
 
   await novu.trigger('new-gig', {
@@ -58,8 +56,8 @@ export const triggerNewGigNotifications = async (data: {
       gigId: data.gig.id,
       gigName: data.gig.name
     },
-    actor: { subscriberId: data.userId },
+    actor: { subscriberId: data.userId }
   });
 
   return data.gig;
-}
+};

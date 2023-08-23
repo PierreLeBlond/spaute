@@ -1,7 +1,8 @@
-import { TRPCError } from "@trpc/server";
-import { verified } from "./verified";
-import { z } from "zod";
-import prisma from "$lib/prisma";
+import prisma from '$lib/prisma';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+
+import { verified } from './verified';
 
 const schema = z.object({
   bandId: z.string()
@@ -17,7 +18,7 @@ export const admin = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
     where: {
       userId: ctx.user.userId
     }
-  })
+  });
 
   const { bandId } = result.data;
 

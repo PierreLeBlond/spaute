@@ -14,7 +14,7 @@
   const { value, errors, constraints } = formFieldProxy(form as SuperForm<ZodValidation<T>, unknown>, field);
 </script>
 
-<div class="flex h-full flex-col">
+<div class="w-full flex h-full flex-col">
   <div class="flex justify-between text-xs">
     <label
       for="{field}-input"

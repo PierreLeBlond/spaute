@@ -6,6 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -18,22 +20,19 @@
   <ReturnLink href="/bands" />
 </div>
 
-<div class="w-full p-2">
+<FormLayout>
   <Form {form}>
-    <div class="grid grid-cols-2 gap-y-2">
-      <h2 class="col-span-2 text-xs">Créer une fanfare</h2>
+    <InputsLayout>
       <Text
         {form}
         field="name"
         label="nom"
       />
-      <div class="col-span-2">
-        <Button
-          {form}
-          label="Créer"
-          disabledWhenNotTainted
-        />
-      </div>
-    </div>
+      <Button
+        {form}
+        label="Créer"
+        disabledWhenNotTainted
+      />
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

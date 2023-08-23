@@ -5,6 +5,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -13,11 +15,14 @@
 
 <ReturnLink href="/band/{data['band'].id}" />
 
-<p class="w-full p-2 pl-4 text-sm">{data.player.name}</p>
+<p class="px-16 pt-8 text-center text-xs">
+  <b>{data.player.name}</b>
+</p>
 
 {#if !data.membership?.isAdmin}
-  <div class="flex w-full p-2">
+<FormLayout>
     <Form {form}>
+    <InputsLayout>
       <input
         type="hidden"
         name="bandId"
@@ -32,8 +37,11 @@
         {form}
         label="Promouvoir en admin"
       />
+    </InputsLayout>
     </Form>
-  </div>
+</FormLayout>
 {:else}
-  <div class="flex w-full p-2 pl-4 text-xs">Déjà admin</div>
+<p class="px-16 pt-8 text-center text-xs">
+  Déjà <b>admin</b>
+</p>
 {/if}

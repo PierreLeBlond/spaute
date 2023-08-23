@@ -14,11 +14,8 @@
   );
 </script>
 
-<div class="p-4">
-  <RightLink
-    href="/gig"
-    label="Créer une presta"
-  />
+<div class="py-8 px-16">
+  <RightLink href="/gig">Ajouter une presta</RightLink>
 </div>
 
 <List>

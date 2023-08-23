@@ -1,9 +1,10 @@
-import type { Actions, PageServerLoad } from './$types';
-import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
-import { z } from 'zod';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { router } from '$lib/trpc/router';
 import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const updateSchema = z.object({
   playerId: z.string(),
@@ -14,15 +15,20 @@ const updateSchema = z.object({
 const deleteSchema = z.object({
   playerId: z.string(),
   id: z.string()
-})
+});
 
 export const load: PageServerLoad = async (event) => {
   const { currentPlayer } = await event.parent();
   const caller = router.createCaller(await createContext(event));
   const roles = await caller.roles.list({ playerId: currentPlayer.id });
-  const updateForm = () => superValidate({
-    playables: roles.map(role => role.playable)
-  }, updateSchema, { id: 'updateForm' })
+  const updateForm = () =>
+    superValidate(
+      {
+        playables: roles.map((role) => role.playable)
+      },
+      updateSchema,
+      { id: 'updateForm' }
+    );
   const deleteForm = () => superValidate(deleteSchema, { id: 'deleteForm' });
 
   return {
@@ -30,8 +36,8 @@ export const load: PageServerLoad = async (event) => {
     deleteForm: deleteForm(),
     roles,
     index: 1000
-  }
-}
+  };
+};
 
 export const actions: Actions = {
   update: async (event) => {
@@ -46,22 +52,20 @@ export const actions: Actions = {
     try {
       const caller = router.createCaller(await createContext(event));
       await Promise.all(
-        form.data.playables.map((playable, index) => caller.roles.update({
-          id: form.data.ids[index] as string,
-          playable,
-          playerId: form.data.playerId
-        }))
+        form.data.playables.map((playable, index) =>
+          caller.roles.update({
+            id: form.data.ids[index] as string,
+            playable,
+            playerId: form.data.playerId
+          })
+        )
       );
       return message(form, 'Pupitre mise à jour :)');
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Impossible de mettre à jour :(');
     }
   },
@@ -76,12 +80,8 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Echec :(');
     }
   }
-}
+};

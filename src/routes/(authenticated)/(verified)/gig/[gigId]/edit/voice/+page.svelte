@@ -6,6 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -18,10 +20,11 @@
 
 <ReturnLink href="/gig/{data.gig.id}/edit" />
 
-<div class="w-full p-2">
+<h2 class="text-xs text-center px-16 py-8 font-bold">Ajouter un pupitre</h2>
+
+<FormLayout>
   <Form {form}>
-    <div class="grid grid-cols-1 gap-y-2">
-      <h2 class="text-xs">Ajouter un pupitre</h2>
+    <InputsLayout>
       <Select
         {form}
         field={'instrumentId'}
@@ -37,6 +40,6 @@
         {form}
         label="Ajouter"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

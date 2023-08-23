@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'DEFAULT': '-4px 4px',
+        DEFAULT: '-4px 4px'
       }
-    },
+    }
   },
-  plugins: [],
-}
+  plugins: []
+};

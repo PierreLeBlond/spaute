@@ -1,14 +1,15 @@
-import type { Actions, PageServerLoad } from './$types';
 import { createContext } from '$lib/trpc/context';
 import { router } from '$lib/trpc/router';
-import { z } from 'zod';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
   bandId: z.string(),
   instrumentId: z.string()
-})
+});
 
 export const load: PageServerLoad = async (event) => {
   const caller = router.createCaller(await createContext(event));
@@ -19,9 +20,10 @@ export const load: PageServerLoad = async (event) => {
   return {
     form: form(),
     instruments: instruments(),
-    index: 16
-  }
-}
+    index: 16,
+    title: 'Ajouter un pupitre'
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -34,13 +36,8 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Echec :(');
     }
   }
-}
-
+};

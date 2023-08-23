@@ -1,7 +1,6 @@
-import { novu } from "$lib/novu";
+import { novu } from '$lib/novu';
 
-export const triggerPasswordResetEmail = (data: { userId: string, email: string, name: string, password: string }) => {
-
+export const triggerPasswordResetEmail = (data: { userId: string; email: string; name: string; password: string }) => {
   novu.trigger('password-reset', {
     to: {
       subscriberId: data.userId,
@@ -12,4 +11,4 @@ export const triggerPasswordResetEmail = (data: { userId: string, email: string,
       name: data.name
     }
   });
-}
+};

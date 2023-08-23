@@ -31,7 +31,9 @@
   <div class="flex w-full grow flex-col items-center overflow-y-hidden bg-neutral-100 pt-40 sm:w-96">
     <SlidingTabs
       href={data.href}
-      {tabs}><slot /></SlidingTabs
+      {tabs}
     >
+      <slot />
+    </SlidingTabs>
   </div>
 </main>

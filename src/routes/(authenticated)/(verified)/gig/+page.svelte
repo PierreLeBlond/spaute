@@ -10,6 +10,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -33,20 +35,15 @@
   <ReturnLink href="/gigs" />
 </div>
 
-<div class="w-full grow overflow-auto p-2">
+<FormLayout>
   <Form {form}>
-    <div
-      class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
-      style:grid-template-rows="auto auto auto 1fr auto"
-    >
-      <p class="col-span-2 text-xs">Ajouter une presta</p>
+    <InputsLayout>
       <Select
         {form}
         field="bandId"
         label="fanfare"
         {options}
       />
-      <div class="col-span-1" />
       <Text
         {form}
         field="name"
@@ -67,20 +64,16 @@
         field="time"
         label="heure"
       />
-      <div class="col-span-2">
-        <TextArea
-          {form}
-          field="description"
-          label="description"
-        />
-      </div>
-      <div class="col-span-2">
-        <Button
-          {form}
-          label={'Créer'}
-          disabledWhenNotTainted={true}
-        />
-      </div>
-    </div>
+      <TextArea
+        {form}
+        field="description"
+        label="description"
+      />
+      <Button
+        {form}
+        label={'Créer'}
+        disabledWhenNotTainted
+      />
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

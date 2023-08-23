@@ -19,22 +19,19 @@
   const deleteForm = superForm(data.deleteForm);
 </script>
 
-<div class="p-4">
-  <RightLink
-    href="/role"
-    label="Ajouter un pupitre"
-  />
+<div class="py-8 px-16">
+  <RightLink href="/role">Ajouter un pupitre</RightLink>
 </div>
 
 <List>
   {#if data.roles.length == 0}
-    <p class="text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
+    <p class="text-xs px-16 pt-8 text-center">Alley, tu dois bien savoir jouer d'un truc non ?</p>
   {:else}
     {#each data.roles as role, index}
       <ListItem>
         <div class="grid grid-cols-6 gap-y-2 p-2">
-          <div class="col-span-4 col-start-2 flex items-center justify-center">
-            <p class="text-center text-xs">
+          <div class="col-span-5 flex items-center">
+            <p class="text-xs font-bold">
               {role.instrument.name}
             </p>
           </div>
@@ -78,7 +75,7 @@
   {/if}
 </List>
 
-<div class="p-4">
+<div class="py-8 px-16 bg-neutral-200">
   <Form
     form={updateForm}
     action="?/update"

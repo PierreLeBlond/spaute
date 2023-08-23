@@ -19,7 +19,7 @@
   <ReturnLink href="/bands" />
 </div>
 
-<div class="p-2">
+<div class="p-8">
   <SearchBar
     bind:searchValue
     on:input={throttle(update, 500)}

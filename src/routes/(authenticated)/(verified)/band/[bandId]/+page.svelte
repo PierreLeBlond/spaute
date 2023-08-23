@@ -10,6 +10,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -24,25 +26,26 @@
 </div>
 
 {#if !data.currentMembership}
-  <div class="w-full p-2">
+  <FormLayout>
     <Form {form}>
-      <p class="text-xs">Allez viens, on est bien !</p>
-      <input
-        type="hidden"
-        name="bandId"
-        value={data.band.id}
-      />
-      <input
-        type="hidden"
-        name="playerId"
-        value={data.currentPlayer.id}
-      />
-      <Button
-        {form}
-        label="Rejoindre"
-      />
+      <InputsLayout>
+        <input
+          type="hidden"
+          name="bandId"
+          value={data.band.id}
+        />
+        <input
+          type="hidden"
+          name="playerId"
+          value={data.currentPlayer.id}
+        />
+        <Button
+          {form}
+          label="Rejoindre"
+        />
+      </InputsLayout>
     </Form>
-  </div>
+  </FormLayout>
 {/if}
 
 <List>

@@ -6,6 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
 
   export let data: PageData;
 
@@ -18,9 +20,9 @@
   <ReturnLink href="/settings/password-change" />
 </div>
 
-<div class="flex w-full flex-col items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center pt-8">
+    <InputsLayout>
       <Text
         {form}
         field="password"
@@ -30,6 +32,6 @@
         {form}
         label="Valider"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

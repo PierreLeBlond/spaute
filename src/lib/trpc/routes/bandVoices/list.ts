@@ -1,10 +1,9 @@
-import { BandVoiceWhereInputSchema } from "$lib/generated/zod";
-import prisma from "$lib/prisma";
-import { verifiedProcedure } from "$lib/trpc/procedures/verifiedProcedure";
+import { BandVoiceWhereInputSchema } from '$lib/generated/zod';
+import prisma from '$lib/prisma';
+import { verifiedProcedure } from '$lib/trpc/procedures/verifiedProcedure';
 
-export const list = verifiedProcedure
-  .input(BandVoiceWhereInputSchema)
-  .query(({ input }) => prisma.bandVoice.findMany({
+export const list = verifiedProcedure.input(BandVoiceWhereInputSchema).query(({ input }) =>
+  prisma.bandVoice.findMany({
     where: input,
     orderBy: {
       instrument: {
@@ -14,4 +13,5 @@ export const list = verifiedProcedure
     include: {
       instrument: true
     }
-  }));
+  })
+);

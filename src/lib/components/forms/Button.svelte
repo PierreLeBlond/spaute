@@ -5,7 +5,7 @@
 
   export let id: string = '';
   export let label: string;
-  export let deleting = false;
+  export let danger = false;
   export let disabledWhenNotTainted = false;
 
   type T = $$Generic<AnyZodObject>;
@@ -21,7 +21,7 @@
     name={id}
     disabled={(disabledWhenNotTainted && !$tainted) || $submitting}
     class="flex h-8 w-full justify-center rounded bg-cyan-600 text-sm text-neutral-800 transition-colors hover:cursor-pointer disabled:bg-neutral-300 disabled:text-neutral-400 disabled:hover:cursor-auto"
-    class:bg-red-500={deleting}
+    class:bg-red-500={danger}
   />
   {#if $submitting}
     <div class="absolute left-1/2 -translate-x-1/2">

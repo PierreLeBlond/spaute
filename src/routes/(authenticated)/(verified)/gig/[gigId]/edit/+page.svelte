@@ -1,4 +1,5 @@
 <script lang="ts">
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
   import Button from '$lib/components/forms/Button.svelte';
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
   import DateInput from '$lib/components/forms/DateInput.svelte';
@@ -15,6 +16,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
 
   export let data: PageData;
 
@@ -29,72 +32,61 @@
   });
 
   const { form } = updateDisabledVoiceForm;
-
   const deleteGigVoiceForm = superForm(data.deleteGigVoiceForm);
-
-  const deleteForm = superForm(data.deleteForm, {
-    flashMessage: {
-      module: flashModule
-    }
-  });
 </script>
 
 <div class="flex">
   <ReturnLink href="/gig/{data.gig.id}" />
 </div>
 
-<div class="w-full overflow-y-auto p-2">
+<div class="overflow-y-auto">
+  <p class="text-center px-16 py-4 font-bold text-xs">Modifier la presta</p>
+
   {#if hasWriteAccess}
-    <Form
-      form={updateForm}
-      action="?/update"
-    >
-      <div
-        class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
-        style:grid-template-rows="auto auto auto 1fr auto"
+    <FormLayout>
+      <Form
+        form={updateForm}
+        action="?/update"
       >
-        <p class="col-span-2 text-xs text-neutral-600">Modifier la presta</p>
-        <Text
-          form={updateForm}
-          field="name"
-          label="titre"
-        />
-        <Text
-          form={updateForm}
-          field="location"
-          label="lieu"
-        />
-        <DateInput
-          form={updateForm}
-          field="date"
-          label="date"
-        />
-        <TimeInput
-          form={updateForm}
-          field="time"
-          label="heure"
-        />
-        <div class="col-span-2">
+        <InputsLayout>
+          <Text
+            form={updateForm}
+            field="name"
+            label="titre"
+          />
+          <Text
+            form={updateForm}
+            field="location"
+            label="lieu"
+          />
+          <DateInput
+            form={updateForm}
+            field="date"
+            label="date"
+          />
+          <TimeInput
+            form={updateForm}
+            field="time"
+            label="heure"
+          />
           <TextArea
             form={updateForm}
             field="description"
             label="description"
           />
-        </div>
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <div class="col-span-2">
+          <input
+            type="hidden"
+            name="gigId"
+            value={data.gig.id}
+          />
           <Button
             form={updateForm}
             label="Mettre à jour"
             disabledWhenNotTainted
           />
-        </div>
-      </div>
-    </Form>
+        </InputsLayout>
+      </Form>
+    </FormLayout>
   {/if}
 
   {#if data.gig.band}
@@ -158,83 +150,59 @@
     {/if}
   {/if}
 
-  <h2 class="text-xs">Pupitres additionels</h2>
+  <Delimiter></Delimiter>
+
+  <h2 class="px-16 py-8 text-center text-xs font-bold">Pupitres additionels</h2>
+
+  <List>
+    {#if data.gigVoices.length == 0}
+      <p class="text-xs text-center px-16 py-8">La presta n'a pas de pupitres additionnels !</p>
+    {:else}
+      {#each data.gigVoices as voice}
+        <ListItem>
+          <div class="flex w-full items-center justify-between">
+            <p class="w-full rounded p-2 text-sm">
+              {voice.instrument.name}
+            </p>
+            {#if hasWriteAccess}
+              <Form
+                form={deleteGigVoiceForm}
+                action="?/deleteGigVoice"
+                hideErrors
+              >
+                <input
+                  type="hidden"
+                  name="id"
+                  value={voice.id}
+                />
+                <input
+                  type="hidden"
+                  name="gigId"
+                  value={voice.gigId}
+                />
+                <DeleteButtonIcon />
+              </Form>
+            {/if}
+          </div>
+        </ListItem>
+      {/each}
+    {/if}
+  </List>
 
   {#if hasWriteAccess}
-    <div class="py-2">
-      <RightLink
-        href="/gig/{data.gig.id}/edit/voice"
-        label="Ajouter un pupitre"
-      />
+    <div class="px-16 p-8 bg-neutral-200 mb-8">
+      <RightLink href="/gig/{data.gig.id}/edit/voice">Ajouter un pupitre</RightLink>
     </div>
   {/if}
 
-  <div class="pb-2">
-    <List>
-      {#if data.gigVoices.length == 0}
-        <p class="text-xs">La presta n'a pas de pupitres additionnels !</p>
-      {:else}
-        {#each data.gigVoices as voice}
-          <ListItem>
-            <div class="flex w-full items-center justify-between">
-              <p class="w-full rounded p-2 text-sm">
-                {voice.instrument.name}
-              </p>
-              {#if hasWriteAccess}
-                <Form
-                  form={deleteGigVoiceForm}
-                  action="?/deleteGigVoice"
-                  hideErrors
-                >
-                  <input
-                    type="hidden"
-                    name="id"
-                    value={voice.id}
-                  />
-                  <input
-                    type="hidden"
-                    name="gigId"
-                    value={voice.gigId}
-                  />
-                  <DeleteButtonIcon />
-                </Form>
-              {/if}
-            </div>
-          </ListItem>
-        {/each}
-      {/if}
-    </List>
-  </div>
-
   {#if hasWriteAccess}
-    <div class="border border-red-500 p-2 text-red-500">
-      <Form
-        form={deleteForm}
-        action="?/delete"
+    <Delimiter></Delimiter>
+
+    <div class="px-16 py-8">
+      <RightLink
+        href="/gig/{data.gig.id}/edit/delete"
+        danger>Supprimer la presta ?</RightLink
       >
-        <p class="text-xs">Suppression de la presta</p>
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <input
-          type="hidden"
-          name="name"
-          value={data.gig.name}
-        />
-        <Text
-          form={deleteForm}
-          field="nameCopy"
-          label="recopie son titre pour valider la suppression"
-        />
-        <Button
-          form={deleteForm}
-          label="Supprimer"
-          deleting
-          disabledWhenNotTainted
-        />
-      </Form>
     </div>
   {/if}
 </div>

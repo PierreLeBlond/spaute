@@ -2,12 +2,15 @@
   import Link from './Link.svelte';
 
   export let href: string;
-  export let label: string;
+  export let danger: boolean = false;
 </script>
 
-<Link {href}>
+<Link
+  {href}
+  {danger}
+>
   <div class="grid h-full w-full grid-cols-8 items-center">
-    <p class="col-span-6 col-start-2">{label}</p>
+    <p class="col-span-6 col-start-2"><slot /></p>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"

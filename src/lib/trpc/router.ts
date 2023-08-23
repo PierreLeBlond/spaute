@@ -1,16 +1,16 @@
-import { t } from "./t";
-import { instruments } from "./routes/instruments";
-import { bands } from "./routes/bands";
-import { gigs } from "./routes/gigs";
-import { presences } from "./routes/presences";
-import { players } from "./routes/players";
-import { formations } from "./routes/formations";
-import { memberships } from "./routes/memberships";
-import { gigVoices } from "./routes/gigVoices";
-import { disabledVoices } from "./routes/disabledVoices";
-import { bandVoices } from "./routes/bandVoices";
-import { roles } from "./routes/roles";
-import { users } from "./routes/users";
+import { bandVoices } from './routes/bandVoices';
+import { bands } from './routes/bands';
+import { disabledVoices } from './routes/disabledVoices';
+import { formations } from './routes/formations';
+import { gigVoices } from './routes/gigVoices';
+import { gigs } from './routes/gigs';
+import { instruments } from './routes/instruments';
+import { memberships } from './routes/memberships';
+import { players } from './routes/players';
+import { presences } from './routes/presences';
+import { roles } from './routes/roles';
+import { users } from './routes/users';
+import { t } from './t';
 
 export const router = t.router({
   memberships,

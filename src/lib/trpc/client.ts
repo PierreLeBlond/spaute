@@ -1,4 +1,5 @@
-import { createTRPCClient, type TRPCClientInit } from 'trpc-sveltekit';
+import { type TRPCClientInit, createTRPCClient } from 'trpc-sveltekit';
+
 import type { Router } from './router';
 
 let browserClient: ReturnType<typeof createTRPCClient<Router>>;
@@ -13,4 +14,4 @@ export const trpc = (init?: TRPCClientInit) => {
     browserClient = client;
   }
   return client;
-}
+};

@@ -1,10 +1,11 @@
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+import { redirect } from 'sveltekit-flash-message/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+
 import type { Actions, PageServerLoad } from './$types';
-import { z } from "zod";
-import { message, setError, superValidate } from "sveltekit-superforms/server";
-import { router } from "$lib/trpc/router";
-import { createContext } from "$lib/trpc/context";
-import { TRPCError } from "@trpc/server";
-import { redirect } from 'sveltekit-flash-message/server'
 
 const schema = z.object({
   email: z.string(),
@@ -17,8 +18,8 @@ export const load: PageServerLoad = async () => {
   return {
     form,
     index: 1
-  }
-}
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -38,18 +39,13 @@ export const actions: Actions = {
         event.cookies.delete('fromPathname');
       }
       throw redirect(302, fromPathname || '/', 'Hello !', event);
-
     } catch (error) {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      form.data.password = "";
-      setError(
-        form,
-        "",
-        error.message
-      );
+      form.data.password = '';
+      setError(form, '', error.message);
       return message(form, 'Vous ne passerez pas :(');
     }
   }
-}
+};

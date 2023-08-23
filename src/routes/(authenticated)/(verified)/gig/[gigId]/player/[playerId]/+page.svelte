@@ -5,6 +5,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -13,27 +15,31 @@
 
 <ReturnLink href="/gig/{data['gig'].id}" />
 
-<p class="w-full p-2 pl-4 text-sm">{data.player.name}</p>
+<p class="text-center px-16 pt-8 text-xs">
+  <b>{data.player.name}</b>
+</p>
 
 {#if !data.presence?.isOrganizer}
-  <div class="flex w-full p-2">
-    <Form {form}>
-      <input
-        type="hidden"
-        name="gigId"
-        value={data.gig.id}
-      />
-      <input
-        type="hidden"
-        name="playerId"
-        value={data.player.id}
-      />
-      <Button
-        {form}
-        label="Promouvoir en organisateurice"
-      />
-    </Form>
-  </div>
+  <FormLayout>
+    <InputsLayout>
+      <Form {form}>
+        <input
+          type="hidden"
+          name="gigId"
+          value={data.gig.id}
+        />
+        <input
+          type="hidden"
+          name="playerId"
+          value={data.player.id}
+        />
+        <Button
+          {form}
+          label="Promouvoir en organisateurice"
+        />
+      </Form>
+    </InputsLayout>
+  </FormLayout>
 {:else}
-  <div class="flex w-full p-2 pl-4 text-xs">Déjà organisateurice</div>
+  <p class="px-16 pt-8 text-center text-xs">Déjà <b> organisateurice </b></p>
 {/if}

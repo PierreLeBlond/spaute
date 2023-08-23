@@ -1,7 +1,8 @@
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import { verified } from "./verified";
-import prisma from "$lib/prisma";
+import prisma from '$lib/prisma';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+
+import { verified } from './verified';
 
 const schema = z.object({
   playerId: z.string()
@@ -17,10 +18,10 @@ export const owner = verified.unstable_pipe(async ({ next, ctx, rawInput }) => {
     where: {
       userId: ctx.user.userId
     }
-  })
+  });
 
   if (player.id != result.data.playerId) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'The player does not own this resource.' });
   }
   return next();
-})
+});

@@ -1,11 +1,7 @@
-import { TriggerRecipientsTypeEnum } from "@novu/shared";
-import { novu } from "$lib/novu";
+import { novu } from '$lib/novu';
+import { TriggerRecipientsTypeEnum } from '@novu/shared';
 
-export const triggerGigSpam = (data: {
-  gigId: string,
-  gigName: string,
-  userId: string
-}) => {
+export const triggerGigSpam = (data: { gigId: string; gigName: string; userId: string }) => {
   const spamTopicKey = `gig:spam:${data.gigId}`;
 
   return novu.trigger('spam-gig', {
@@ -16,4 +12,4 @@ export const triggerGigSpam = (data: {
     },
     actor: { subscriberId: data.userId }
   });
-}
+};

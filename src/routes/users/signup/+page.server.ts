@@ -1,17 +1,18 @@
-import type { PageServerLoad, Actions } from "./$types";
-import { z } from "zod";
-import { message, setError, superValidate } from "sveltekit-superforms/server";
-import { createContext } from "$lib/trpc/context";
-import { router } from "$lib/trpc/router";
-import { TRPCError } from "@trpc/server";
-import { redirect } from "@sveltejs/kit";
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { redirect } from '@sveltejs/kit';
+import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
   email: z.string().email({ message: 'Email incorrect' }),
   password: z.string().min(8, { message: 'Au moins 8 caractères' }).max(32),
   passwordConfirmation: z.string(),
   name: z.string().min(1, { message: 'On veut un nom !' }).max(32)
-})
+});
 
 export const load: PageServerLoad = async () => {
   const form = () => superValidate(schema);
@@ -19,8 +20,8 @@ export const load: PageServerLoad = async () => {
   return {
     form: form(),
     index: 2
-  }
-}
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -52,11 +53,7 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Fanfaronx non valide :(');
     }
   }

@@ -6,6 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -18,14 +20,14 @@
   <ReturnLink href="/users/login" />
 </div>
 
-<p class="px-16 pt-8 text-center text-xs">
+<p class="px-16 text-center text-xs">
   Pour te connecter, nous avons besoin de t'envoyer par <b>email</b> un
   <b>mot de passe</b> à <b>usage unique</b> !
 </p>
 
-<div class="flex w-full flex-col items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center">
+    <InputsLayout>
       <Text
         {form}
         field="email"
@@ -36,6 +38,6 @@
         {form}
         label="Envoyer"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

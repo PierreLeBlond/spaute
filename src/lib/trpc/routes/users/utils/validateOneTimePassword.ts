@@ -1,7 +1,7 @@
-import prisma from "$lib/prisma";
-import bcrypt from "bcrypt";
-import { TRPCError } from "@trpc/server";
-import { isWithinExpiration } from "lucia/utils";
+import prisma from '$lib/prisma';
+import { TRPCError } from '@trpc/server';
+import bcrypt from 'bcrypt';
+import { isWithinExpiration } from 'lucia/utils';
 
 export const validateOneTimePassword = async (email: string, password: string) => {
   const oneTimePassword = await prisma.oneTimePassword.findUnique({
@@ -13,7 +13,7 @@ export const validateOneTimePassword = async (email: string, password: string) =
   if (!oneTimePassword) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'Le mot de passe n\'est pas valide...',
+      message: "Le mot de passe n'est pas valide..."
     });
   }
 
@@ -22,7 +22,7 @@ export const validateOneTimePassword = async (email: string, password: string) =
   if (!match) {
     throw new TRPCError({
       code: 'NOT_FOUND',
-      message: 'Le mot de passe n\'est pas valide...',
+      message: "Le mot de passe n'est pas valide..."
     });
   }
 
@@ -35,7 +35,7 @@ export const validateOneTimePassword = async (email: string, password: string) =
   if (!isWithinExpiration(Number(oneTimePassword.expires))) {
     throw new TRPCError({
       code: 'TIMEOUT',
-      message: 'Le mot de passe à expiré...',
+      message: 'Le mot de passe à expiré...'
     });
   }
 };

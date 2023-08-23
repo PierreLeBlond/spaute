@@ -17,6 +17,7 @@
 </script>
 
 <form
+  class="w-full"
   id={$formId}
   method="POST"
   {action}

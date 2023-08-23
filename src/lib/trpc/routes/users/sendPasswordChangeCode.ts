@@ -1,23 +1,23 @@
-import { triggerPasswordResetEmail } from "$lib/hook/notifications/triggerPasswordResetEmail";
-import prisma from "$lib/prisma";
-import { createOneTimePassword } from "./utils/createOneTimePassword";
-import { verifiedProcedure } from "$lib/trpc/procedures/verifiedProcedure";
+import { triggerPasswordResetEmail } from '$lib/hook/notifications/triggerPasswordResetEmail';
+import prisma from '$lib/prisma';
+import { verifiedProcedure } from '$lib/trpc/procedures/verifiedProcedure';
 
-export const sendPasswordChangeCode = verifiedProcedure
-  .mutation(async ({ ctx }) => {
-    const { user } = ctx;
+import { createOneTimePassword } from './utils/createOneTimePassword';
 
-    const password = await createOneTimePassword(user.email);
+export const sendPasswordChangeCode = verifiedProcedure.mutation(async ({ ctx }) => {
+  const { user } = ctx;
 
-    const currentPlayer = await prisma.player.findUniqueOrThrow({
-      where: {
-        userId: user.userId
-      }
-    });
-    return triggerPasswordResetEmail({
-      userId: user.userId,
-      email: user.email,
-      name: currentPlayer.name,
-      password
-    })
+  const password = await createOneTimePassword(user.email);
+
+  const currentPlayer = await prisma.player.findUniqueOrThrow({
+    where: {
+      userId: user.userId
+    }
   });
+  return triggerPasswordResetEmail({
+    userId: user.userId,
+    email: user.email,
+    name: currentPlayer.name,
+    password
+  });
+});

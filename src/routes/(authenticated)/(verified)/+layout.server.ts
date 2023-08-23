@@ -19,5 +19,5 @@ export const load: LayoutServerLoad = async () => {
         label: 'mes pupitres'
       }
     ]
-  }
+  };
 };

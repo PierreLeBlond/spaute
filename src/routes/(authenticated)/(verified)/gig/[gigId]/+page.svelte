@@ -12,6 +12,10 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
+  import List from '$lib/components/layout/List.svelte';
+  import ListItem from '$lib/components/layout/ListItem.svelte';
 
   export let data: PageData;
 
@@ -42,7 +46,7 @@
 </div>
 
 <div class="h-full w-full overflow-y-auto">
-  <div class="flex w-full p-2">
+  <div class="flex justify-center p-8">
     <div class="grid grid-cols-6 items-center justify-center text-sm">
       <p class="col-span-6 text-center">
         {data.gig.name}
@@ -149,22 +153,23 @@
       >
         copier le lien de la presta
       </div>
-      {#if !data.currentPresence}
-        <p class="col-span-5 col-start-2">Je ne sais pas si j'y participe.</p>
-      {:else if data.currentPresence.value}
-        <p class="col-span-5 col-start-2 text-orange-600">Je participe !</p>
-      {:else}
-        <p class="col-span-5 col-start-2 text-red-500">Je n'y participe pas.</p>
-      {/if}
       {#if data.gig.playable}
-        <p class="col-span-5 col-start-2 text-orange-600">C'est jouable !</p>
+        <p class="col-span-5 col-start-2">C'est jouable !</p>
       {:else}
         <p class="col-span-5 col-start-2 text-red-500">C'est pas encore jouable...</p>
       {/if}
     </div>
   </div>
 
-  <div class="flex w-full flex-col bg-neutral-200 p-2">
+  {#if data.gig.description}
+    <p class="p-4 text-center text-xs">
+      {data.gig.description}
+    </p>
+  {/if}
+
+  <Delimiter></Delimiter>
+
+  <FormLayout>
     {#if !data.currentPresence}
       <UpdatePresenceForm
         action="?/create"
@@ -180,61 +185,64 @@
         {form}
       />
     {/if}
-  </div>
+  </FormLayout>
 
-  <div class="p-2 text-sm">
-    <p>Description</p>
-    <p class="p-2">
-      {data.gig.description || '...'}
-    </p>
-  </div>
+  <Delimiter></Delimiter>
 
-  <div class="bg-neutral-200 p-2">
-    <p class="text-sm">Présences et configuration</p>
-    <ul class="p-2">
-      {#if data.gig.currentFormation}
-        {#each data.gig.currentFormation.formationVoices as formationVoice}
-          <p class="text-sm">{formationVoice.instrument.name}</p>
+  <p class="text-center px-16 py-8 text-sm font-bold">Présences et configurations</p>
+  <ul>
+    {#if data.gig.currentFormation}
+      {#each data.gig.currentFormation.formationVoices as formationVoice}
+        <li class="flex justify-center">
+          <p class="text-center px-16 py-2 text-sm">{formationVoice.instrument.name}</p>
           <div class="contents text-orange-600">
-            {#each formationVoice.formationVoicePresences as formationVoicePresence}
+            <List>
+              {#each formationVoice.formationVoicePresences as formationVoicePresence}
+                {@const membership =
+                  data.band?.memberships.find(
+                    (membership) => membership.player.id == formationVoicePresence.presence.player.id
+                  ) || null}
+                <PlayerView
+                  currentPresence={data.currentPresence}
+                  presence={formationVoicePresence.presence}
+                  currentMembership={data.currentMembership}
+                  {membership}
+                  gig={data.gig}
+                />
+              {/each}
+            </List>
+          </div>
+        </li>
+      {/each}
+      {#if data.gig.currentFormation.formationUndefinedVoicePresences.length > 0}
+        <p class="text-center px-16 py-2 text-sm">Sans instruments attribués</p>
+        <div class="contents text-orange-600">
+          <List>
+            {#each data.gig.currentFormation.formationUndefinedVoicePresences as formationUndefinedVoicePresence}
               {@const membership =
                 data.band?.memberships.find(
-                  (membership) => membership.player.id == formationVoicePresence.presence.player.id
+                  (membership) => membership.player.id == formationUndefinedVoicePresence.presence.player.id
                 ) || null}
               <PlayerView
                 currentPresence={data.currentPresence}
-                presence={formationVoicePresence.presence}
+                presence={formationUndefinedVoicePresence.presence}
                 currentMembership={data.currentMembership}
                 {membership}
                 gig={data.gig}
               />
             {/each}
-          </div>
-        {/each}
-        <p class="text-sm">Autres</p>
-        <div class="contents text-orange-600">
-          {#each data.gig.currentFormation.formationUndefinedVoicePresences as formationUndefinedVoicePresence}
-            {@const membership =
-              data.band?.memberships.find(
-                (membership) => membership.player.id == formationUndefinedVoicePresence.presence.player.id
-              ) || null}
-            <PlayerView
-              currentPresence={data.currentPresence}
-              presence={formationUndefinedVoicePresence.presence}
-              currentMembership={data.currentMembership}
-              {membership}
-              gig={data.gig}
-            />
-          {/each}
+          </List>
         </div>
-      {:else}
-        <p class="text-sm">Pas de configuration possible :(</p>
       {/if}
-    </ul>
+    {:else}
+      <p class="text-sm px-16 py-2 text-center font-bold">Pas de configuration possible :(</p>
+    {/if}
+  </ul>
 
-    <p class="text-sm">Absences</p>
-
-    <ul class="p-2">
+  {#if absentPresences.length > 0}
+    <Delimiter></Delimiter>
+    <p class="text-center px-16 py-8 text-sm font-bold">Absences</p>
+    <List>
       {#each absentPresences as presence}
         {@const membership =
           data.band?.memberships.find((membership) => membership.player.id == presence.player.id) || null}
@@ -248,41 +256,42 @@
           />
         </div>
       {/each}
-    </ul>
+    </List>
+  {/if}
 
-    {#if remainingMemberships.length > 0}
-      <p class="pb-2 text-sm">N'ont pas encore répondus</p>
-      {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
-        <Form
+  {#if remainingMemberships.length > 0}
+    <Delimiter></Delimiter>
+    <p class="px-16 py-8 text-center text-sm font-bold">N'ont pas encore répondus</p>
+    {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
+      <Form
+        form={spamForm}
+        action="?/spam"
+      >
+        <input
+          type="hidden"
+          name="userId"
+          value={data.currentPlayer.userId}
+        />
+        <input
+          type="hidden"
+          name="gigId"
+          value={data.gig.id}
+        />
+        <input
+          type="hidden"
+          name="gigName"
+          value={data.gig.name}
+        />
+        <Button
           form={spamForm}
-          action="?/spam"
-        >
-          <input
-            type="hidden"
-            name="userId"
-            value={data.currentPlayer.userId}
-          />
-          <input
-            type="hidden"
-            name="gigId"
-            value={data.gig.id}
-          />
-          <input
-            type="hidden"
-            name="gigName"
-            value={data.gig.name}
-          />
-          <Button
-            form={spamForm}
-            label={'Spaaaaaaaamer ces fanfarons !'}
-          />
-        </Form>
-      {/if}
-      <ul class="p-2">
-        {#each remainingMemberships as membership}
-          <PlayerItem player={membership.player} />
-        {/each}
-      </ul>
+          label={'Spaaaaaaaamer ces fanfarons !'}
+        />
+      </Form>
     {/if}
-  </div>
+    <List>
+      {#each remainingMemberships as membership}
+        <PlayerItem player={membership.player} />
+      {/each}
+    </List>
+  {/if}
 </div>

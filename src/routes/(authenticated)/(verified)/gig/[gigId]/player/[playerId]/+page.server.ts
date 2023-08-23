@@ -1,9 +1,10 @@
-import type { Actions, PageServerLoad } from './$types';
-import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
-import { z } from 'zod';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { router } from '$lib/trpc/router';
 import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
   gigId: z.string(),
@@ -14,9 +15,10 @@ export const load: PageServerLoad = async (event) => {
   const { gigId, playerId } = event.params;
   const caller = router.createCaller(await createContext(event));
 
-  const player = () => caller.players.read({
-    id: playerId
-  });
+  const player = () =>
+    caller.players.read({
+      id: playerId
+    });
   const presence = () => caller.presences.read({ gigId, playerId });
 
   const form = () => superValidate(schema);
@@ -26,8 +28,8 @@ export const load: PageServerLoad = async (event) => {
     player: player(),
     presence: presence(),
     index: 103
-  }
-}
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -41,13 +43,8 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Echec :(');
     }
   }
-}
-
+};

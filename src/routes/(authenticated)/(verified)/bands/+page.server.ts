@@ -1,6 +1,7 @@
-import { createContext } from "$lib/trpc/context";
-import { router } from "$lib/trpc/router";
-import type { PageServerLoad } from "./$types"
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
   const { currentPlayer } = await event.parent();
@@ -11,4 +12,4 @@ export const load: PageServerLoad = async (event) => {
     memberships: memberships(),
     index: 10
   };
-}
+};
