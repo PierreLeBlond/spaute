@@ -24,7 +24,7 @@ export const update = ownerProcedure.input(schema).mutation(async ({ input: { pl
     }
   });
 
-  await computePlayabilities(role.player.presences.map((presence) => presence.gig));
+computePlayabilities(role.player.presences.map((presence) => presence.gig));
 
   return role;
 });

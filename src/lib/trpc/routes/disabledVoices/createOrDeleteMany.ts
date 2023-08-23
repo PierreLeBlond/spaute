@@ -1,4 +1,4 @@
-import { computePlayability, gigIncludes } from '$lib/hook/computePlayability';
+import { computePlayabilities, gigIncludes } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma';
 import { organizerProcedure } from '$lib/trpc/procedures/organizerProcedure';
 import { z } from 'zod';
@@ -46,7 +46,7 @@ export const createOrDeleteMany = organizerProcedure.input(schema).mutation(asyn
   const disabledVoice = disabledVoices[disabledVoices.length - 1];
 
   if (disabledVoice) {
-    await computePlayability(disabledVoice.gig);
+    computePlayabilities([disabledVoice.gig]);
   }
 
   return disabledVoices;

@@ -15,7 +15,6 @@
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import Delimiter from '$lib/components/layout/Delimiter.svelte';
   import List from '$lib/components/layout/List.svelte';
-  import ListItem from '$lib/components/layout/ListItem.svelte';
 
   export let data: PageData;
 
@@ -189,11 +188,11 @@
 
   <Delimiter></Delimiter>
 
+  {#if data.gig.currentFormation && (data.gig.currentFormation.formationVoices.length > 0 || data.gig.currentFormation.formationUndefinedVoicePresences.length > 0)}
+
   <p class="text-center px-16 py-8 text-sm font-bold">Présences et configurations</p>
   <ul>
-    {#if data.gig.currentFormation}
       {#each data.gig.currentFormation.formationVoices as formationVoice}
-        <li class="flex justify-center">
           <p class="text-center px-16 py-2 text-sm">{formationVoice.instrument.name}</p>
           <div class="contents text-orange-600">
             <List>
@@ -212,7 +211,6 @@
               {/each}
             </List>
           </div>
-        </li>
       {/each}
       {#if data.gig.currentFormation.formationUndefinedVoicePresences.length > 0}
         <p class="text-center px-16 py-2 text-sm">Sans instruments attribués</p>
@@ -234,10 +232,10 @@
           </List>
         </div>
       {/if}
-    {:else}
-      <p class="text-sm px-16 py-2 text-center font-bold">Pas de configuration possible :(</p>
-    {/if}
   </ul>
+    {:else}
+      <p class="text-sm px-16 py-8 text-center font-bold">Pas de configuration possible :(</p>
+  {/if}
 
   {#if absentPresences.length > 0}
     <Delimiter></Delimiter>

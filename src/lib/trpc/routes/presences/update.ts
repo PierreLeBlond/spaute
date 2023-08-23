@@ -1,5 +1,5 @@
 import { PresenceSchema } from '$lib/generated/zod';
-import { computePlayability, gigIncludes } from '$lib/hook/computePlayability';
+import { computePlayabilities, gigIncludes } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma';
 import { ownerProcedure } from '$lib/trpc/procedures/ownerProcedure';
 
@@ -19,7 +19,7 @@ export const update = ownerProcedure.input(schema).mutation(async ({ input: { pl
     }
   });
 
-  await computePlayability(presence.gig);
+computePlayabilities([presence.gig]);
 
   return presence;
 });

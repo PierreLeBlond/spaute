@@ -22,7 +22,7 @@ export const del = ownerProcedure.input(schema).mutation(async ({ input }) => {
     }
   });
 
-  await computePlayabilities(presences.map((presence) => presence.gig));
+computePlayabilities(presences.map((presence) => presence.gig));
 
   return role;
 });

@@ -36,7 +36,7 @@ export const create = ownerProcedure.input(schema).mutation(({ input: { playerId
       }
     })
     .then(async (role) => {
-      await computePlayabilities(role.player.presences.map((presence) => presence.gig));
+      computePlayabilities(role.player.presences.map((presence) => presence.gig));
       return role;
     })
     .catch((error) => {

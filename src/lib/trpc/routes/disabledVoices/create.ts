@@ -1,5 +1,5 @@
 import { DisabledVoiceSchema } from '$lib/generated/zod';
-import { computePlayability, gigIncludes } from '$lib/hook/computePlayability';
+import { computePlayabilities, gigIncludes } from '$lib/hook/computePlayability';
 import prisma from '$lib/prisma';
 import { organizerProcedure } from '$lib/trpc/procedures/organizerProcedure';
 
@@ -24,7 +24,7 @@ export const create = organizerProcedure.input(schema).mutation(async ({ input }
     }
   });
 
-  await computePlayability(disabledVoice.gig);
+computePlayabilities([disabledVoice.gig]);
 
   return disabledVoice;
 });

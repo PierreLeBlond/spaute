@@ -1,5 +1,6 @@
 import prisma from '$lib/prisma';
 import type { Band, BandVoice, DisabledVoice, Gig, GigVoice, Player, Presence, Role } from '@prisma/client';
+import throttle from 'lodash.throttle';
 
 export const gigIncludes = {
   include: {
@@ -232,6 +233,17 @@ export const computePlayability = async (gig: GigPayload) => {
   );
 };
 
-export const computePlayabilities = async (gigs: GigPayload[]) => {
-  await Promise.all(gigs.map((gig) => computePlayability(gig)));
+let agregatedGigs: GigPayload[] = [];
+
+const throttledComputePlayability = throttle(() => {
+  console.log(agregatedGigs);
+  agregatedGigs.map(gig => computePlayability(gig));
+  agregatedGigs = [];
+}, 1000);
+
+export const computePlayabilities = (gigs: GigPayload[]) => {
+  agregatedGigs = agregatedGigs.filter(agregatedGig => gigs.every(gig => gig.id !== agregatedGig.id));
+  agregatedGigs = [...agregatedGigs, ...gigs];
+
+  throttledComputePlayability();
 };

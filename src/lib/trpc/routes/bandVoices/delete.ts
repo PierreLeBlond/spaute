@@ -32,7 +32,7 @@ export const del = adminProcedure.input(schema).mutation(async ({ input }) => {
     }
   });
 
-  await computePlayabilities(band.gigs);
+  computePlayabilities(band.gigs);
 
   return bandVoice;
 });

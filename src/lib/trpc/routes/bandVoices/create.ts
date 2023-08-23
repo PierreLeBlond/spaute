@@ -28,7 +28,7 @@ export const create = adminProcedure.input(schema).mutation(async ({ input }) =>
     }
   });
 
-  await computePlayabilities(bandVoice.band.gigs);
+  computePlayabilities(bandVoice.band.gigs);
 
   return bandVoice;
 });
