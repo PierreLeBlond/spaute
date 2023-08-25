@@ -9,6 +9,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import FormLayout from '$lib/components/layout/FormLayout.svelte';
 
   export let data: PageData;
 
@@ -19,13 +21,13 @@
   const deleteForm = superForm(data.deleteForm);
 </script>
 
-<div class="py-8 px-16">
-  <RightLink href="/role">Ajouter un pupitre</RightLink>
-</div>
+<p class="px-16 pt-8 text-center text-xs">
+  <b>Pupitres</b>
+</p>
 
 <List>
   {#if data.roles.length == 0}
-    <p class="text-xs px-16 pt-8 text-center">Alley, tu dois bien savoir jouer d'un truc non ?</p>
+    <p class="px-16 pt-8 text-center text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
   {:else}
     {#each data.roles as role, index}
       <ListItem>
@@ -75,22 +77,26 @@
   {/if}
 </List>
 
-<div class="py-8 px-16 bg-neutral-200">
+<FormLayout>
   <Form
     form={updateForm}
     action="?/update"
   >
-    <input
-      type="hidden"
-      value={data.currentPlayer.id}
-      name="playerId"
-    />
-    <div class="col-span-6">
+    <InputsLayout>
+      <input
+        type="hidden"
+        value={data.currentPlayer.id}
+        name="playerId"
+      />
       <Button
         form={updateForm}
         label={'Mettre à jour'}
         disabledWhenNotTainted
       />
-    </div>
+    </InputsLayout>
   </Form>
+</FormLayout>
+
+<div class="px-16 pb-8">
+  <RightLink href="/role">Ajouter un pupitre</RightLink>
 </div>

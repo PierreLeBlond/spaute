@@ -1,5 +1,5 @@
-<div class="flex w-full grow overflow-y-hidden bg-neutral-200 p-2">
-  <ul class="w-full overflow-y-auto rounded p-2">
+<div class="flex w-full grow overflow-y-hidden p-4">
+  <ul class="w-full overflow-y-auto rounded p-4">
     <slot />
   </ul>
 </div>

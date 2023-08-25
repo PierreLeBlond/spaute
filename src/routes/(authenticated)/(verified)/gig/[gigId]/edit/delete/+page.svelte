@@ -3,12 +3,12 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -20,9 +20,10 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href="/gig/{data['gig'].id}/edit" />
-</div>
+<NavBar
+  returnHref="/gig/{data['gig'].id}/edit"
+  label={data.gig.name}
+/>
 
 <p class="px-16 pt-8 text-center text-xs">
   Pour <b>supprimer la presta</b>, recopie son <b>titre</b> !

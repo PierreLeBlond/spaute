@@ -6,12 +6,12 @@
   import Text from '$lib/components/forms/Text.svelte';
   import TextArea from '$lib/components/forms/TextArea.svelte';
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -31,9 +31,7 @@
   ];
 </script>
 
-<div class="flex">
-  <ReturnLink href="/gigs" />
-</div>
+<NavBar returnHref="/gigs" />
 
 <FormLayout>
   <Form {form}>

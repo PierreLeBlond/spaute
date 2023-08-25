@@ -13,7 +13,6 @@ export const load: LayoutServerLoad = async (event) => {
 
   return {
     band,
-    currentMembership: currentMembership(),
-    title: band.name
+    currentMembership: currentMembership()
   };
 };

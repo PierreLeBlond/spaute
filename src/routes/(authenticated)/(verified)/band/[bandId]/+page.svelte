@@ -5,25 +5,24 @@
   import PlayerLinkItem from '$lib/components/gigs/gig/PlayerLinkItem.svelte';
   import PlayerSelfItem from '$lib/components/gigs/gig/PlayerSelfItem.svelte';
   import List from '$lib/components/layout/List.svelte';
-  import EditLink from '$lib/components/links/EditLink.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form);
 </script>
 
-<div class="flex justify-between">
-  <ReturnLink href="/bands" />
-  {#if data.currentMembership?.isAdmin}
-    <EditLink href="/band/{data.band.id}/edit" />
-  {/if}
-</div>
+<NavBar
+  returnHref="/bands"
+  label={data.band.name}
+  editHref={data.currentMembership?.isAdmin ? `/band/${data.band.id}/edit` : null}
+></NavBar>
 
 {#if !data.currentMembership}
   <FormLayout>
@@ -48,9 +47,13 @@
   </FormLayout>
 {/if}
 
+<p class="px-16 pt-8 text-center text-xs">
+  <b>Fanfaronxs</b>
+</p>
+
 <List>
   {#if data.band.memberships.length == 0}
-    <p class="text-xs">Youhou ? Y'a quelqu'un ?</p>
+    <Rest></Rest>
   {:else}
     {#each data.band.memberships as membership}
       <div

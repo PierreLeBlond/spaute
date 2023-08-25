@@ -5,8 +5,6 @@
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
   import PlayerView from '$lib/components/gigs/gig/PlayerView.svelte';
   import UpdatePresenceForm from '$lib/components/gigs/presence/UpdatePresenceForm.svelte';
-  import EditLink from '$lib/components/links/EditLink.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
   import { DateTime } from 'luxon';
   import { superForm } from 'sveltekit-superforms/client';
@@ -15,6 +13,9 @@
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import Delimiter from '$lib/components/layout/Delimiter.svelte';
   import List from '$lib/components/layout/List.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
+  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -37,19 +38,15 @@
   };
 </script>
 
-<div class="flex justify-between">
-  <ReturnLink href="/gigs" />
-  {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
-    <EditLink href="/gig/{data.gig.id}/edit" />
-  {/if}
-</div>
+<NavBar
+  returnHref="/gigs"
+  label={data.gig.name}
+  editHref={data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer ? `/gig/${data.gig.id}/edit` : null}
+></NavBar>
 
 <div class="h-full w-full overflow-y-auto">
   <div class="flex justify-center p-8">
     <div class="grid grid-cols-6 items-center justify-center text-sm">
-      <p class="col-span-6 text-center">
-        {data.gig.name}
-      </p>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -189,31 +186,33 @@
   <Delimiter></Delimiter>
 
   {#if data.gig.currentFormation && (data.gig.currentFormation.formationVoices.length > 0 || data.gig.currentFormation.formationUndefinedVoicePresences.length > 0)}
-
-  <p class="text-center px-16 py-8 text-sm font-bold">Présences et configurations</p>
-  <ul>
+    <p class="px-16 py-8 text-center text-sm font-bold">Présences et configurations</p>
+    <ul>
       {#each data.gig.currentFormation.formationVoices as formationVoice}
-          <p class="text-center px-16 py-2 text-sm">{formationVoice.instrument.name}</p>
-          <div class="contents text-orange-600">
-            <List>
-              {#each formationVoice.formationVoicePresences as formationVoicePresence}
-                {@const membership =
-                  data.band?.memberships.find(
-                    (membership) => membership.player.id == formationVoicePresence.presence.player.id
-                  ) || null}
-                <PlayerView
-                  currentPresence={data.currentPresence}
-                  presence={formationVoicePresence.presence}
-                  currentMembership={data.currentMembership}
-                  {membership}
-                  gig={data.gig}
-                />
-              {/each}
-            </List>
-          </div>
+        <p class="px-16 py-2 text-center text-sm">{formationVoice.instrument.name}</p>
+        <div class="contents text-orange-600">
+          <List>
+            {#if formationVoice.formationVoicePresences.length == 0}
+              <Rest></Rest>
+            {/if}
+            {#each formationVoice.formationVoicePresences as formationVoicePresence}
+              {@const membership =
+                data.band?.memberships.find(
+                  (membership) => membership.player.id == formationVoicePresence.presence.player.id
+                ) || null}
+              <PlayerView
+                currentPresence={data.currentPresence}
+                presence={formationVoicePresence.presence}
+                currentMembership={data.currentMembership}
+                {membership}
+                gig={data.gig}
+              />
+            {/each}
+          </List>
+        </div>
       {/each}
       {#if data.gig.currentFormation.formationUndefinedVoicePresences.length > 0}
-        <p class="text-center px-16 py-2 text-sm">Sans instruments attribués</p>
+        <p class="px-16 py-2 text-center text-sm">Sans instruments attribués</p>
         <div class="contents text-orange-600">
           <List>
             {#each data.gig.currentFormation.formationUndefinedVoicePresences as formationUndefinedVoicePresence}
@@ -232,14 +231,14 @@
           </List>
         </div>
       {/if}
-  </ul>
-    {:else}
-      <p class="text-sm px-16 py-8 text-center font-bold">Pas de configuration possible :(</p>
+    </ul>
+  {:else}
+    <p class="px-16 py-8 text-center text-sm font-bold">Pas de configuration possible :(</p>
   {/if}
 
   {#if absentPresences.length > 0}
     <Delimiter></Delimiter>
-    <p class="text-center px-16 py-8 text-sm font-bold">Absences</p>
+    <p class="px-16 pt-8 text-center text-sm font-bold">Absences</p>
     <List>
       {#each absentPresences as presence}
         {@const membership =
@@ -260,36 +259,40 @@
   {#if remainingMemberships.length > 0}
     <Delimiter></Delimiter>
     <p class="px-16 py-8 text-center text-sm font-bold">N'ont pas encore répondus</p>
-    {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
-      <Form
-        form={spamForm}
-        action="?/spam"
-      >
-        <input
-          type="hidden"
-          name="userId"
-          value={data.currentPlayer.userId}
-        />
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <input
-          type="hidden"
-          name="gigName"
-          value={data.gig.name}
-        />
-        <Button
-          form={spamForm}
-          label={'Spaaaaaaaamer ces fanfarons !'}
-        />
-      </Form>
-    {/if}
     <List>
       {#each remainingMemberships as membership}
         <PlayerItem player={membership.player} />
       {/each}
     </List>
+    {#if data.currentMembership?.isAdmin || data.currentPresence?.isOrganizer}
+      <FormLayout>
+        <Form
+          form={spamForm}
+          action="?/spam"
+        >
+          <InputsLayout>
+            <input
+              type="hidden"
+              name="userId"
+              value={data.currentPlayer.userId}
+            />
+            <input
+              type="hidden"
+              name="gigId"
+              value={data.gig.id}
+            />
+            <input
+              type="hidden"
+              name="gigName"
+              value={data.gig.name}
+            />
+            <Button
+              form={spamForm}
+              label={'Spaaaaaaaamer ces fanfaronxs !'}
+            />
+          </InputsLayout>
+        </Form>
+      </FormLayout>
+    {/if}
   {/if}
 </div>

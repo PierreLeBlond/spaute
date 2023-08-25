@@ -15,8 +15,7 @@ export const load: PageServerLoad = async () => {
 
   return {
     form,
-    index: 11,
-    title: 'Créer une fanfare'
+    index: 11
   };
 };
 

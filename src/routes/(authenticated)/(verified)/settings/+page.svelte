@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Button from '$lib/components/forms/Button.svelte';
   import Text from '$lib/components/forms/Text.svelte';
@@ -8,6 +7,7 @@
   import Link from '$lib/components/links/Link.svelte';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -16,9 +16,7 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href={'/gigs'} />
-</div>
+<NavBar returnHref="/gigs" />
 
 <FormLayout>
   <Form {form}>
@@ -43,6 +41,6 @@
   </Form>
 </FormLayout>
 
-<div class="mx-8 flex flex-col justify-center p-8 border-t-2">
+<div class="mx-8 flex flex-col justify-center border-t-2 p-8">
   <Link href="/settings/password-change">{data.user.hasPassword ? 'Changer de' : 'Créer un'} mot de passe</Link>
 </div>

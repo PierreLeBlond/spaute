@@ -12,7 +12,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
         key: '/notifications',
         label: 'notifications'
       }
-    ],
-    title: 'Cloche ! cloche ! cloche !'
+    ]
   };
 };

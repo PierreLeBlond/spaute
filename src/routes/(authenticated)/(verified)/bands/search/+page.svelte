@@ -2,7 +2,8 @@
   import SearchBar from '$lib/components/forms/SearchBar.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
   import { trpc } from '$lib/trpc/client';
   import type { Band } from '@prisma/client';
   import throttle from 'lodash.throttle';
@@ -15,9 +16,7 @@
   };
 </script>
 
-<div class="flex">
-  <ReturnLink href="/bands" />
-</div>
+<NavBar returnHref="/bands" />
 
 <div class="p-8">
   <SearchBar
@@ -26,6 +25,9 @@
   />
 </div>
 <List>
+  {#if bands.length == 0}
+    <Rest></Rest>
+  {/if}
   {#each bands as band}
     <ListLinkItem>
       <div class="flex w-full items-center justify-between">

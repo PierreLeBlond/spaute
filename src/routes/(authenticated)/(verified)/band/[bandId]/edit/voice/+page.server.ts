@@ -20,8 +20,7 @@ export const load: PageServerLoad = async (event) => {
   return {
     form: form(),
     instruments: instruments(),
-    index: 16,
-    title: 'Ajouter un pupitre'
+    index: 16
   };
 };
 

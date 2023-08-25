@@ -3,7 +3,6 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Password from '$lib/components/forms/Password.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import Link from '$lib/components/links/Link.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
@@ -49,7 +48,7 @@
         {form}
       />
       <a
-        class="w-full text-start text-sm text-cyan-600 pt-2"
+        class="w-full pt-2 text-start text-sm text-cyan-600"
         href="/users/password-reset">Mot de passe oublié ?</a
       >
     </InputsLayout>

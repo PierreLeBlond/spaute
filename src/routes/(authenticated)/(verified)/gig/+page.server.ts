@@ -20,8 +20,7 @@ export const load: PageServerLoad = async (event) => {
   return {
     form: form(),
     memberships: memberships(),
-    index: 101,
-    title: 'Ajouter une presta'
+    index: 101
   };
 };
 

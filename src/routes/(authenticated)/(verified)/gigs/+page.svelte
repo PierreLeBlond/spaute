@@ -14,9 +14,9 @@
   );
 </script>
 
-<div class="py-8 px-16">
-  <RightLink href="/gig">Ajouter une presta</RightLink>
-</div>
+<p class="px-16 pt-8 text-center text-xs">
+  <b>Prestas</b>
+</p>
 
 <List>
   {#if data.gigs.length == 0}
@@ -100,3 +100,7 @@
     {/each}
   {/if}
 </List>
+
+<div class="px-16 py-8">
+  <RightLink href="/gig">Ajouter une presta</RightLink>
+</div>

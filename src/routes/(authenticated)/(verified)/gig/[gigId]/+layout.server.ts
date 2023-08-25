@@ -23,7 +23,6 @@ export const load: LayoutServerLoad = async (event) => {
     currentMembership: currentMembership(),
     gig,
     gigVoices: gigVoices(),
-    currentPresence: currentPresence(),
-    title: gig.name
+    currentPresence: currentPresence()
   };
 };

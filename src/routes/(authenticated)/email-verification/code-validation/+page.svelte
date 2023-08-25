@@ -2,12 +2,11 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-
   import type { PageData } from './$types';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -16,9 +15,7 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href="/email-verification" />
-</div>
+<NavBar returnHref="/email-verification" />
 
 <FormLayout>
   <Form {form}>

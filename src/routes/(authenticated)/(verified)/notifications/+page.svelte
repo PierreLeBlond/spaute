@@ -2,7 +2,6 @@
   import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { HeadlessService } from '@novu/headless';
   import type { FetchResult, UpdateResult } from '@novu/headless/dist/lib/types';
   import type { ISession } from '@novu/headless/dist/utils/types';
@@ -10,6 +9,7 @@
   import { Firework } from 'svelte-loading-spinners';
 
   import type { PageData } from './$types';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -62,9 +62,7 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href={'/gigs'} />
-</div>
+<NavBar returnHref={'/gigs'} />
 
 <List>
   {#if loading}

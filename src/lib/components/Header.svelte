@@ -46,7 +46,7 @@
       />
     </g>
   </svg>
-  <div class="z-10 grid h-full w-full auto-rows-fr grid-cols-5 sm:w-96">
+  <div class="z-10 grid h-full w-full grid-cols-5 sm:w-96">
     <div class="relative col-span-1 flex flex-col items-center justify-evenly truncate py-2">
       {#if $page.data['currentPlayer']}
         <a
@@ -100,11 +100,6 @@
         </div>
         <p class="text-xs">logout</p>
       {/if}
-    </div>
-    <div class="relative col-span-5 row-start-2 flex flex-col items-start justify-start overflow-y-auto pl-8">
-      <h1 class="text-xl">
-        {$page.data['title'] ?? ''}
-      </h1>
     </div>
     <Toaster />
   </div>

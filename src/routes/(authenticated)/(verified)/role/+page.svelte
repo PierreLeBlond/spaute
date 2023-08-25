@@ -3,12 +3,11 @@
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-
   import type { PageData } from './$types';
   import FormLayout from '$lib/components/layout/FormLayout.svelte';
   import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import NavBar from '$lib/components/layout/NavBar.svelte';
 
   export let data: PageData;
 
@@ -20,7 +19,7 @@
   }));
 </script>
 
-<ReturnLink href="/roles" />
+<NavBar returnHref="/roles" />
 
 <FormLayout>
   <Form {form}>

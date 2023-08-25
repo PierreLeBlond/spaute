@@ -30,8 +30,7 @@ export const load = (async ({ parent }) => {
         key: '/settings',
         label: 'configuration'
       }
-    ],
-    title: 'Configuration'
+    ]
   };
 }) satisfies PageServerLoad;
 

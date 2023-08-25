@@ -23,7 +23,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
         key: '/users/signup',
         label: 'inscription'
       }
-    ],
-    title: 'Spaute'
+    ]
   };
 };

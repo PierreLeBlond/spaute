@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        DEFAULT: '-4px 4px'
+        DEFAULT: '-4px 4px',
+        inner: 'inset -4px 4px'
       }
     }
   },
