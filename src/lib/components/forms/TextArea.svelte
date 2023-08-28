@@ -14,7 +14,7 @@
   const { value, errors, constraints } = formFieldProxy(form as SuperForm<ZodValidation<T>, unknown>, field);
 </script>
 
-<div class="w-full flex h-full flex-col">
+<div class="flex h-full w-full flex-col">
   <div class="flex justify-between text-xs">
     <label
       for="{field}-input"
@@ -27,7 +27,7 @@
   <textarea
     id="{field}-input"
     name={field}
-    class="grow rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
+    class="w-56 grow rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
     class:border={$errors}
     bind:value={$value}
     {...$constraints}

@@ -12,6 +12,9 @@ export const load: PageServerLoad = async ({ cookies }) => {
         key: '/notifications',
         label: 'notifications'
       }
-    ]
+    ],
+    nav: {
+      return: '/'
+    }
   };
 };

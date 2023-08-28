@@ -4,8 +4,9 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './code-validation/$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
@@ -14,9 +15,9 @@
   });
 </script>
 
-<p class="px-16 pt-8 text-center text-xs">
+<Info>
   Spaute a besoin de vérifier ton <b>email</b> en t'envoyant un <b>code de validation</b> !
-</p>
+</Info>
 
 <FormLayout>
   <Form {form}>

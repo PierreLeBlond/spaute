@@ -40,7 +40,10 @@ export const load: PageServerLoad = async () => {
         label: 'mdp oublié'
       }
     ],
-    index: 100000
+    index: 100000,
+    nav: {
+      return: 'users/login'
+    }
   };
 };
 

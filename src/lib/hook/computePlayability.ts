@@ -236,13 +236,12 @@ export const computePlayability = async (gig: GigPayload) => {
 let agregatedGigs: GigPayload[] = [];
 
 const throttledComputePlayability = throttle(() => {
-  console.log(agregatedGigs);
-  agregatedGigs.map(gig => computePlayability(gig));
+  agregatedGigs.map((gig) => computePlayability(gig));
   agregatedGigs = [];
 }, 1000);
 
 export const computePlayabilities = (gigs: GigPayload[]) => {
-  agregatedGigs = agregatedGigs.filter(agregatedGig => gigs.every(gig => gig.id !== agregatedGig.id));
+  agregatedGigs = agregatedGigs.filter((agregatedGig) => gigs.every((gig) => gig.id !== agregatedGig.id));
   agregatedGigs = [...agregatedGigs, ...gigs];
 
   throttledComputePlayability();

@@ -5,9 +5,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
 
   export let data: PageData;
 
@@ -18,11 +17,6 @@
     label: instrument.name
   }));
 </script>
-
-<NavBar
-  returnHref="/band/{data.band.id}/edit"
-  label={data.band.name}
-/>
 
 <FormLayout>
   <Form {form}>

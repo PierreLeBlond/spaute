@@ -4,9 +4,9 @@
   import Select from '$lib/components/forms/Select.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
 
   export let data: PageData;
 
@@ -17,12 +17,7 @@
   }));
 </script>
 
-<NavBar
-  returnHref="/gig/{data.gig.id}/edit"
-  label={data.gig.name}
-/>
-
-<h2 class="px-16 py-8 text-center text-xs font-bold">Ajouter un pupitre</h2>
+<Title>Ajouter un pupitre</Title>
 
 <FormLayout>
   <Form {form}>

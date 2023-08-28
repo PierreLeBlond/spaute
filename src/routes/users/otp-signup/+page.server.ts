@@ -42,7 +42,10 @@ export const load: PageServerLoad = async () => {
         label: 'otp'
       }
     ],
-    index: 1000000
+    index: 1000000,
+    nav: {
+      return: '/users/login'
+    }
   };
 };
 

@@ -57,7 +57,10 @@ export const load: PageServerLoad = async ({ url }) => {
         label: 'validation'
       }
     ],
-    index: 1000001
+    index: 1000001,
+    nav: {
+      return: '/users/otp-signup'
+    }
   };
 };
 

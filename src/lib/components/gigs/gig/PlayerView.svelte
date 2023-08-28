@@ -3,7 +3,6 @@
 
   import PlayerItem from './PlayerItem.svelte';
   import PlayerLinkItem from './PlayerLinkItem.svelte';
-  import PlayerSelfItem from './PlayerSelfItem.svelte';
 
   export let currentPresence: Presence | null;
   export let presence: Presence & { player: Player };
@@ -15,10 +14,11 @@
 </script>
 
 {#if currentPresence?.playerId == presence.player.id}
-  <PlayerSelfItem
+  <PlayerItem
     player={presence.player}
     isAdmin={membership?.isAdmin}
     isOrganizer={presence.isOrganizer}
+    type="self"
   />
 {:else if currentMembership?.isAdmin || currentPresence?.isOrganizer}
   <PlayerLinkItem

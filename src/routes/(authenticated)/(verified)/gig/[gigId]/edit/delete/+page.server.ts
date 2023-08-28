@@ -9,11 +9,18 @@ import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({ gigId: z.string(), name: z.string(), nameCopy: z.string() });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
   const form = () => superValidate(schema);
+
+  const { gig } = await event.parent();
+
   return {
     form: form(),
-    index: 106
+    index: 106,
+    nav: {
+      return: `/gig/${gig.id}/edit`,
+      label: gig.name
+    }
   };
 };
 

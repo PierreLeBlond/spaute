@@ -2,13 +2,13 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
   import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
@@ -20,21 +20,16 @@
   });
 </script>
 
-<NavBar
-  returnHref="/gig/{data['gig'].id}/edit"
-  label={data.gig.name}
-/>
-
-<p class="px-16 pt-8 text-center text-xs">
+<Info>
   Pour <b>supprimer la presta</b>, recopie son <b>titre</b> !
-</p>
+</Info>
 
 <FormLayout>
   <Form {form}>
     <InputsLayout>
       <input
         type="hidden"
-        name="bandId"
+        name="gigId"
         value={data.gig.id}
       />
       <input

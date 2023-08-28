@@ -1,11 +1,14 @@
 <script lang="ts">
   import List from '$lib/components/layout/List.svelte';
-  import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
+  import ListItem from '$lib/components/layout/ListItem.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
   import type { Gig, Presence } from '@prisma/client';
   import { DateTime } from 'luxon';
 
   import type { PageData } from './$types';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
 
   export let data: PageData;
 
@@ -14,20 +17,22 @@
   );
 </script>
 
-<p class="px-16 pt-8 text-center text-xs">
-  <b>Prestas</b>
-</p>
+<RightLink href="/gig">Ajouter une presta</RightLink>
+
+<Delimiter></Delimiter>
+
+<Title>Mes prestas</Title>
 
 <List>
   {#if data.gigs.length == 0}
-    <p class="text-xs">Pas de prestas à l'horizon. On se fait chier...</p>
+    <Rest></Rest>
   {:else}
     {#each data.gigs as gig}
       {@const presence = presences.get(gig)}
-      <ListLinkItem>
+      <ListItem type="link">
         <a
           href="./gig/{gig.id}"
-          class="block w-full rounded p-2 text-sm"
+          class="block w-full rounded text-sm"
         >
           <div class="grid grid-cols-6 items-center justify-center text-sm">
             <p class="col-span-6 text-center">
@@ -96,11 +101,7 @@
             {/if}
           </div>
         </a>
-      </ListLinkItem>
+      </ListItem>
     {/each}
   {/if}
 </List>
-
-<div class="px-16 py-8">
-  <RightLink href="/gig">Ajouter une presta</RightLink>
-</div>

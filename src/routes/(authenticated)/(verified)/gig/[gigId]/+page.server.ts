@@ -39,7 +39,7 @@ const joinSchema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
-  const { currentPresence } = await event.parent();
+  const { gig, currentMembership, currentPresence } = await event.parent();
 
   const spamForm = () => superValidate(spamSchema, { id: 'spamForm' });
 
@@ -58,7 +58,12 @@ export const load: PageServerLoad = async (event) => {
     form: form(),
     spamForm: spamForm(),
     joinForm: joinForm(),
-    index: 102
+    index: 102,
+    nav: {
+      return: `/gigs`,
+      label: gig.name,
+      edit: currentMembership?.isAdmin || currentPresence?.isOrganizer ? `/gig/${gig.id}/edit` : null
+    }
   };
 };
 

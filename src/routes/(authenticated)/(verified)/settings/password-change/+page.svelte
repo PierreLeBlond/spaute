@@ -3,9 +3,9 @@
   import Form from '$lib/components/forms/Form.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
@@ -14,13 +14,11 @@
   });
 </script>
 
-<NavBar returnHref="/settings" />
-
-<p class="px-16 text-center text-xs">
+<Info>
   Pour te créer un nouveau <b>mot de passe</b>, nous avons besoin vérifier ton identité en t'envoyant par <b>email</b>
   un
   <b>code de validation</b> !
-</p>
+</Info>
 
 <FormLayout>
   <Form {form}>

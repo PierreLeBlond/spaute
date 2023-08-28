@@ -5,9 +5,9 @@
   import type { PageData } from './$types';
   import { superForm } from 'sveltekit-superforms/client';
   import Link from '$lib/components/links/Link.svelte';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
 
   export let data: PageData;
 
@@ -15,8 +15,6 @@
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
 </script>
-
-<NavBar returnHref="/gigs" />
 
 <FormLayout>
   <Form {form}>
@@ -41,6 +39,6 @@
   </Form>
 </FormLayout>
 
-<div class="mx-8 flex flex-col justify-center border-t-2 p-8">
-  <Link href="/settings/password-change">{data.user.hasPassword ? 'Changer de' : 'Créer un'} mot de passe</Link>
-</div>
+<Delimiter></Delimiter>
+
+<Link href="/settings/password-change">{data.user.hasPassword ? 'Changer de' : 'Créer un'} mot de passe</Link>

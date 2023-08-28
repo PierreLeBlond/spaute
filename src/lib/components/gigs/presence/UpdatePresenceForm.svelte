@@ -7,6 +7,7 @@
   import Checkbox from '../../forms/Checkbox.svelte';
   import Form from '../../forms/Form.svelte';
   import type { PresenceSchema } from './presenceSchema';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
 
   export let gig: Gig;
   export let player: Player;
@@ -19,7 +20,7 @@
   {form}
   {action}
 >
-  <div class="grid w-full grid-cols-1 gap-y-2">
+  <InputsLayout>
     <input
       type="hidden"
       name="gigId"
@@ -40,5 +41,5 @@
       {form}
       label="Mettre à jour"
     />
-  </div>
+  </InputsLayout>
 </Form>

@@ -4,23 +4,17 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form);
 </script>
 
-<NavBar
-  returnHref={`/band/${data.band.id}`}
-  label={data.band.name}
-></NavBar>
-
-<p class="px-16 pt-8 text-center text-xs">
-  <b>{data.player.name}</b>
-</p>
+<Title>{data.player.name}</Title>
 
 {#if !data.membership?.isAdmin}
   <FormLayout>
@@ -44,7 +38,7 @@
     </Form>
   </FormLayout>
 {:else}
-  <p class="px-16 pt-8 text-center text-xs">
+  <Info>
     Déjà <b>admin</b>
-  </p>
+  </Info>
 {/if}

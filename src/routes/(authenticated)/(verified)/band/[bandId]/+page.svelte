@@ -3,28 +3,24 @@
   import Form from '$lib/components/forms/Form.svelte';
   import PlayerItem from '$lib/components/gigs/gig/PlayerItem.svelte';
   import PlayerLinkItem from '$lib/components/gigs/gig/PlayerLinkItem.svelte';
-  import PlayerSelfItem from '$lib/components/gigs/gig/PlayerSelfItem.svelte';
   import List from '$lib/components/layout/List.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
   import Rest from '$lib/components/logos/Rest.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form);
 </script>
 
-<NavBar
-  returnHref="/bands"
-  label={data.band.name}
-  editHref={data.currentMembership?.isAdmin ? `/band/${data.band.id}/edit` : null}
-></NavBar>
-
 {#if !data.currentMembership}
+  <Info>Rejoindre la fanfare <b>{data.band.name}</b> ?</Info>
   <FormLayout>
     <Form {form}>
       <InputsLayout>
@@ -45,25 +41,21 @@
       </InputsLayout>
     </Form>
   </FormLayout>
+  <Delimiter></Delimiter>
 {/if}
 
-<p class="px-16 pt-8 text-center text-xs">
-  <b>Fanfaronxs</b>
-</p>
+<Title>Fanfaronxs</Title>
 
 <List>
   {#if data.band.memberships.length == 0}
     <Rest></Rest>
   {:else}
     {#each data.band.memberships as membership}
-      <div
-        class="contents"
-        class:!shadow-orange-300={data.currentMembership?.player.id == membership.player.id}
-      />
       {#if data.currentMembership?.player.id == membership.player.id}
-        <PlayerSelfItem
+        <PlayerItem
           player={membership.player}
           isAdmin={membership.isAdmin}
+          type="self"
         />
       {:else if data.currentMembership?.isAdmin}
         <PlayerLinkItem

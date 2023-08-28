@@ -40,7 +40,10 @@ export const load: PageServerLoad = async () => {
         label: 'nouveau mdp'
       }
     ],
-    index: 0.2
+    index: 0.2,
+    nav: {
+      return: '/settings'
+    }
   };
 };
 

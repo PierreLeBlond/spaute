@@ -17,10 +17,16 @@ export const load: PageServerLoad = async (event) => {
 
   const form = () => superValidate(schema);
 
+  const { gig } = await event.parent();
+
   return {
     form: form(),
     instruments: instruments(),
-    index: 105
+    index: 105,
+    nav: {
+      return: `/gig/${gig.id}/edit`,
+      label: gig.name
+    }
   };
 };
 

@@ -26,7 +26,10 @@ export const load: PageServerLoad = async ({ url }) => {
         key: 'users/password-reset/code-validation',
         label: 'mise à jour'
       }
-    ]
+    ],
+    nav: {
+      return: `users/password-reset/code-validation?email=${email}`
+    }
   };
 };
 

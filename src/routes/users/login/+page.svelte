@@ -6,8 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
 
   export let data: PageData;
@@ -17,7 +17,7 @@
   });
 </script>
 
-<div class="flex flex-col justify-center px-16 py-8">
+<div class="flex w-full flex-col items-center justify-center px-16 py-8">
   <p class="pb-2 text-center text-xs">Connexion avec <b>mot de passe</b> à <b>usage unique</b></p>
   <RightLink href="/users/otp-signup">Se connecter</RightLink>
 </div>

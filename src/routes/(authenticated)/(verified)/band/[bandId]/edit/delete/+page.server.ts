@@ -9,11 +9,16 @@ import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({ bandId: z.string(), name: z.string(), nameCopy: z.string() });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ parent }) => {
   const form = () => superValidate(schema);
+  const { band } = await parent();
   return {
     form: form(),
-    index: 17
+    index: 17,
+    nav: {
+      return: `/band/${band.id}/edit`,
+      label: band.name
+    }
   };
 };
 

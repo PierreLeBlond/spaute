@@ -6,9 +6,9 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
@@ -20,14 +20,9 @@
   });
 </script>
 
-<NavBar
-  returnHref="/band/{data['band'].id}/edit"
-  label={data.band.name}
-/>
-
-<p class="px-16 pt-8 text-center text-xs">
+<Info>
   Pour <b>supprimer la fanfare</b>, recopie son <b>nom</b> !
-</p>
+</Info>
 
 <FormLayout>
   <Form {form}>

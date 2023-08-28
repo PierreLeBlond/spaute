@@ -14,7 +14,7 @@
   const { tainted, submitting } = form;
 </script>
 
-<div class="relative flex h-8 w-full">
+<div class="relative flex h-8 w-56">
   <input
     type="submit"
     value={$submitting ? '' : label}

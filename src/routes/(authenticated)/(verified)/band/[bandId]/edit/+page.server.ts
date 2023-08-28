@@ -1,8 +1,8 @@
-import { z } from 'zod';
 import { createContext } from '$lib/trpc/context';
 import { router } from '$lib/trpc/router';
 import { TRPCError } from '@trpc/server';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -16,10 +16,17 @@ export const load: PageServerLoad = async (event) => {
   const caller = router.createCaller(await createContext(event));
   const bandVoices = () => caller.bandVoices.list({ bandId: bandId });
   const form = () => superValidate(schema);
+
+  const { band } = await event.parent();
+
   return {
     form: form(),
     bandVoices: bandVoices(),
-    index: 15
+    index: 15,
+    nav: {
+      return: `/band/${band.id}`,
+      label: band.name
+    }
   };
 };
 

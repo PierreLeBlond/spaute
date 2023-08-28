@@ -7,6 +7,7 @@
 
   export let action: string | undefined = undefined;
   export let hideErrors = false;
+  export let submitOnChange = false;
 
   type T = $$Generic<AnyZodObject>;
 
@@ -17,12 +18,17 @@
 </script>
 
 <form
-  class="w-full"
   id={$formId}
   method="POST"
   {action}
   use:enhance
   novalidate
+  on:change={(e) => {
+    if (!submitOnChange) {
+      return;
+    }
+    e.currentTarget.requestSubmit();
+  }}
 >
   <slot />
   {#if !hideErrors}

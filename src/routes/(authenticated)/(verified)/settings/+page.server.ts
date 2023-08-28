@@ -30,7 +30,10 @@ export const load = (async ({ parent }) => {
         key: '/settings',
         label: 'configuration'
       }
-    ]
+    ],
+    nav: {
+      return: '/'
+    }
   };
 }) satisfies PageServerLoad;
 

@@ -11,12 +11,19 @@ const schema = z.object({
   playerId: z.string()
 });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
   const form = () => superValidate(schema);
+
+  const { band, currentMembership } = await event.parent();
 
   return {
     form: form(),
-    index: 13
+    index: 13,
+    nav: {
+      return: `/bands`,
+      label: band.name,
+      edit: currentMembership?.isAdmin ? `/band/${band.id}/edit` : null
+    }
   };
 };
 

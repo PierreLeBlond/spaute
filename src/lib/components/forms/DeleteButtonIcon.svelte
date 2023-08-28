@@ -1,7 +1,7 @@
 <button
   type="submit"
   on:click
-  class="flex items-center justify-center rounded p-2 text-sm text-red-500"
+  class="flex items-center justify-center rounded text-sm text-red-500"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

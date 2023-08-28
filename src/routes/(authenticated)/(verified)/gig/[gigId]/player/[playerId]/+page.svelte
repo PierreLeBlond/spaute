@@ -3,23 +3,19 @@
   import Form from '$lib/components/forms/Form.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form);
 </script>
 
-<NavBar
-  returnHref="/gig/{data['gig'].id}"
-  label={data.gig.name}
-/>
-
-<p class="px-16 pt-8 text-center text-xs">
+<Title>
   <b>{data.player.name}</b>
-</p>
+</Title>
 
 {#if !data.presence?.isOrganizer}
   <FormLayout>
@@ -43,5 +39,5 @@
     </InputsLayout>
   </FormLayout>
 {:else}
-  <p class="px-16 pt-8 text-center text-xs">Déjà <b> organisateurice </b></p>
+  <Info>Déjà <b> organisateurice </b></Info>
 {/if}

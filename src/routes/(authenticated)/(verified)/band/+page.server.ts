@@ -15,7 +15,10 @@ export const load: PageServerLoad = async () => {
 
   return {
     form,
-    index: 11
+    index: 11,
+    nav: {
+      return: "/bands"
+    }
   };
 };
 

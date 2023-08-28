@@ -23,11 +23,17 @@ export const load: PageServerLoad = async (event) => {
 
   const form = () => superValidate(schema);
 
+  const { gig } = await event.parent();
+
   return {
     form: form(),
     player: player(),
     presence: presence(),
-    index: 103
+    index: 103,
+    nav: {
+      return: `/gig/${gig.id}`,
+      label: gig.name
+    }
   };
 };
 

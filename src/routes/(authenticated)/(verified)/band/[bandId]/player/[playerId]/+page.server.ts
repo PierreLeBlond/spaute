@@ -21,11 +21,17 @@ export const load: PageServerLoad = async (event) => {
 
   const form = () => superValidate(schema);
 
+  const { band } = await event.parent();
+
   return {
     form: form(),
     player: player(),
     membership: membership(),
-    index: 14
+    index: 14,
+    nav: {
+      return: `/band/${band.id}`,
+      label: band.name
+    }
   };
 };
 

@@ -2,8 +2,8 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
 
-  import Notifications from './notifications/Notifications.svelte';
-  import Toaster from './toast/Toaster.svelte';
+  import Notifications from '../notifications/Notifications.svelte';
+  import Toaster from '../toast/Toaster.svelte';
 
   const logout = async () => {
     await fetch('/logout', {
@@ -46,7 +46,7 @@
       />
     </g>
   </svg>
-  <div class="z-10 grid h-full w-full grid-cols-5 sm:w-96">
+  <div class="z-10 grid h-full w-full grid-cols-5 sm:flex sm:justify-end sm:gap-8">
     <div class="relative col-span-1 flex flex-col items-center justify-evenly truncate py-2">
       {#if $page.data['currentPlayer']}
         <a

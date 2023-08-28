@@ -54,7 +54,10 @@ export const load: PageServerLoad = async ({ url }) => {
         label: 'validation'
       }
     ],
-    index: 10001
+    index: 10001,
+    nav: {
+      return: '/email-verification'
+    }
   };
 };
 

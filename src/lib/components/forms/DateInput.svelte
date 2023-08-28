@@ -14,7 +14,7 @@
   const { value, errors } = formFieldProxy(form as SuperForm<ZodValidation<T>, unknown>, field);
 </script>
 
-<div class="w-full flex flex-col">
+<div class="flex w-full flex-col">
   <label
     for="{field}-input"
     class="text-xs">{label}</label
@@ -23,7 +23,7 @@
     id="{field}-input"
     name={field}
     type="date"
-    class="h-8 rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
+    class="h-8 w-56 rounded border-red-500 bg-neutral-200 text-sm focus:outline-cyan-600"
     class:border={$errors}
     bind:value={$value}
   />

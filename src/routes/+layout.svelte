@@ -1,24 +1,22 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import Header from '$lib/components/Header.svelte';
-  import SlidingTabs from '$lib/components/SlidingTabs.svelte';
+  import Header from '$lib/components/layout/Header.svelte';
+  import SlidingTabs from '$lib/components/layout/SlidingTabs.svelte';
   import { sendToast } from '$lib/components/toast/Toaster.svelte';
-  import { initFlash } from 'sveltekit-flash-message/client';
+  import { getFlash } from 'sveltekit-flash-message/client';
 
   import '../app.css';
   import type { LayoutData } from './$types';
 
   export let data: LayoutData;
 
-  const flash = initFlash(page);
+  const flash = getFlash(page);
   flash.subscribe((message) => {
     if (!message) {
       return;
     }
     sendToast(message);
   });
-
-  $: tabs = $page.data['tabs'];
 </script>
 
 <main
@@ -28,11 +26,8 @@
   <div class="absolute top-0 h-20 w-full">
     <Header />
   </div>
-  <div class="flex w-full grow flex-col items-center overflow-y-hidden bg-neutral-100 pt-20 sm:w-96">
-    <SlidingTabs
-      href={data.href}
-      {tabs}
-    >
+  <div class="flex w-full grow flex-col items-center overflow-y-hidden bg-neutral-100 pt-20">
+    <SlidingTabs href={data.href}>
       <slot />
     </SlidingTabs>
   </div>

@@ -20,7 +20,10 @@ export const load: PageServerLoad = async (event) => {
   return {
     form: form(),
     memberships: memberships(),
-    index: 101
+    index: 101,
+    nav: {
+      return: '/gigs'
+    }
   };
 };
 

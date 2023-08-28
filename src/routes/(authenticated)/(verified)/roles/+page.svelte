@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Button from '$lib/components/forms/Button.svelte';
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
   import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import Form from '$lib/components/forms/Form.svelte';
@@ -9,32 +8,39 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
 
   export let data: PageData;
 
-  const updateForm = superForm(data.updateForm, {
-    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
-  });
+  const updatePayloads = data.updatePayloads.map(({ role, form }) => ({
+    role,
+    form: superForm(form, {
+      taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.',
+      id: role.id
+    })
+  }));
 
   const deleteForm = superForm(data.deleteForm);
 </script>
 
-<p class="px-16 pt-8 text-center text-xs">
-  <b>Pupitres</b>
-</p>
+<RightLink href="/role">Ajouter un pupitre</RightLink>
+
+<Delimiter></Delimiter>
+
+<Title>Mes pupitres</Title>
 
 <List>
   {#if data.roles.length == 0}
-    <p class="px-16 pt-8 text-center text-xs">Alley, tu dois bien savoir jouer d'un truc non ?</p>
+    <Rest></Rest>
   {:else}
-    {#each data.roles as role, index}
+    {#each updatePayloads as updatePayload}
       <ListItem>
-        <div class="grid grid-cols-6 gap-y-2 p-2">
+        <div class="grid w-full grid-cols-6 gap-y-2 pl-2 pt-2">
           <div class="col-span-5 flex items-center">
             <p class="text-xs font-bold">
-              {role.instrument.name}
+              {updatePayload.role.instrument.name}
             </p>
           </div>
           <div class="flex items-center justify-center">
@@ -50,53 +56,40 @@
               />
               <input
                 type="hidden"
-                value={role.id}
+                value={updatePayload.role.id}
                 name="id"
               />
               <DeleteButtonIcon />
             </Form>
           </div>
-          <input
-            form="updateForm"
-            type="hidden"
-            name="ids"
-            value={role.id}
-          />
           <div class="col-span-6">
-            <Checkbox
-              form={updateForm}
-              name="playables"
-              field="playables[{index}]"
-              checkedLabel="je gère mon pupitre"
-              uncheckedLabel="je gère pas encore"
-            />
+            <Form
+              form={updatePayload.form}
+              action="?/update"
+              submitOnChange
+              hideErrors
+            >
+              <input
+                type="hidden"
+                name="id"
+                value={updatePayload.role.id}
+              />
+              <input
+                type="hidden"
+                value={data.currentPlayer.id}
+                name="playerId"
+              />
+              <Checkbox
+                form={updatePayload.form}
+                name="playable"
+                field="playable"
+                checkedLabel="je gère mon pupitre"
+                uncheckedLabel="je gère pas encore"
+              />
+            </Form>
           </div>
         </div>
       </ListItem>
     {/each}
   {/if}
 </List>
-
-<FormLayout>
-  <Form
-    form={updateForm}
-    action="?/update"
-  >
-    <InputsLayout>
-      <input
-        type="hidden"
-        value={data.currentPlayer.id}
-        name="playerId"
-      />
-      <Button
-        form={updateForm}
-        label={'Mettre à jour'}
-        disabledWhenNotTainted
-      />
-    </InputsLayout>
-  </Form>
-</FormLayout>
-
-<div class="px-16 pb-8">
-  <RightLink href="/role">Ajouter un pupitre</RightLink>
-</div>

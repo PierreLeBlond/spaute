@@ -4,9 +4,8 @@
   import Text from '$lib/components/forms/Text.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -14,8 +13,6 @@
     taintedMessage: null
   });
 </script>
-
-<NavBar returnHref="/users/password-reset" />
 
 <FormLayout>
   <Form {form}>

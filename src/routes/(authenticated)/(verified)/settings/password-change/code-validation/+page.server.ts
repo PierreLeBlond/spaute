@@ -54,7 +54,10 @@ export const load: PageServerLoad = async ({ url }) => {
         label: 'validation'
       }
     ],
-    index: 0.3
+    index: 0.3,
+    nav: {
+      return: '/settings/password-change'
+    }
   };
 };
 

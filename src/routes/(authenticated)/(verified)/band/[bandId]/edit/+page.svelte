@@ -8,21 +8,17 @@
 
   import type { PageData } from './$types';
   import Rest from '$lib/components/logos/Rest.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form);
 </script>
 
-<NavBar
-  returnHref="/band/{data['band'].id}"
-  label={data.band.name}
-/>
+<Title>Pupitres</Title>
 
-<p class="px-16 pt-8 text-center text-xs">
-  <b>Pupitres</b>
-</p>
+<RightLink href="/band/{data.band.id}/edit/voice">Ajouter un pupitre</RightLink>
 
 <List>
   {#if data.bandVoices.length == 0}
@@ -31,7 +27,7 @@
     {#each data.bandVoices as voice}
       <ListItem>
         <div class="flex w-full items-center justify-between">
-          <p class="w-full rounded p-2 text-sm">
+          <p class="w-full rounded text-sm">
             {voice.instrument.name}
           </p>
           {#if data.currentMembership?.isAdmin}
@@ -60,14 +56,9 @@
   {/if}
 </List>
 
-{#if data.currentMembership?.isAdmin}
-  <div class="px-16 pb-4 pt-8">
-    <RightLink href="/band/{data.band.id}/edit/voice">Ajouter un pupitre</RightLink>
-  </div>
-  <div class="px-16 pb-8 pt-4">
-    <RightLink
-      href="/band/{data.band.id}/edit/delete"
-      danger>Supprimer la fanfare ?</RightLink
-    >
-  </div>
-{/if}
+<Delimiter></Delimiter>
+
+<RightLink
+  href="/band/{data.band.id}/edit/delete"
+  danger>Supprimer la fanfare ?</RightLink
+>

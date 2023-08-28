@@ -5,9 +5,8 @@
   import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
   import type { PageData } from './$types';
-  import FormLayout from '$lib/components/layout/FormLayout.svelte';
-  import InputsLayout from '$lib/components/layout/InputsLayout.svelte';
-  import NavBar from '$lib/components/layout/NavBar.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -18,8 +17,6 @@
     }
   });
 </script>
-
-<NavBar returnHref={`/users/password-reset/code-validation?email=${data.email}`} />
 
 <FormLayout>
   <Form {form}>

@@ -18,6 +18,16 @@ declare global {
     }
     interface PageData {
       flash?: string;
+      tabs: {
+        href: string;
+        key: string;
+        label: string;
+      }[];
+      nav?: {
+        return?: string;
+        label?: string;
+        edit?: string;
+      };
     }
     // interface Platform {}
   }

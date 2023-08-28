@@ -1,5 +1,3 @@
-<div class="flex w-full grow overflow-y-hidden p-4">
-  <ul class="w-full overflow-y-auto rounded p-4">
-    <slot />
-  </ul>
-</div>
+<ul class="flex w-full flex-wrap items-center justify-center gap-4 rounded px-8 pt-8">
+  <slot />
+</ul>

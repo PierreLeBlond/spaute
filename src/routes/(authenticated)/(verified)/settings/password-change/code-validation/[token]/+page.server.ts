@@ -24,7 +24,11 @@ export const load: PageServerLoad = async () => {
         key: 'settings/password-change/code-validation',
         label: 'mise à jour'
       }
-    ]
+    ],
+
+    nav: {
+      return: '/settings/password-change/code-validation'
+    }
   };
 };
 
