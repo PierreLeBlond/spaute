@@ -1,7 +1,8 @@
-import { TRPCError } from "@trpc/server";
-import prisma from "$lib/prisma";
-import { z } from "zod";
-import { verified } from "./verified";
+import prisma from '$lib/prisma';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+
+import { verified } from './verified';
 
 const schema = z.object({
   gigId: z.string()
@@ -17,7 +18,7 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
     where: {
       userId: ctx.user.userId
     }
-  })
+  });
   const { gigId } = result.data;
 
   const presence = await prisma.presence.findUnique({
@@ -56,4 +57,4 @@ export const organizer = verified.unstable_pipe(async ({ next, ctx, rawInput }) 
   }
 
   throw new TRPCError({ code: 'UNAUTHORIZED', message: 'The player does not have organizer role on this gig.' });
-})
+});

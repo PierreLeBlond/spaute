@@ -1,16 +1,17 @@
-import { t } from "$lib/trpc/t";
-import { create } from "./create";
-import { validatePasswordReset } from "./validatePasswordReset";
-import { validatePasswordChange } from "./validatePasswordChange";
-import { login } from "./login";
-import { resetPassword } from "./resetPassword";
-import { changePassword } from "./changePassword";
-import { sendSignupPassword } from "./sendSignupPassword";
-import { sendPasswordResetCode } from "./sendPasswordResetCode";
-import { sendPasswordChangeCode } from "./sendPasswordChangeCode";
-import { sendEmailVerificationCode } from "./sendEmailVerificationCode";
-import { verifyEmail } from "./verifyEmail";
-import { signup } from "./signup";
+import { t } from '$lib/trpc/t';
+
+import { changePassword } from './changePassword';
+import { create } from './create';
+import { login } from './login';
+import { resetPassword } from './resetPassword';
+import { sendEmailVerificationCode } from './sendEmailVerificationCode';
+import { sendPasswordChangeCode } from './sendPasswordChangeCode';
+import { sendPasswordResetCode } from './sendPasswordResetCode';
+import { sendSignupPassword } from './sendSignupPassword';
+import { signup } from './signup';
+import { validatePasswordChange } from './validatePasswordChange';
+import { validatePasswordReset } from './validatePasswordReset';
+import { verifyEmail } from './verifyEmail';
 
 export const users = t.router({
   create,
@@ -25,4 +26,4 @@ export const users = t.router({
   changePassword,
   sendSignupPassword,
   signup
-})
+});

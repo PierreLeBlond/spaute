@@ -1,5 +1,6 @@
-import { TRPCError } from "@trpc/server";
-import { authenticated } from "./authenticated";
+import { TRPCError } from '@trpc/server';
+
+import { authenticated } from './authenticated';
 
 export const verified = authenticated.unstable_pipe(async ({ next, ctx }) => {
   const { user } = ctx;

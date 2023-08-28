@@ -1,6 +1,11 @@
-import { novu } from "$lib/novu";
+import { novu } from '$lib/novu';
 
-export const triggerEmailVerificationEmail = (data: { userId: string, email: string, name: string, password: string }) => {
+export const triggerEmailVerificationEmail = (data: {
+  userId: string;
+  email: string;
+  name: string;
+  password: string;
+}) => {
   novu.trigger('email-verification', {
     to: {
       subscriberId: data.userId,
@@ -11,4 +16,4 @@ export const triggerEmailVerificationEmail = (data: { userId: string, email: str
       name: data.name
     }
   });
-}
+};

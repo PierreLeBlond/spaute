@@ -2,10 +2,11 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import Info from '$lib/components/layout/Info.svelte';
 
   export let data: PageData;
 
@@ -14,19 +15,15 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href="/users/login" />
-</div>
-
-<p class="px-16 pt-8 text-center text-xs">
+<Info>
   Pour te créer un nouveau <b>mot de passe</b>, nous avons besoin vérifier ton identité en t'envoyant par <b>email</b>
   un
   <b>code de validation</b> !
-</p>
+</Info>
 
-<div class="flex w-full flex-col items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center">
+    <InputsLayout>
       <Text
         {form}
         field="email"
@@ -37,6 +34,6 @@
         {form}
         label="Envoyer"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

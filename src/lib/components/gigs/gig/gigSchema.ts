@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const gigSchema = z.object({
   name: z.string().min(1, { message: 'Tout est dans le titre.' }).max(32),

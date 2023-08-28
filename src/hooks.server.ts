@@ -1,10 +1,10 @@
+import { dev } from '$app/environment';
+import { auth } from '$lib/lucia';
 import { createContext } from '$lib/trpc/context';
 import { router } from '$lib/trpc/router';
 import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { createTRPCHandle } from 'trpc-sveltekit';
-import { dev } from '$app/environment';
-import { auth } from "$lib/lucia";
 
 const authHandle: Handle = async ({ event, resolve }) => {
   event.locals.auth = auth.handleRequest(event);
@@ -34,16 +34,16 @@ const authHandle: Handle = async ({ event, resolve }) => {
   }
 
   return resolve(event);
-}
+};
 
 const trpcHandle: Handle = createTRPCHandle({
-  router, createContext
+  router,
+  createContext
 });
 
 export const handle = sequence(authHandle, trpcHandle);
 
 export const handleError: HandleServerError = (input) => {
-
   const error = input.error as App.Error;
 
   if (!dev) {
@@ -56,5 +56,5 @@ export const handleError: HandleServerError = (input) => {
   return {
     message: error.message,
     code: error?.code ?? 'UNKNOWN'
-  }
-}
+  };
+};

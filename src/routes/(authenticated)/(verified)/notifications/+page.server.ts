@@ -1,7 +1,6 @@
-import type { PageServerLoad } from "./$types"
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-
   const fromPathname = cookies.get('fromPathname');
 
   return {
@@ -14,6 +13,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
         label: 'notifications'
       }
     ],
-    title: 'Cloche ! cloche ! cloche !'
+    nav: {
+      return: '/'
+    }
   };
-}
+};

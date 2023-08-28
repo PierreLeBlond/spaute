@@ -1,9 +1,10 @@
-import type { Actions, PageServerLoad } from './$types';
-import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
-import { z } from 'zod';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { router } from '$lib/trpc/router';
 import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
   bandId: z.string(),
@@ -20,13 +21,19 @@ export const load: PageServerLoad = async (event) => {
 
   const form = () => superValidate(schema);
 
+  const { band } = await event.parent();
+
   return {
     form: form(),
     player: player(),
     membership: membership(),
-    index: 14
-  }
-}
+    index: 14,
+    nav: {
+      return: `/band/${band.id}`,
+      label: band.name
+    }
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -40,13 +47,8 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Echec :(');
     }
   }
-}
-
+};

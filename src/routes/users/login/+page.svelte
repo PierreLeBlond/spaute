@@ -3,10 +3,12 @@
   import Form from '$lib/components/forms/Form.svelte';
   import Password from '$lib/components/forms/Password.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import Link from '$lib/components/links/Link.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import RightLink from '$lib/components/links/RightLink.svelte';
 
   export let data: PageData;
 
@@ -15,9 +17,9 @@
   });
 </script>
 
-<div class="mx-8 flex flex-col justify-center px-16 pb-8 pt-16">
-  <p class="pb-2 text-center text-xs">Login avec <b>mot de passe</b> à <b>usage unique</b> :</p>
-  <Link href="/users/otp-signup">Mot de passe unique</Link>
+<div class="flex w-full flex-col items-center justify-center px-16 py-8">
+  <p class="pb-2 text-center text-xs">Connexion avec <b>mot de passe</b> à <b>usage unique</b></p>
+  <RightLink href="/users/otp-signup">Se connecter</RightLink>
 </div>
 
 <div class="grid w-full grid-cols-7 items-center justify-center px-8">
@@ -26,9 +28,9 @@
   <p class="col-span-3 border-b" />
 </div>
 
-<div class="flex w-full items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center">
+    <InputsLayout>
       <Text
         {form}
         field="email"
@@ -42,13 +44,13 @@
         autocomplete="current-password"
       />
       <Button
-        label="Log in"
+        label="Se connecter"
         {form}
       />
       <a
-        class="w-full text-start text-sm text-cyan-600"
+        class="w-full pt-2 text-start text-sm text-cyan-600"
         href="/users/password-reset">Mot de passe oublié ?</a
       >
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

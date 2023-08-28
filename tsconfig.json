@@ -1,45 +1,45 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		// Type checking
-		"allowUnreachableCode": false,
-		"allowUnusedLabels": false,
-		"alwaysStrict": true,
-		// "exactOptionalPropertyTypes": true, // Fails with zod-prisma-types definitions
-		// "noFallthroughCasesInSwitch": true, // We don't use switch statement anyway
-		"noImplicitAny": true,
-		"noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"noUncheckedIndexedAccess": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		// Let's be strict, covers and enables several strictness options
-		"strict": true,
-		// Module
-		"allowUmdGlobalAccess": false,
-		// "baseUrl": "",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"noResolve": false,
-		"resolveJsonModule": true,
-		"newLine": "lf",
-		"preserveConstEnums": true,
-		"sourceMap": true,
-		"allowJs": false,
-		"checkJs": false,
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"isolatedModules": true,
-		"skipLibCheck": true
-	},
-	"ts-node": {
-		"esm": true // To make prisma seeding work with ts-node
-	}
-	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
-	//
-	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
-	// from the referenced tsconfig.json - TypeScript does not merge them in
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    // Type checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    // "exactOptionalPropertyTypes": true, // Fails with zod-prisma-types definitions
+    // "noFallthroughCasesInSwitch": true, // We don't use switch statement anyway
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // Let's be strict, covers and enables several strictness options
+    "strict": true,
+    // Module
+    "allowUmdGlobalAccess": false,
+    // "baseUrl": "",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noResolve": false,
+    "resolveJsonModule": true,
+    "newLine": "lf",
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "allowJs": false,
+    "checkJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "esm": true // To make prisma seeding work with ts-node
+  }
+  // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+  //
+  // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+  // from the referenced tsconfig.json - TypeScript does not merge them in
 }

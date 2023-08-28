@@ -1,5 +1,5 @@
-import prisma from "$lib/prisma";
-import { generateRandomString } from "lucia/utils";
+import prisma from '$lib/prisma';
+import { generateRandomString } from 'lucia/utils';
 
 const EXPIRES_IN = 1000 * 60 * 10;
 
@@ -22,4 +22,4 @@ export const createToken = async (userId: string) => {
   });
 
   return token;
-}
+};

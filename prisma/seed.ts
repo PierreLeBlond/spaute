@@ -1,61 +1,61 @@
-import { PrismaClient, type Prisma } from '@prisma/client'
+import { type Prisma, PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const instrumentData: Prisma.InstrumentCreateInput[] = [
   {
-    name: 'Flute',
+    name: 'Flute'
   },
   {
-    name: 'Kick Drum',
+    name: 'Kick Drum'
   },
   {
-    name: 'Snare Drum',
+    name: 'Snare Drum'
   },
   {
-    name: 'Trombone',
+    name: 'Trombone'
   },
   {
-    name: 'Trumpet',
+    name: 'Trumpet'
   },
   {
-    name: 'Euphonium',
+    name: 'Euphonium'
   },
   {
-    name: 'Alto Saxophone',
+    name: 'Alto Saxophone'
   },
   {
-    name: 'Tenor Saxophone',
+    name: 'Tenor Saxophone'
   },
   {
-    name: 'Clarinet',
+    name: 'Clarinet'
   },
   {
-    name: 'Sousaphone',
+    name: 'Sousaphone'
   },
   {
-    name: 'Rusty Trombone',
-  },
-]
+    name: 'Rusty Trombone'
+  }
+];
 
 async function main() {
-  console.log(`Start seeding ...`)
+  console.log(`Start seeding ...`);
 
   for (const i of instrumentData) {
     await prisma.instrument.create({
-      data: i,
-    })
+      data: i
+    });
   }
 
-  console.log(`Seeding finished.`)
+  console.log(`Seeding finished.`);
 }
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

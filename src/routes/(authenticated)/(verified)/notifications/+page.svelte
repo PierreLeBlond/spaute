@@ -1,8 +1,7 @@
 <script lang="ts">
   import DeleteButtonIcon from '$lib/components/forms/DeleteButtonIcon.svelte';
   import List from '$lib/components/layout/List.svelte';
-  import ListLinkItem from '$lib/components/layout/ListLinkItem.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
+  import ListItem from '$lib/components/layout/ListItem.svelte';
   import { HeadlessService } from '@novu/headless';
   import type { FetchResult, UpdateResult } from '@novu/headless/dist/lib/types';
   import type { ISession } from '@novu/headless/dist/utils/types';
@@ -10,6 +9,7 @@
   import { Firework } from 'svelte-loading-spinners';
 
   import type { PageData } from './$types';
+  import Rest from '$lib/components/logos/Rest.svelte';
 
   export let data: PageData;
 
@@ -62,10 +62,6 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href={'/gigs'} />
-</div>
-
 <List>
   {#if loading}
     <div class="flex w-full justify-center">
@@ -76,18 +72,16 @@
       />
     </div>
   {:else if messages.length == 0}
-    <p class="text-xs">Rien, nada, zobi.</p>
+    <Rest></Rest>
   {:else}
     {#each messages as message}
-      <ListLinkItem>
-        <div class="flex w-full items-center justify-between">
-          <a
-            href={message.cta.data.url}
-            class="grow rounded p-2 text-xs">{message.content}</a
-          >
-          <DeleteButtonIcon on:click={() => removeNotification(message._id)} />
-        </div>
-      </ListLinkItem>
+      <ListItem type="link">
+        <a
+          href={message.cta.data.url}
+          class="grow rounded text-xs">{message.content}</a
+        >
+        <DeleteButtonIcon on:click={() => removeNotification(message._id)} />
+      </ListItem>
     {/each}
   {/if}
 </List>

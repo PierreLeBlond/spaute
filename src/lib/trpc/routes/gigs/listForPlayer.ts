@@ -1,12 +1,11 @@
-import prisma from "$lib/prisma";
-import { ownerProcedure } from "$lib/trpc/procedures/ownerProcedure";
-import { z } from "zod";
+import prisma from '$lib/prisma';
+import { ownerProcedure } from '$lib/trpc/procedures/ownerProcedure';
+import { z } from 'zod';
 
 const schema = z.object({ playerId: z.string() });
 
-export const listForPlayer = ownerProcedure
-  .input(schema)
-  .query(({ input }) => prisma.gig.findMany({
+export const listForPlayer = ownerProcedure.input(schema).query(({ input }) =>
+  prisma.gig.findMany({
     where: {
       OR: [
         {
@@ -14,8 +13,9 @@ export const listForPlayer = ownerProcedure
             some: {
               playerId: input.playerId
             }
-          },
-        }, {
+          }
+        },
+        {
           band: {
             memberships: {
               some: {
@@ -24,7 +24,7 @@ export const listForPlayer = ownerProcedure
             }
           }
         }
-      ],
+      ]
     },
     orderBy: {
       date: 'desc'
@@ -33,4 +33,5 @@ export const listForPlayer = ownerProcedure
       band: true,
       presences: true
     }
-  }));
+  })
+);

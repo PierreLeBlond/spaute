@@ -6,18 +6,18 @@ export const load: LayoutServerLoad = async () => {
       {
         href: '/bands',
         key: '/band',
-        label: 'mes fanfares'
+        label: 'Fanfares'
       },
       {
         href: '/gigs',
         key: '/gig',
-        label: 'mes prestas'
+        label: 'Prestas'
       },
       {
         href: '/roles',
         key: '/role',
-        label: 'mes pupitres'
+        label: 'Pupitres'
       }
     ]
-  }
+  };
 };

@@ -1,7 +1,7 @@
-import { MembershipBandIdPlayerIdCompoundUniqueInputSchema } from "$lib/generated/zod";
-import { addSubscriberToGigs } from "$lib/hook/notifications/addSubscriberToGigs";
-import prisma from "$lib/prisma";
-import { verifiedProcedure } from "$lib/trpc/procedures/verifiedProcedure";
+import { MembershipBandIdPlayerIdCompoundUniqueInputSchema } from '$lib/generated/zod';
+import { addSubscriberToGigs } from '$lib/hook/notifications/addSubscriberToGigs';
+import prisma from '$lib/prisma';
+import { verifiedProcedure } from '$lib/trpc/procedures/verifiedProcedure';
 
 export const create = verifiedProcedure
   .input(MembershipBandIdPlayerIdCompoundUniqueInputSchema)
@@ -39,13 +39,13 @@ export const create = verifiedProcedure
     });
 
     const gigIds = membership.band.gigs
-      .filter(gig => gig.presences.every(presence => presence.playerId != input.playerId))
-      .map(gig => gig.id);
+      .filter((gig) => gig.presences.every((presence) => presence.playerId != input.playerId))
+      .map((gig) => gig.id);
 
     await addSubscriberToGigs({
       gigIds,
       userId: player.userId
-    })
+    });
 
     return membership;
   });

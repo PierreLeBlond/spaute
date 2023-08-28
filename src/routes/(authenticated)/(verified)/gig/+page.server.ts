@@ -1,27 +1,31 @@
-import type { Actions, PageServerLoad } from './$types';
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
-import { createContext } from '$lib/trpc/context';
-import { TRPCError } from '@trpc/server';
-import { router } from '$lib/trpc/router';
-import { DateTime } from 'luxon';
 import { gigSchema } from '$lib/components/gigs/gig/gigSchema';
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { TRPCError } from '@trpc/server';
+import { DateTime } from 'luxon';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = gigSchema.extend({ bandId: z.string() });
 
 export const load: PageServerLoad = async (event) => {
   const { currentPlayer } = await event.parent();
 
-  const memberships = async () => router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
+  const memberships = async () =>
+    router.createCaller(await createContext(event)).memberships.list({ playerId: currentPlayer.id });
   const form = () => superValidate(schema);
-
 
   return {
     form: form(),
     memberships: memberships(),
-    index: 101
-  }
-}
+    index: 101,
+    nav: {
+      return: '/gigs'
+    }
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
@@ -37,8 +41,8 @@ export const actions: Actions = {
     const data = {
       bandId: bandId != '' ? bandId : null,
       date: DateTime.fromISO(`${date}T${time}`).toJSDate(),
-      ...rest,
-    }
+      ...rest
+    };
 
     try {
       await router.createCaller(await createContext(event)).gigs.create(data);
@@ -47,12 +51,8 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Presta non valide :(');
     }
   }
-}
+};

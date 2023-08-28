@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ListItem from '$lib/components/layout/ListItem.svelte';
   import type { Player } from '@prisma/client';
 
   export let player: Player;
@@ -7,16 +8,18 @@
   export let href: string;
 </script>
 
-<a
-  class="mb-2 flex w-full justify-between rounded bg-neutral-100 p-2 text-sm shadow shadow-blue-300"
-  {href}
->
-  <p>
-    {player.name}
-  </p>
-  {#if isAdmin}
-    <p>admin</p>
-  {:else if isOrganizer}
-    <p>organisateurice</p>
-  {/if}
-</a>
+<ListItem type="link">
+  <a
+    class="flex w-full justify-between rounded text-sm"
+    {href}
+  >
+    <p>
+      {player.name}
+    </p>
+    {#if isAdmin}
+      <p>admin</p>
+    {:else if isOrganizer}
+      <p>organisateurice</p>
+    {/if}
+  </a>
+</ListItem>

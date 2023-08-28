@@ -6,6 +6,8 @@
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -14,9 +16,9 @@
   });
 </script>
 
-<div class="flex w-full items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center pt-8">
+    <InputsLayout>
       <Text
         {form}
         field="email"
@@ -43,8 +45,8 @@
       />
       <Button
         {form}
-        label="Sign up"
+        label="S'inscrire"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

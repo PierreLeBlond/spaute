@@ -2,10 +2,11 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Select from '$lib/components/forms/Select.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
 
   export let data: PageData;
 
@@ -17,14 +18,9 @@
   }));
 </script>
 
-<div class="flex">
-  <ReturnLink href="/band/{data.band.id}/edit" />
-</div>
-
-<div class="w-full p-2">
+<FormLayout>
   <Form {form}>
-    <div class="grid grid-cols-1 gap-y-2">
-      <h2 class="text-xs">Ajouter un pupitre</h2>
+    <InputsLayout>
       <Select
         {form}
         field={'instrumentId'}
@@ -40,6 +36,6 @@
         {form}
         label="Ajouter"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

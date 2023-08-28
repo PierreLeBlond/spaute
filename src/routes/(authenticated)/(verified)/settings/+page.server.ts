@@ -1,9 +1,10 @@
-import { message, setError, superValidate } from 'sveltekit-superforms/server';
-import type { Actions, PageServerLoad } from './$types';
-import { z } from 'zod';
-import { TRPCError } from '@trpc/server';
-import { router } from '$lib/trpc/router';
 import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import { TRPCError } from '@trpc/server';
+import { message, setError, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+
+import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
   playerId: z.string(),
@@ -12,9 +13,13 @@ const schema = z.object({
 
 export const load = (async ({ parent }) => {
   const { currentPlayer } = await parent();
-  const form = () => superValidate({
-    name: currentPlayer.name
-  }, schema);
+  const form = () =>
+    superValidate(
+      {
+        name: currentPlayer.name
+      },
+      schema
+    );
 
   return {
     form: form(),
@@ -26,13 +31,14 @@ export const load = (async ({ parent }) => {
         label: 'configuration'
       }
     ],
-    title: 'Configuration'
+    nav: {
+      return: '/'
+    }
   };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
   default: async (event) => {
-
     const { request } = event;
     const form = await superValidate(request, schema);
 
@@ -47,11 +53,7 @@ export const actions: Actions = {
       if (!(error instanceof TRPCError)) {
         throw error;
       }
-      setError(
-        form,
-        "",
-        error.message
-      );
+      setError(form, '', error.message);
       return message(form, 'Pas mis à jour :(');
     }
   }

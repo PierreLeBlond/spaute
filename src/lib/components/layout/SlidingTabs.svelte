@@ -1,14 +1,12 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import Menu from '$lib/components/Menu.svelte';
+  import Menu from '$lib/components/layout/Menu.svelte';
   import { cubicOut } from 'svelte/easing';
   import type { EasingFunction } from 'svelte/transition';
 
-  import type { Tab } from './Tab';
+  import NavBar from './NavBar.svelte';
 
   export let href: string | undefined;
-
-  export let tabs: Tab[];
 
   let lastIndex: number;
   let direction: number;
@@ -45,7 +43,7 @@
   };
 </script>
 
-<Menu {tabs} />
+<Menu />
 
 <div
   bind:clientWidth
@@ -55,9 +53,12 @@
     <div
       in:slide={{ sign: 1 }}
       out:slide={{ sign: -1 }}
-      class="absolute flex h-full w-full flex-col"
+      class="absolute flex h-full w-full flex-col items-center"
     >
-      <slot />
+      <NavBar></NavBar>
+      <div class="flex w-full flex-col items-center overflow-y-auto pb-8">
+        <slot />
+      </div>
     </div>
   {/key}
 </div>

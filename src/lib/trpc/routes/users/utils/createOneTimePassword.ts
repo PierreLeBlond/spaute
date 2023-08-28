@@ -1,6 +1,6 @@
-import prisma from "$lib/prisma";
-import bcrypt from "bcrypt";
-import { generateRandomString } from "lucia/utils";
+import prisma from '$lib/prisma';
+import bcrypt from 'bcrypt';
+import { generateRandomString } from 'lucia/utils';
 
 const SALT_ROUNDS = 10;
 const EXPIRES_IN = 1000 * 60 * 10;
@@ -25,4 +25,4 @@ export const createOneTimePassword = async (email: string) => {
   });
 
   return password;
-}
+};

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
   import Button from '$lib/components/forms/Button.svelte';
   import Checkbox from '$lib/components/forms/Checkbox.svelte';
   import DateInput from '$lib/components/forms/DateInput.svelte';
@@ -9,183 +10,159 @@
   import TimeInput from '$lib/components/forms/TimeInput.svelte';
   import List from '$lib/components/layout/List.svelte';
   import ListItem from '$lib/components/layout/ListItem.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import RightLink from '$lib/components/links/RightLink.svelte';
-  import * as flashModule from 'sveltekit-flash-message/client';
   import { superForm } from 'sveltekit-superforms/client';
 
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import Delimiter from '$lib/components/layout/Delimiter.svelte';
+  import Rest from '$lib/components/logos/Rest.svelte';
+  import Title from '$lib/components/layout/Title.svelte';
 
   export let data: PageData;
-
-  const hasWriteAccess = data.currentPresence?.isOrganizer || data.currentMembership?.isAdmin;
 
   const updateForm = superForm(data.updateForm, {
     taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
   });
 
-  const updateDisabledVoiceForm = superForm(data.updateDisabledVoiceForm, {
-    taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.'
-  });
-
-  const { form } = updateDisabledVoiceForm;
+  const updateDisabledVoicePayloads = data.updateDisabledVoicePayloads.map(({ bandVoice, form }) => ({
+    bandVoice,
+    form: superForm(form, {
+      taintedMessage: 'Veux tu vraiment quitter la page ? Tes modifications seront perdues.',
+      id: bandVoice.id
+    })
+  }));
 
   const deleteGigVoiceForm = superForm(data.deleteGigVoiceForm);
-
-  const deleteForm = superForm(data.deleteForm, {
-    flashMessage: {
-      module: flashModule
-    }
-  });
 </script>
 
-<div class="flex">
-  <ReturnLink href="/gig/{data.gig.id}" />
-</div>
-
-<div class="w-full overflow-y-auto p-2">
-  {#if hasWriteAccess}
-    <Form
-      form={updateForm}
-      action="?/update"
-    >
-      <div
-        class="grid h-full grid-cols-2 gap-x-2 gap-y-2"
-        style:grid-template-rows="auto auto auto 1fr auto"
+<div
+  class="grid w-full md:grid-cols-2"
+  class:md:grid-cols-3={data.band}
+>
+  <section class="flex flex-col items-center">
+    <Title>Modifier la presta</Title>
+    <FormLayout>
+      <Form
+        form={updateForm}
+        action="?/update"
       >
-        <p class="col-span-2 text-xs text-neutral-600">Modifier la presta</p>
-        <Text
-          form={updateForm}
-          field="name"
-          label="titre"
-        />
-        <Text
-          form={updateForm}
-          field="location"
-          label="lieu"
-        />
-        <DateInput
-          form={updateForm}
-          field="date"
-          label="date"
-        />
-        <TimeInput
-          form={updateForm}
-          field="time"
-          label="heure"
-        />
-        <div class="col-span-2">
+        <InputsLayout>
+          <Text
+            form={updateForm}
+            field="name"
+            label="titre"
+          />
+          <Text
+            form={updateForm}
+            field="location"
+            label="lieu"
+          />
+          <DateInput
+            form={updateForm}
+            field="date"
+            label="date"
+          />
+          <TimeInput
+            form={updateForm}
+            field="time"
+            label="heure"
+          />
           <TextArea
             form={updateForm}
             field="description"
             label="description"
           />
-        </div>
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <div class="col-span-2">
+          <input
+            type="hidden"
+            name="gigId"
+            value={data.gig.id}
+          />
           <Button
             form={updateForm}
             label="Mettre à jour"
             disabledWhenNotTainted
           />
-        </div>
-      </div>
-    </Form>
-  {/if}
-
-  {#if data.gig.band}
-    <h2 class="pb-2 text-xs">
-      Pupitres de la fanfare <i>{data.gig.band.name}</i>
-    </h2>
-
-    <div class="pb-2" />
-    {#if hasWriteAccess}
-      <Form
-        form={updateDisabledVoiceForm}
-        action="?/updateDisabledVoice"
-      >
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <List>
-          {#if data.bandVoices.length == 0}
-            <p class="text-xs">La fanfare n'a pas de pupitres :(</p>
-          {:else}
-            {#each data.bandVoices as bandVoice, index}
-              <ListItem>
-                <div class="flex w-full items-center justify-between">
-                  <p
-                    class="w-full rounded p-2 text-sm"
-                    class:text-neutral-500={!$form.enableds[index]}
-                  >
-                    {bandVoice.instrument.name}
-                  </p>
-                  {#if hasWriteAccess}
-                    <input
-                      form="updateDisabledVoiceForm"
-                      type="hidden"
-                      name="bandVoiceIds"
-                      value={bandVoice.id}
-                    />
-                    <div class="col-span-6">
-                      <Checkbox
-                        form={updateDisabledVoiceForm}
-                        name="enableds"
-                        field="enableds[{index}]"
-                        disabled={!data.currentPresence?.isOrganizer}
-                      />
-                    </div>
-                  {/if}
-                </div>
-              </ListItem>
-            {/each}
-          {/if}
-        </List>
-        <div class="col-span-6 pt-2">
-          <Button
-            form={updateDisabledVoiceForm}
-            label={'Mettre à jour'}
-            disabledWhenNotTainted
-          />
-        </div>
+        </InputsLayout>
       </Form>
-    {/if}
+    </FormLayout>
+  </section>
+
+  {#if data.band}
+    <section class="flex flex-col items-center">
+      <div class="block w-full md:hidden">
+        <Delimiter></Delimiter>
+      </div>
+
+      <Title>
+        Pupitres de la fanfare {data.band.name}
+      </Title>
+
+      <List>
+        {#if data.bandVoices.length == 0}
+          <Rest></Rest>
+        {:else}
+          {#each updateDisabledVoicePayloads as updateDisabledVoicePayload}
+            <ListItem>
+              <div class="flex w-full items-center justify-between">
+                <p class="w-full rounded text-sm">
+                  {updateDisabledVoicePayload.bandVoice.instrument.name}
+                </p>
+                <Form
+                  form={updateDisabledVoicePayload.form}
+                  action="?/updateDisabledVoice"
+                  submitOnChange
+                  hideErrors
+                >
+                  <input
+                    type="hidden"
+                    name="gigId"
+                    value={data.gig.id}
+                  />
+                  <input
+                    type="hidden"
+                    name="bandVoiceId"
+                    value={updateDisabledVoicePayload.bandVoice.id}
+                  />
+                  <Checkbox
+                    form={updateDisabledVoicePayload.form}
+                    name="enabled"
+                    field="enabled"
+                  />
+                </Form>
+              </div>
+            </ListItem>
+          {/each}
+        {/if}
+      </List>
+    </section>
   {/if}
 
-  <h2 class="text-xs">Pupitres additionels</h2>
-
-  {#if hasWriteAccess}
-    <div class="py-2">
-      <RightLink
-        href="/gig/{data.gig.id}/edit/voice"
-        label="Ajouter un pupitre"
-      />
+  <section class="flex flex-col items-center">
+    <div class="block w-full md:hidden">
+      <Delimiter></Delimiter>
     </div>
-  {/if}
 
-  <div class="pb-2">
+    <Title>Pupitres additionels</Title>
+
+    <RightLink href="/gig/{data.gig.id}/edit/voice">Ajouter un pupitre</RightLink>
+
     <List>
       {#if data.gigVoices.length == 0}
-        <p class="text-xs">La presta n'a pas de pupitres additionnels !</p>
+        <Rest></Rest>
       {:else}
         {#each data.gigVoices as voice}
           <ListItem>
             <div class="flex w-full items-center justify-between">
-              <p class="w-full rounded p-2 text-sm">
+              <p class="w-full rounded text-sm">
                 {voice.instrument.name}
               </p>
-              {#if hasWriteAccess}
-                <Form
-                  form={deleteGigVoiceForm}
-                  action="?/deleteGigVoice"
-                  hideErrors
-                >
+              <Form
+                form={deleteGigVoiceForm}
+                action="?/deleteGigVoice"
+                hideErrors
+              >
+                <div class="flex justify-end">
                   <input
                     type="hidden"
                     name="id"
@@ -197,44 +174,19 @@
                     value={voice.gigId}
                   />
                   <DeleteButtonIcon />
-                </Form>
-              {/if}
+                </div>
+              </Form>
             </div>
           </ListItem>
         {/each}
       {/if}
     </List>
-  </div>
 
-  {#if hasWriteAccess}
-    <div class="border border-red-500 p-2 text-red-500">
-      <Form
-        form={deleteForm}
-        action="?/delete"
-      >
-        <p class="text-xs">Suppression de la presta</p>
-        <input
-          type="hidden"
-          name="gigId"
-          value={data.gig.id}
-        />
-        <input
-          type="hidden"
-          name="name"
-          value={data.gig.name}
-        />
-        <Text
-          form={deleteForm}
-          field="nameCopy"
-          label="recopie son titre pour valider la suppression"
-        />
-        <Button
-          form={deleteForm}
-          label="Supprimer"
-          deleting
-          disabledWhenNotTainted
-        />
-      </Form>
-    </div>
-  {/if}
+    <Delimiter></Delimiter>
+
+    <RightLink
+      href="/gig/{data.gig.id}/edit/delete"
+      danger>Supprimer la presta ?</RightLink
+    >
+  </section>
 </div>

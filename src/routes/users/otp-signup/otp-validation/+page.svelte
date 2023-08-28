@@ -2,10 +2,10 @@
   import Button from '$lib/components/forms/Button.svelte';
   import Form from '$lib/components/forms/Form.svelte';
   import Text from '$lib/components/forms/Text.svelte';
-  import ReturnLink from '$lib/components/links/ReturnLink.svelte';
   import { superForm } from 'sveltekit-superforms/client';
-
   import type { PageData } from './$types';
+  import FormLayout from '$lib/components/forms/FormLayout.svelte';
+  import InputsLayout from '$lib/components/forms/InputsLayout.svelte';
 
   export let data: PageData;
 
@@ -14,17 +14,13 @@
   });
 </script>
 
-<div class="flex">
-  <ReturnLink href="/users/otp-signup" />
-</div>
-
-<div class="flex w-full flex-col items-center justify-center p-8">
+<FormLayout>
   <Form {form}>
-    <div class="flex flex-col items-center justify-center pt-8">
+    <InputsLayout>
       <Text
         {form}
         field="password"
-        label="mot de passe unique"
+        label="mot de passe à usage unique"
       />
       <input
         type="hidden"
@@ -35,6 +31,6 @@
         {form}
         label="Valider"
       />
-    </div>
+    </InputsLayout>
   </Form>
-</div>
+</FormLayout>

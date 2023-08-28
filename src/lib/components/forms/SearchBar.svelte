@@ -11,8 +11,8 @@
   };
 </script>
 
-<div class="flex h-11 flex-shrink-0 items-center justify-center">
-  <div class="relative h-full w-96">
+<div class="mt-8 flex h-11 w-full flex-shrink-0 items-center justify-center px-8">
+  <div class="relative h-full w-full max-w-sm">
     <input
       type="search"
       placeholder="Rechercher par nom..."
